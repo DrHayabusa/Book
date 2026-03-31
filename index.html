@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For Assail</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,.28), transparent 30%),
+        linear-gradient(180deg, #d9cebf 0%, #cabca6 100%);
+      color: #2c221b;
+    }
+
+    .scene {
+      width: 100%;
+      max-width: 1440px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .top-note {
+      color: #5f4d3c;
+      font-size: 15px;
+      text-align: center;
+      letter-spacing: .2px;
+    }
+
+    .book-shell {
+      position: relative;
+      width: 1240px;
+      max-width: 100%;
+      height: 820px;
+      border-radius: 24px;
+    }
+
+    .book {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow:
+        0 35px 70px rgba(37, 27, 18, .20),
+        0 12px 22px rgba(37, 27, 18, .14);
+      background: #f2e7d4;
+    }
+
+    .spread {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(.985);
+      transition: opacity .45s ease, transform .45s ease;
+    }
+
+    .spread.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+    }
+
+    .spread.enter-next { animation: enterNext .6s ease; }
+    .spread.enter-prev { animation: enterPrev .6s ease; }
+
+    @keyframes enterNext {
+      0% { opacity: 0; transform: translateX(28px) scale(.985); }
+      100% { opacity: 1; transform: translateX(0) scale(1); }
+    }
+
+    @keyframes enterPrev {
+      0% { opacity: 0; transform: translateX(-28px) scale(.985); }
+      100% { opacity: 1; transform: translateX(0) scale(1); }
+    }
+
+    .page {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.38), rgba(255,255,255,.03)),
+        #f6eddd;
+      border: 1px solid #bca07d;
+    }
+
+    .page.left {
+      border-right: none;
+      border-radius: 24px 0 0 24px;
+    }
+
+    .page.right {
+      border-left: none;
+      border-radius: 0 24px 24px 0;
+    }
+
+    .spine {
+      position: absolute;
+      inset: 0 auto 0 50%;
+      width: 48px;
+      transform: translateX(-50%);
+      z-index: 15;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          to right,
+          rgba(70, 49, 33, .22),
+          rgba(255,255,255,.18) 32%,
+          rgba(120, 92, 67, .10) 50%,
+          rgba(255,255,255,.12) 68%,
+          rgba(70, 49, 33, .20)
+        );
+      filter: blur(1px);
+    }
+
+    .inner-border {
+      position: absolute;
+      inset: 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(169, 138, 101, .45);
+      pointer-events: none;
+    }
+
+    .corner-cats {
+      position: absolute;
+      inset: 16px;
+      pointer-events: none;
+      opacity: .18;
+      background-image:
+        radial-gradient(circle at 18px 18px, #a98b69 0 2px, transparent 2px),
+        radial-gradient(circle at calc(100% - 18px) 18px, #a98b69 0 2px, transparent 2px),
+        radial-gradient(circle at 18px calc(100% - 18px), #a98b69 0 2px, transparent 2px),
+        radial-gradient(circle at calc(100% - 18px) calc(100% - 18px), #a98b69 0 2px, transparent 2px);
+      border-radius: 12px;
+    }
+
+    .content {
+      position: relative;
+      height: 100%;
+      padding: 50px 56px 120px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cover-spread .page {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.08)),
+        linear-gradient(135deg, #7c5c45, #5d4130);
+      color: #fff6ea;
+      border-color: #4c3628;
+    }
+
+    .cover-left .content,
+    .cover-right .content {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .cover-frame {
+      position: absolute;
+      inset: 18px;
+      border-radius: 14px;
+      border: 2px solid rgba(255, 243, 223, .42);
+      pointer-events: none;
+    }
+
+    .cover-kicker {
+      font-size: 18px;
+      letter-spacing: 4px;
+      opacity: .9;
+      margin-bottom: 18px;
+    }
+
+    .cover-title {
+      font-size: 58px;
+      margin: 0 0 14px;
+      letter-spacing: 1px;
+    }
+
+    .cover-subtitle {
+      margin: 0;
+      font-size: 24px;
+      font-style: italic;
+      opacity: .94;
+      max-width: 420px;
+      line-height: 1.5;
+    }
+
+    .chapter {
+      text-align: center;
+      font-size: 38px;
+      margin: 0 0 18px;
+      color: #3e2c20;
+      line-height: 1.15;
+    }
+
+    .ornament {
+      text-align: center;
+      color: #8c6d50;
+      font-size: 18px;
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+    }
+
+    .text {
+      flex: 1;
+      white-space: pre-line;
+      font-size: 19px;
+      line-height: 1.82;
+      text-align: justify;
+      color: #30261e;
+      overflow: auto;
+      padding-right: 6px;
+      scrollbar-width: thin;
+    }
+
+    .text::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    .text::-webkit-scrollbar-thumb {
+      background: rgba(140,109,80,.35);
+      border-radius: 10px;
+    }
+
+    .poem-ar {
+      margin: 14px 0 10px;
+      padding: 14px 18px;
+      background: rgba(145, 114, 82, .08);
+      border-left: 4px solid #a47d59;
+      border-radius: 8px;
+      direction: rtl;
+      text-align: right;
+      font-size: 22px;
+      line-height: 1.75;
+      color: #402f22;
+    }
+
+    .quote-en {
+      margin: 12px 0 10px;
+      padding: 14px 18px;
+      background: rgba(145, 114, 82, .06);
+      border-left: 4px solid #b78d66;
+      border-radius: 8px;
+      font-size: 18px;
+      line-height: 1.65;
+      color: #4a382b;
+      font-style: italic;
+    }
+
+    .poem-note {
+      font-size: 14px;
+      color: #6d5642;
+      font-style: italic;
+      margin-bottom: 12px;
+    }
+
+    .page-number {
+      position: absolute;
+      bottom: 22px;
+      font-size: 16px;
+      color: #78604a;
+      z-index: 12;
+      background: rgba(246,237,221,.9);
+      padding: 2px 6px;
+      border-radius: 10px;
+    }
+
+    .left .page-number { left: 34px; }
+    .right .page-number { right: 34px; }
+
+    .nav {
+      position: absolute;
+      bottom: 18px;
+      width: 84px;
+      height: 84px;
+      border: none;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+      z-index: 40;
+      transition: transform .18s ease, opacity .18s ease;
+    }
+
+    .nav:hover { transform: translateY(-2px) scale(1.03); }
+    .nav:active { transform: scale(.98); }
+    .nav[disabled] {
+      opacity: .28;
+      pointer-events: none;
+    }
+
+    .nav-left { left: 14px; }
+    .nav-right { right: 14px; }
+
+    .cat-svg {
+      width: 84px;
+      height: 84px;
+      display: block;
+      filter: drop-shadow(0 6px 10px rgba(50,35,22,.22));
+    }
+
+    .cat-head { animation: bob 2.2s ease-in-out infinite; transform-origin: center; }
+    .cat-heart { animation: heartbeat 1.2s infinite; transform-origin: center; }
+    .arrow { opacity: .92; }
+
+    @keyframes bob {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+    }
+
+    @keyframes heartbeat {
+      0%,100% { transform: scale(1); }
+      25% { transform: scale(1.08); }
+      45% { transform: scale(.98); }
+      65% { transform: scale(1.06); }
+    }
+
+    .footer-note {
+      color: #5f4d3c;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 1260px) {
+      .book-shell { height: 760px; }
+      .content { padding: 42px 40px 112px; }
+      .text { font-size: 18px; }
+      .poem-ar { font-size: 20px; }
+      .cover-title { font-size: 48px; }
+    }
+
+    @media (max-width: 950px) {
+      body { overflow: auto; }
+      .book-shell { height: auto; aspect-ratio: 1240 / 820; }
+      .text { font-size: 16px; line-height: 1.7; }
+      .chapter { font-size: 28px; }
+      .poem-ar { font-size: 18px; }
+      .nav { width: 74px; height: 74px; }
+      .cat-svg { width: 74px; height: 74px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <div class="top-note">The left cat goes back. The right cat goes forward.</div>
+
+    <div class="book-shell">
+      <div class="book" id="book">
+        <div class="spine"></div>
+
+        <section class="spread cover-spread active" data-index="0">
+          <div class="page left cover-left">
+            <div class="cover-frame"></div>
+            <div class="content">
+              <div class="cover-kicker">FOR ASSAIL</div>
+              <h1 class="cover-title">For My Love</h1>
+              <p class="cover-subtitle">A little book about what you make me feel,
+and the hope I still carry for us.</p>
+              <div class="page-number">Cover</div>
+            </div>
+          </div>
+          <div class="page right cover-right">
+            <div class="cover-frame"></div>
+            <div class="content">
+              <div class="cover-kicker">إلى أسيل</div>
+              <h1 class="cover-title">Again</h1>
+              <p class="cover-subtitle">Not pressure.
+Not goodbye.
+Just love, patience, and a heart still open to a new chapter.</p>
+              <div class="page-number">Opening</div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <button class="nav nav-left" id="prevBtn" aria-label="Previous spread">
+        <svg class="cat-svg" viewBox="0 0 100 100">
+          <g class="cat-head">
+            <path d="M26 34 L35 18 L44 34" fill="#d7b28c"/>
+            <path d="M56 34 L65 18 L74 34" fill="#d7b28c"/>
+            <ellipse cx="50" cy="45" rx="24" ry="20" fill="#e9c7a2"/>
+            <ellipse cx="41" cy="44" rx="3" ry="4" fill="#3a2c22"/>
+            <ellipse cx="59" cy="44" rx="3" ry="4" fill="#3a2c22"/>
+            <path d="M50 48 Q46 53 50 56 Q54 53 50 48" fill="#7b5540"/>
+            <path d="M35 51 L22 49" stroke="#7b5540" stroke-width="2" stroke-linecap="round"/>
+            <path d="M35 55 L22 57" stroke="#7b5540" stroke-width="2" stroke-linecap="round"/>
+            <path d="M65 51 L78 49" stroke="#7b5540" stroke-width="2" stroke-linecap="round"/>
+            <path d="M65 55 L78 57" stroke="#7b5540" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <g class="cat-heart">
+            <path d="M50 79 C43 71, 31 65, 31 54 C31 46, 37 41, 43 41 C47 41, 50 44, 50 47 C50 44, 53 41, 57 41 C63 41, 69 46, 69 54 C69 65, 57 71, 50 79Z" fill="#e85e76"/>
+          </g>
+          <path class="arrow" d="M16 50 L28 42 L28 47 L39 47 L39 53 L28 53 L28 58 Z" fill="#7a5a42"/>
+        </svg>
+      </button>
+
+      <button class="nav nav-right" id="nextBtn" aria-label="Next spread">
+        <svg class="cat-svg" viewBox="0 0 100 100">
+          <g class="cat-head">
+            <path d="M26 34 L35 18 L44 34" fill="#d7b28c"/>
+            <path d="M56 34 L65 18 L74 34" fill="#d7b28c"/>
+            <ellipse cx="50" cy="45" rx="24" ry="20" fill="#e9c7a2"/>
+            <ellipse cx="41" cy="44" rx="3" ry="4" fill="#3a2c22"/>
+            <ellipse cx="59" cy="44" rx="3" ry="4" fill="#3a2c22"/>
+            <path d="M50 48 Q46 53 50 56 Q54 53 50 48" fill="#7b5540"/>
+            <path d="M35 51 L22 49" stroke="#7b5540" stroke-width="2" stroke-linecap="round"/>
+            <path d="M35 55 L22 57" stroke="#7b5540" stroke-width="2" stroke-linecap="round"/>
+            <path d="M65 51 L78 49" stroke="#7b5540" stroke-width="2" stroke-linecap="round"/>
+            <path d="M65 55 L78 57" stroke="#7b5540" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <g class="cat-heart">
+            <path d="M50 79 C43 71, 31 65, 31 54 C31 46, 37 41, 43 41 C47 41, 50 44, 50 47 C50 44, 53 41, 57 41 C63 41, 69 46, 69 54 C69 65, 57 71, 50 79Z" fill="#e85e76"/>
+          </g>
+          <path class="arrow" d="M84 50 L72 42 L72 47 L61 47 L61 53 L72 53 L72 58 Z" fill="#7a5a42"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="footer-note">You can edit any title or paragraph directly inside the HTML.</div>
+  </div>
+
+  <script>
+    const spreadsData = [
+      {
+        left: {
+          title: "Dedication",
+          text: `This book is for you, Assail.
+
+Not to make you feel trapped.
+Not to ask anything from you that your heart does not want to give.
+Only to tell you, gently and honestly, what has stayed true in me.
+
+Some people leave a mark that does not fade.
+You are that for me.
+And every page here is only love spoken softly.`
+        },
+        right: {
+          title: "How You Make Me Feel",
+          text: `You make me feel calm in a world that is usually loud.
+You make the ordinary feel beautiful.
+You make tenderness feel natural.
+You make love feel like something warm, safe, and worth protecting.
+
+With you, happiness never felt forced.
+It felt simple.
+And maybe that is why my heart still finds its peace in your name.`
+        }
+      },
+      {
+        left: {
+          title: "The Softness of You",
+          quoteEn: `“Whatever our souls are made of, his and mine are the same.” — Emily Brontë`,
+          text: `There is a softness in you that changed me.
+
+The way you exist,
+the way you make a moment gentler without even trying,
+the way my mind slows down when I think of you —
+all of it made me understand that love is not always loud.
+
+Sometimes it is just one person making the world feel kinder.`
+        },
+        right: {
+          title: "What Stayed With Me",
+          text: `What stayed with me was never only your beauty.
+It was your presence.
+Your energy.
+Your heart.
+
+It was the feeling that being close to you made life less heavy.
+That even silence had meaning with you.
+That even a normal day could become a memory just because it had you in it.`
+        }
+      },
+      {
+        left: {
+          title: "In the Language of Longing",
+          poem: `أَمُرُّ عَلَى الدِّيَارِ دِيَارِ لَيْلَى
+أُقَبِّلُ ذَا الجِدَارَ وَذَا الجِدَارَا`,
+          note: `Qays ibn al-Mulawwah (Majnun Layla)`,
+          text: `There is a kind of love that makes even places feel alive.
+That is what these lines say to me:
+when someone has touched your soul,
+the spaces around them begin to matter too.
+
+It is never only the walls.
+It is the memory inside them.
+It is never only the world.
+It is the person who changed the meaning of the world.`
+        },
+        right: {
+          title: "And the Reason Why",
+          poem: `وَمَا حُبُّ الدِّيَارِ شَغَفْنَ قَلْبِي
+وَلَكِنْ حُبُّ مَنْ سَكَنَ الدِّيَارَا`,
+          note: `Qays ibn al-Mulawwah (Majnun Layla)`,
+          text: `I do not hold on to the idea of us because of habit.
+Not because of memory alone.
+Not because I am afraid to move on.
+
+I hold on because of you.
+Because my heart still knows who it loved.
+And because what I felt with you was real enough to deserve patience, not pressure.`
+        }
+      },
+      {
+        left: {
+          title: "Not the End",
+          quoteEn: `“I have waited for this opportunity for more than half a century, to repeat to you once again my vow of eternal fidelity and everlasting love.” — Gabriel García Márquez`,
+          text: `I do not believe this has to be the end of our story.
+
+Maybe this is only a difficult chapter.
+Maybe this is a pause created by fear, by pressure, by life being unfair.
+Maybe what is broken is not love, but timing.
+
+And if timing is the problem, then patience can still be an answer.`
+        },
+        right: {
+          title: "If We Ever Try Again",
+          text: `If we ever try again, I do not want to repeat pain.
+I want to do it better.
+
+More honesty.
+More patience.
+More listening.
+More care for your heart.
+More calm.
+More gentleness.
+
+Not because what we had meant little,
+but because it meant enough to me that I would want to protect it more carefully the second time.`
+        }
+      },
+      {
+        left: {
+          title: "Distance",
+          poem: `أَضْحَى التَّنَائِي بَدِيلاً مِنْ تَدَانِينَا
+وَنَابَ عَنْ طِيبِ لُقْيَانَا تَجَافِينَا`,
+          note: `Ibn Zaydun`,
+          text: `Old Arabic poetry understands what distance feels like.
+
+Sometimes separation does not come because love disappears.
+Sometimes it comes because circumstances become louder than hearts.
+Because the world becomes difficult.
+Because family, fear, and uncertainty take up too much room.
+
+But distance is not always the same thing as the end.`
+        },
+        right: {
+          title: "What I Need You to Know",
+          text: `I never want you to feel forced by my love.
+
+I do not want to pull at your heart.
+I do not want to make you feel guilty.
+I do not want my feelings to become a weight on your shoulders.
+
+I only want you to know that my love for you is patient.
+It does not shout.
+It does not demand.
+It simply remains sincere.`
+        }
+      },
+      {
+        left: {
+          title: "Patience",
+          quoteEn: `“Love is patient.”`,
+          text: `If love is real, then it should know how to wait without becoming cruel.
+
+So if you need time, I understand time.
+If you need space, I understand space.
+If life is heavy on you, I understand heaviness.
+
+My heart is not here to corner you.
+It is here to tell you that patience can also be a form of love.`
+        },
+        right: {
+          title: "What I Mean by Forever",
+          text: `Forever, to me, does not mean forcing fate.
+It means not giving up too quickly on something beautiful and true.
+
+It means I still believe in another beginning.
+I still believe in a softer chapter for us.
+I still believe that if two hearts once found something real,
+that truth does not become meaningless because life got hard.
+
+Forever means hope held gently.`
+        }
+      },
+      {
+        left: {
+          title: "Steadfastness",
+          poem: `وَلَقَدْ ذَكَرْتُكِ وَالرِّمَاحُ نَوَاهِلٌ
+مِنِّي وَبِيضُ الْهِنْدِ تَقْطُرُ مِنْ دَمِي`,
+          note: `Antarah ibn Shaddad`,
+          text: `Antarah remembered the one he loved even in the middle of battle.
+
+I understand that in my own way.
+
+Because life has felt heavy.
+Because things have been difficult.
+Because love does not always happen under easy skies.
+And still, in the middle of all that, your name arrives in my heart with softness.`
+        },
+        right: {
+          title: "Still Choosing You",
+          text: `If I had to choose again, I would still choose you.
+
+I would still choose your smile.
+Still choose the peace I feel with you.
+Still choose the future I once imagined with you.
+Still choose the tenderness that your presence brings into my life.
+
+Because what I feel for you is not shallow.
+It is the kind of feeling that stays.`
+        }
+      },
+      {
+        left: {
+          title: "Without Pressure",
+          text: `This matters to me:
+I want you to feel loved, not pressured.
+
+So read this only as honesty.
+Read it as tenderness.
+Read it as someone telling you that you matter deeply to him,
+while still respecting your pace, your emotions, and your choices.
+
+I am not here to push.
+I am here to stay sincere.`
+        },
+        right: {
+          title: "A New Chapter",
+          quoteEn: `Some stories do not need to end. Sometimes they only need to be written again, more gently.`,
+          text: `What I want is not to drag the past back exactly as it was.
+What I want is a new chapter.
+
+One with more peace.
+One with more trust.
+One with more understanding.
+One where love feels safe again.
+
+If there is still even a small light left for us,
+I would protect it carefully.`
+        }
+      },
+      {
+        left: {
+          title: "I Will Wait Gently",
+          text: `I will wait for you, but gently.
+
+Not in a way that asks you to carry my heart.
+Not in a way that makes you afraid to breathe.
+But in a quiet way.
+A respectful way.
+A loyal way.
+
+Because some people are worth being patient for.
+And to me, Assail, you are.`
+        },
+        right: {
+          title: "If Your Heart Ever Turns Back",
+          text: `If your heart ever turns back toward me,
+it will find mine still open.
+
+No anger.
+No pride.
+No punishment for the time that passed.
+Only warmth.
+Only sincerity.
+Only the same love, but wiser and calmer than before.
+
+That is the kind of love I want to offer you.`
+        }
+      },
+      {
+        left: {
+          title: "What Is Still True",
+          text: `You are still loved.
+Not in the past tense.
+Not as a memory only.
+Not as something that ended.
+
+You are still loved now.
+With tenderness.
+With patience.
+With respect.
+With a heart that still believes something beautiful can begin again.`
+        },
+        right: {
+          title: "Last Page",
+          quoteEn: `“Come what may, I have been, and shall always be, your friend.” — Jane Austen`,
+          text: `So this is my promise to you, Assail:
+
+I will not stop caring for you.
+I will not stop wishing goodness for you.
+I will not stop believing that what was beautiful between us can still become beautiful again.
+
+And if one day you want to try again,
+you will find me here —
+still gentle,
+still patient,
+still loving you,
+and still ready for our new chapter.`
+        }
+      }
+    ];
+
+    const book = document.getElementById("book");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    function makePageHTML(side, data, pageNumber) {
+      const poemBlock = data.poem
+        ? `<div class="poem-ar">${data.poem}</div>
+           <div class="poem-note">${data.note || ""}</div>`
+        : "";
+
+      const quoteBlock = data.quoteEn
+        ? `<div class="quote-en">${data.quoteEn}</div>`
+        : "";
+
+      return `
+        <div class="page ${side}">
+          <div class="inner-border"></div>
+          <div class="corner-cats"></div>
+          <div class="content">
+            <div class="ornament">❦ ❦ ❦</div>
+            <h2 class="chapter">${data.title}</h2>
+            ${poemBlock}
+            ${quoteBlock}
+            <div class="text">${data.text}</div>
+            <div class="page-number">${pageNumber}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function buildSpreads() {
+      spreadsData.forEach((spread, i) => {
+        const section = document.createElement("section");
+        section.className = "spread";
+        section.dataset.index = i + 1;
+
+        const leftNum = i * 2 + 1;
+        const rightNum = i * 2 + 2;
+
+        section.innerHTML =
+          makePageHTML("left", spread.left, leftNum) +
+          makePageHTML("right", spread.right, rightNum);
+
+        book.appendChild(section);
+      });
+    }
+
+    buildSpreads();
+
+    const spreads = Array.from(document.querySelectorAll(".spread"));
+    let current = 0;
+
+    function updateButtons() {
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === spreads.length - 1;
+    }
+
+    function showSpread(newIndex, direction) {
+      if (newIndex < 0 || newIndex >= spreads.length || newIndex === current) return;
+
+      spreads[current].classList.remove("active", "enter-next", "enter-prev");
+      current = newIndex;
+      spreads[current].classList.add("active");
+      spreads[current].classList.remove("enter-next", "enter-prev");
+
+      if (direction === "next") {
+        spreads[current].classList.add("enter-next");
+      } else if (direction === "prev") {
+        spreads[current].classList.add("enter-prev");
+      }
+
+      updateButtons();
+    }
+
+    function nextSpread() {
+      if (current < spreads.length - 1) {
+        showSpread(current + 1, "next");
+      }
+    }
+
+    function prevSpread() {
+      if (current > 0) {
+        showSpread(current - 1, "prev");
+      }
+    }
+
+    prevBtn.addEventListener("click", prevSpread);
+    nextBtn.addEventListener("click", nextSpread);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") nextSpread();
+      if (e.key === "ArrowLeft") prevSpread();
+    });
+
+    updateButtons();
+  </script>
+</body>
+</html>
