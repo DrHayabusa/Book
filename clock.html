@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Countdown</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 60% 0%, #2a0a4a 0%, #0d0d1e 55%, #0a0a14 100%);
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: #f0e8ff;
+    }
+
+    /* ── Stars ── */
+    .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle ease-in-out infinite;
+    }
+    @keyframes twinkle {
+      0%,100% { opacity: 0.15; transform: scale(1); }
+      50%      { opacity: 0.9;  transform: scale(1.6); }
+    }
+
+    /* ── Glow orbs ── */
+    .orb {
+      position: fixed; border-radius: 50%;
+      filter: blur(80px); pointer-events: none; z-index: 0;
+      animation: orbDrift 18s ease-in-out infinite alternate;
+    }
+    .orb-1 { width:380px; height:380px; background:rgba(160,80,220,0.18);  top:-100px; left:-80px; }
+    .orb-2 { width:300px; height:300px; background:rgba(80,140,220,0.14);  bottom:-80px; right:-60px; animation-delay:-9s; }
+    .orb-3 { width:200px; height:200px; background:rgba(220,100,150,0.12); top:40%; left:60%; animation-delay:-4s; }
+    @keyframes orbDrift {
+      0%   { transform: translate(0,0); }
+      100% { transform: translate(30px,30px); }
+    }
+
+    /* ── Layout ── */
+    .container {
+      position: relative; z-index: 10;
+      display: flex; flex-direction: column;
+      align-items: center; padding: 20px;
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      background: linear-gradient(120deg, #e8c4f0 0%, #c4a8f8 50%, #a8c8f8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 3px;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .date-tag {
+      font-size: 0.75rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #7a6090;
+      margin-bottom: 44px;
+    }
+
+    /* ════════════════════════
+       CSS CAT
+    ════════════════════════ */
+    .cat-scene { margin-bottom: 40px; position: relative; }
+
+    /* floating sparkles */
+    .sparkle {
+      position: absolute;
+      font-size: 0.75rem;
+      color: rgba(210,180,255,0.7);
+      animation: sparkleAnim 2.5s ease-in-out infinite;
+    }
+    .sparkle:nth-child(1) { top:0;      left:-20px;  animation-delay:0s;   }
+    .sparkle:nth-child(2) { top:20px;   right:-18px; animation-delay:0.8s; }
+    .sparkle:nth-child(3) { bottom:20px;left:-16px;  animation-delay:1.6s; }
+    @keyframes sparkleAnim {
+      0%,100% { opacity:0; transform:scale(0.5) rotate(0deg); }
+      50%      { opacity:1; transform:scale(1.2) rotate(20deg); }
+    }
+
+    .cat {
+      position: relative; width: 140px;
+      animation: catFloat 4s ease-in-out infinite;
+    }
+    @keyframes catFloat {
+      0%,100% { transform: translateY(0) rotate(-1deg); }
+      50%      { transform: translateY(-14px) rotate(1deg); }
+    }
+
+    /* HEAD */
+    .cat-head {
+      position: relative;
+      width: 108px; height: 94px;
+      background: #eedecb;
+      border-radius: 50% 50% 46% 46% / 52% 52% 48% 48%;
+      margin: 0 auto;
+      z-index: 2;
+      box-shadow:
+        inset -10px -12px 22px rgba(170,120,70,0.22),
+        inset 6px 6px 14px rgba(255,245,220,0.45),
+        0 6px 24px rgba(0,0,0,0.35);
+    }
+
+    /* EARS */
+    .ear { position: absolute; top:-24px; width:0; height:0; }
+    .ear-l { left: 12px; }
+    .ear-r { right: 12px; }
+    .ear::before {
+      content: '';
+      position: absolute;
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-bottom: 32px solid #eedecb;
+      filter: drop-shadow(-1px -2px 3px rgba(150,100,50,0.25));
+    }
+    .ear::after {
+      content: '';
+      position: absolute;
+      top: 10px; left: -9px;
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent;
+      border-bottom: 17px solid #e9a0aa;
+    }
+
+    /* FOREHEAD STRIPES */
+    .stripes {
+      position: absolute;
+      top: 10px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 6px;
+    }
+    .stripe { width:3px; height:13px; background:rgba(180,130,80,0.28); border-radius:2px; }
+    .stripe:nth-child(1) { transform: rotate(-6deg); }
+    .stripe:nth-child(3) { transform: rotate(6deg); }
+
+    /* EYES */
+    .cat-eyes {
+      position: absolute;
+      top: 32px; width: 100%;
+      display: flex; justify-content: space-around;
+      padding: 0 18px;
+    }
+    .eye {
+      position: relative;
+      width: 24px; height: 21px;
+      background: #4a9e74;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(80,200,130,0.45), inset 0 2px 4px rgba(0,80,30,0.3);
+      overflow: hidden;
+    }
+    .eye::after {
+      content: '';
+      position: absolute;
+      inset: 0; margin: auto;
+      width: 9px; height: 17px;
+      background: #10101e;
+      border-radius: 50%;
+    }
+    .eye::before {
+      content: '';
+      position: absolute;
+      top: 3px; left: 5px;
+      width: 6px; height: 6px;
+      background: rgba(255,255,255,0.88);
+      border-radius: 50%;
+      z-index: 5;
+    }
+
+    /* NOSE */
+    .cat-nose {
+      position: absolute;
+      top: 58px; left: 50%;
+      transform: translateX(-50%);
+      width: 11px; height: 8px;
+      background: #d96882;
+      border-radius: 40% 40% 50% 50%;
+      box-shadow: 0 1px 4px rgba(200,60,90,0.35);
+    }
+
+    /* MOUTH */
+    .cat-mouth {
+      position: absolute;
+      top: 65px; left: 50%;
+      transform: translateX(-50%);
+      width: 26px; height: 12px;
+    }
+    .cat-mouth::before, .cat-mouth::after {
+      content: '';
+      position: absolute;
+      width: 11px; height: 9px;
+      border-bottom: 2px solid #b85868;
+      border-radius: 0 0 60% 60%;
+      top: 0;
+    }
+    .cat-mouth::before { left: 3px; }
+    .cat-mouth::after  { right: 3px; }
+
+    /* WHISKERS */
+    .whiskers { position: absolute; top: 55px; left: 0; right: 0; }
+    .w { position: absolute; height: 1.5px; background: rgba(170,130,90,0.55); border-radius: 1px; }
+    .wl1 { width:38px; top:0;    left:-36px; transform:rotate(-9deg); }
+    .wl2 { width:40px; top:7px;  left:-38px; transform:rotate(-2deg); }
+    .wl3 { width:36px; top:14px; left:-34px; transform:rotate(7deg); }
+    .wr1 { width:38px; top:0;    right:-36px; transform:rotate(9deg); }
+    .wr2 { width:40px; top:7px;  right:-38px; transform:rotate(2deg); }
+    .wr3 { width:36px; top:14px; right:-34px; transform:rotate(-7deg); }
+
+    /* BLUSH */
+    .blush { position:absolute; top:54px; width:16px; height:9px; background:rgba(230,100,130,0.2); border-radius:50%; }
+    .blush-l { left: 10px; }
+    .blush-r { right: 10px; }
+
+    /* BODY */
+    .cat-body {
+      position: relative;
+      width: 94px; height: 78px;
+      background: #eedecb;
+      border-radius: 48% 48% 42% 42% / 38% 38% 62% 62%;
+      margin: -16px auto 0;
+      z-index: 1;
+      box-shadow:
+        inset -8px -10px 18px rgba(170,120,70,0.2),
+        inset 5px 5px 12px rgba(255,245,220,0.4),
+        0 8px 28px rgba(0,0,0,0.3);
+    }
+    /* belly */
+    .cat-body::before {
+      content: '';
+      position: absolute;
+      bottom: 10px; left: 50%;
+      transform: translateX(-50%);
+      width: 48px; height: 38px;
+      background: #f8ede0;
+      border-radius: 50%;
+    }
+
+    /* PAWS */
+    .paw {
+      position: absolute;
+      bottom: -14px;
+      width: 30px; height: 22px;
+      background: #eedecb;
+      border-radius: 50% 50% 42% 42%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25), inset -3px -3px 6px rgba(160,110,60,0.2);
+    }
+    .paw-l { left: 4px; }
+    .paw-r { right: 4px; }
+    .paw::after {
+      content: '';
+      position: absolute;
+      bottom: 2px; left: 50%;
+      transform: translateX(-50%);
+      width: 20px; height: 6px;
+      border-bottom: 1.5px solid rgba(160,110,70,0.3);
+      border-radius: 0 0 50% 50%;
+    }
+
+    /* TAIL */
+    .cat-tail {
+      position: absolute;
+      bottom: 8px; right: -44px;
+      width: 50px; height: 16px;
+      background: #eedecb;
+      border-radius: 0 40px 40px 0;
+      box-shadow: inset -4px -3px 8px rgba(160,110,60,0.2), 0 3px 10px rgba(0,0,0,0.2);
+      transform-origin: left center;
+      animation: tailSway 3.5s ease-in-out infinite;
+      z-index: 0;
+    }
+    .cat-tail::after {
+      content: '';
+      position: absolute;
+      right: -8px; top: -10px;
+      width: 24px; height: 28px;
+      background: #eedecb;
+      border-radius: 50% 50% 40% 40%;
+      box-shadow: inset -3px -3px 6px rgba(160,110,60,0.2);
+    }
+    @keyframes tailSway {
+      0%,100% { transform: rotate(-18deg); }
+      50%      { transform: rotate(22deg); }
+    }
+
+    /* ════════════════════════
+       COUNTDOWN CARD
+    ════════════════════════ */
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(180,140,255,0.14);
+      border-radius: 28px;
+      padding: 36px 44px 30px;
+      backdrop-filter: blur(24px);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.07);
+      text-align: center;
+      min-width: 340px;
+    }
+    .countdown {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 10px;
+    }
+    .unit {
+      display: flex; flex-direction: column; align-items: center;
+      background: rgba(150,100,230,0.07);
+      border: 1px solid rgba(170,120,255,0.18);
+      border-radius: 18px;
+      padding: 22px 18px 16px;
+      min-width: 76px;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 2px 16px rgba(100,60,180,0.12);
+    }
+    .unit:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 32px rgba(160,100,255,0.22);
+    }
+    .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem; font-weight: 700;
+      color: #ede0ff; line-height: 1;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 0 24px rgba(200,160,255,0.55);
+    }
+    .lbl {
+      font-size: 0.6rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #7060a0;
+      margin-top: 8px;
+    }
+    .colon {
+      font-size: 2.4rem;
+      color: rgba(160,120,220,0.35);
+      font-weight: 300;
+      padding-bottom: 14px;
+      line-height: 1;
+      font-family: 'Playfair Display', serif;
+    }
+    .msg {
+      margin-top: 22px;
+      font-size: 0.82rem;
+      font-style: italic;
+      color: #7060a0;
+      letter-spacing: 0.6px;
+      min-height: 20px;
+      transition: opacity 0.5s;
+    }
+    .arrived {
+      display: none;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      background: linear-gradient(120deg, #e8c4f0, #c4a0f8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: popIn 0.6s cubic-bezier(0.175,0.885,0.32,1.275) both;
+    }
+    @keyframes popIn {
+      from { opacity:0; transform:scale(0.6); }
+      to   { opacity:1; transform:scale(1); }
+    }
+
+    @media (max-width: 480px) {
+      .card { padding:28px 20px 24px; min-width:unset; width:92vw; }
+      .unit { min-width:60px; padding:16px 10px 12px; }
+      .num  { font-size:2.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stars" id="stars"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="container">
+
+    <h1 class="title">Happy Birthday</h1>
+    <p class="date-tag">12 &middot; April &middot; 2026</p>
+
+    <!-- CSS Cat -->
+    <div class="cat-scene">
+      <span class="sparkle">&#10022;</span>
+      <span class="sparkle">&#10022;</span>
+      <span class="sparkle">&#10022;</span>
+
+      <div class="cat">
+        <div class="cat-head">
+          <div class="ear ear-l"></div>
+          <div class="ear ear-r"></div>
+          <div class="stripes">
+            <div class="stripe"></div>
+            <div class="stripe"></div>
+            <div class="stripe"></div>
+          </div>
+          <div class="cat-eyes">
+            <div class="eye"></div>
+            <div class="eye"></div>
+          </div>
+          <div class="cat-nose"></div>
+          <div class="cat-mouth"></div>
+          <div class="whiskers">
+            <div class="w wl1"></div>
+            <div class="w wl2"></div>
+            <div class="w wl3"></div>
+            <div class="w wr1"></div>
+            <div class="w wr2"></div>
+            <div class="w wr3"></div>
+          </div>
+          <div class="blush blush-l"></div>
+          <div class="blush blush-r"></div>
+        </div>
+        <div class="cat-body">
+          <div class="paw paw-l"></div>
+          <div class="paw paw-r"></div>
+          <div class="cat-tail"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Countdown -->
+    <div class="card">
+      <div class="countdown" id="countdown">
+        <div class="unit"><div class="num" id="days">--</div><div class="lbl">Days</div></div>
+        <div class="colon">:</div>
+        <div class="unit"><div class="num" id="hours">--</div><div class="lbl">Hours</div></div>
+        <div class="colon">:</div>
+        <div class="unit"><div class="num" id="mins">--</div><div class="lbl">Minutes</div></div>
+        <div class="colon">:</div>
+        <div class="unit"><div class="num" id="secs">--</div><div class="lbl">Seconds</div></div>
+      </div>
+      <div class="arrived" id="arrived">Happy Birthday &#10022;</div>
+      <p class="msg" id="msg"></p>
+    </div>
+
+  </div>
+
+  <script>
+    // Stars
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 90; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const sz = Math.random() * 2.4 + 0.8;
+      Object.assign(s.style, {
+        width: sz + 'px', height: sz + 'px',
+        left: Math.random() * 100 + '%',
+        top:  Math.random() * 100 + '%',
+        animationDuration: (2.5 + Math.random() * 4) + 's',
+        animationDelay:    (Math.random() * 5) + 's',
+      });
+      starsEl.appendChild(s);
+    }
+
+    // Countdown
+    const TARGET = new Date('2026-04-12T00:00:00');
+    const MSGS = [
+      'counting every heartbeat until your day\u2026',
+      'the stars are already lining up for you',
+      'something wonderful is on its way',
+      'every second is one closer to celebrating you',
+      'the universe is saving its best day for you',
+    ];
+    let mi = 0;
+    const msgEl = document.getElementById('msg');
+    msgEl.textContent = MSGS[0];
+
+    setInterval(() => {
+      msgEl.style.opacity = '0';
+      setTimeout(() => {
+        mi = (mi + 1) % MSGS.length;
+        msgEl.textContent = MSGS[mi];
+        msgEl.style.opacity = '1';
+      }, 500);
+    }, 5000);
+
+    const pad = n => String(n).padStart(2, '0');
+
+    function tick() {
+      const diff = TARGET - Date.now();
+      if (diff <= 0) {
+        document.getElementById('countdown').style.display = 'none';
+        document.getElementById('arrived').style.display = 'block';
+        msgEl.textContent = 'wishing you the most magical day';
+        return;
+      }
+      document.getElementById('days').textContent  = pad(Math.floor(diff / 86400000));
+      document.getElementById('hours').textContent = pad(Math.floor((diff % 86400000) / 3600000));
+      document.getElementById('mins').textContent  = pad(Math.floor((diff % 3600000)  / 60000));
+      document.getElementById('secs').textContent  = pad(Math.floor((diff % 60000)    / 1000));
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
