@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shahid 🐱</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    :root {
+      --fur:       #8B5E3C;
+      --fur-light: #C49A6C;
+      --fur-dark:  #6B4226;
+      --belly:     #D4B896;
+      --eye-col:   #8B5513;
+      --inner-ear: #D4907A;
+    }
+
+    html { height: 100%; }
+    body {
+      height: 100%; min-height: 100vh;
+      background: radial-gradient(ellipse at top left, #1e0828 0%, #0d0d1a 45%, #1a050d 100%);
+      font-family: 'Inter', sans-serif;
+      color: #f0e8ff;
+      display: flex; flex-direction: column; align-items: center;
+      overflow: hidden;
+    }
+
+    /* Stars */
+    .stars { position:fixed; inset:0; pointer-events:none; z-index:0; }
+    .star { position:absolute; background:#fff; border-radius:50%; animation:twinkle ease-in-out infinite; }
+    @keyframes twinkle {
+      0%,100% { opacity:.12; transform:scale(1); }
+      50%      { opacity:.8;  transform:scale(1.5); }
+    }
+
+    /* Glow orbs */
+    .orb { position:fixed; border-radius:50%; filter:blur(75px); pointer-events:none; z-index:0; animation:orbDrift 20s ease-in-out infinite alternate; }
+    .orb-1 { width:360px;height:360px;background:rgba(140,50,90,.2);   top:-100px;left:-80px; }
+    .orb-2 { width:280px;height:280px;background:rgba(70,50,150,.15);  bottom:-60px;right:-60px;animation-delay:-10s; }
+    .orb-3 { width:180px;height:180px;background:rgba(180,80,50,.12);  top:50%;left:10%;animation-delay:-5s; }
+    @keyframes orbDrift { 0%{transform:translate(0,0)} 100%{transform:translate(25px,25px)} }
+
+    /* App */
+    .app {
+      position:relative; z-index:10;
+      width:100%; max-width:500px;
+      height:100vh; height:100dvh;
+      display:flex; flex-direction:column;
+      padding:14px 16px 0;
+    }
+
+    /* Header */
+    .header { text-align:center; flex-shrink:0; margin-bottom:6px; }
+    .hname {
+      font-family:'Playfair Display',serif;
+      font-size:1.5rem; font-weight:600;
+      background:linear-gradient(120deg,#e8c4a0,#c4a0c8,#a0c0e8);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      letter-spacing:2px;
+    }
+    .hsub { font-size:.62rem; color:#7060a0; letter-spacing:3px; text-transform:uppercase; margin-top:1px; }
+
+    /* Cat section */
+    .cat-section {
+      flex-shrink:0;
+      display:flex; flex-direction:column; align-items:center;
+      padding:0 55px; overflow:visible;
+    }
+
+    /* Speech bubble */
+    .bubble {
+      position:relative;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(200,150,100,.22);
+      border-radius:18px;
+      padding:11px 18px;
+      max-width:300px; min-height:48px;
+      margin-bottom:8px;
+      font-size:.82rem; line-height:1.55;
+      color:#e8d8c4; font-style:italic; text-align:center;
+      backdrop-filter:blur(16px);
+      box-shadow:0 4px 20px rgba(0,0,0,.3);
+      transition:opacity .25s;
+    }
+    .bubble::after {
+      content:'';
+      position:absolute; bottom:-9px; left:50%; transform:translateX(-50%);
+      border-left:9px solid transparent; border-right:9px solid transparent;
+      border-top:9px solid rgba(200,150,100,.22);
+    }
+
+    /* Typing dots */
+    .dots { display:inline-flex; gap:4px; align-items:center; }
+    .dot { width:6px;height:6px;background:#c49a6c;border-radius:50%;animation:dotP 1.2s ease-in-out infinite; }
+    .dot:nth-child(2){animation-delay:.2s}
+    .dot:nth-child(3){animation-delay:.4s}
+    @keyframes dotP { 0%,80%,100%{transform:scale(.6);opacity:.4} 40%{transform:scale(1);opacity:1} }
+
+    /* ═══════════════ CSS CAT ═══════════════ */
+    .cat {
+      position:relative; width:130px;
+      animation:idle 4s ease-in-out infinite;
+      cursor:pointer; user-select:none; overflow:visible;
+    }
+    @keyframes idle {
+      0%,100%{transform:translateY(0) rotate(-.5deg)}
+      50%     {transform:translateY(-10px) rotate(.5deg)}
+    }
+    .cat--thinking { animation:thinking 1s ease-in-out infinite !important; }
+    @keyframes thinking {
+      0%,100%{transform:translateY(0) rotate(-4deg)}
+      50%    {transform:translateY(-4px) rotate(-3deg)}
+    }
+    .cat--talking { animation:talking .45s ease-in-out infinite !important; }
+    @keyframes talking {
+      0%,100%{transform:translateY(0) rotate(-1deg)}
+      50%    {transform:translateY(-4px) rotate(1deg)}
+    }
+    .cat--happy { animation:happy .55s ease-in-out infinite !important; }
+    @keyframes happy {
+      0%,100%{transform:translateY(0) rotate(-2deg)}
+      30%    {transform:translateY(-13px) rotate(2deg)}
+      70%    {transform:translateY(-8px) rotate(-1.5deg)}
+    }
+
+    /* HEAD */
+    .cat-head {
+      position:relative;
+      width:104px; height:90px;
+      background:var(--fur);
+      border-radius:50% 50% 46% 46% / 52% 52% 48% 48%;
+      margin:0 auto; z-index:2;
+      box-shadow:
+        inset -10px -12px 20px rgba(50,20,5,.35),
+        inset 5px 5px 12px rgba(200,150,80,.18),
+        0 6px 20px rgba(0,0,0,.4);
+    }
+
+    /* EARS */
+    .ear { position:absolute; top:-22px; width:0; height:0; }
+    .ear-l { left:10px; }
+    .ear-r { right:10px; }
+    .ear::before {
+      content:''; position:absolute;
+      border-left:17px solid transparent;
+      border-right:17px solid transparent;
+      border-bottom:30px solid var(--fur);
+      filter:drop-shadow(-1px -2px 3px rgba(50,20,5,.3));
+    }
+    .ear::after {
+      content:''; position:absolute;
+      top:9px; left:-8px;
+      border-left:8px solid transparent;
+      border-right:8px solid transparent;
+      border-bottom:15px solid var(--inner-ear);
+    }
+
+    /* MUZZLE (lighter patch) */
+    .muzzle {
+      position:absolute; bottom:8px; left:50%;
+      transform:translateX(-50%);
+      width:52px; height:34px;
+      background:var(--belly); border-radius:50%; opacity:.5;
+    }
+
+    /* FOREHEAD STRIPES */
+    .stripes { position:absolute; top:8px; left:50%; transform:translateX(-50%); display:flex; gap:5px; }
+    .stripe { width:3px; height:12px; background:rgba(50,20,5,.28); border-radius:2px; }
+    .stripe:nth-child(1){transform:rotate(-5deg)}
+    .stripe:nth-child(3){transform:rotate(5deg)}
+
+    /* EYES */
+    .cat-eyes { position:absolute; top:28px; width:100%; display:flex; justify-content:space-around; padding:0 16px; }
+    .eye {
+      position:relative;
+      width:22px; height:20px;
+      background:var(--eye-col);
+      border-radius:50%;
+      box-shadow:0 0 8px rgba(160,90,30,.5), inset 0 2px 4px rgba(30,10,0,.4);
+      overflow:hidden;
+      animation:blink 6s ease-in-out infinite;
+    }
+    .eye:last-child{animation-delay:.1s}
+    @keyframes blink { 0%,92%,100%{transform:scaleY(1)} 96%{transform:scaleY(.1)} }
+    .eye::after { /* pupil */
+      content:''; position:absolute; inset:0; margin:auto;
+      width:8px; height:16px; background:#180800; border-radius:50%;
+    }
+    .eye::before { /* shine */
+      content:''; position:absolute;
+      top:3px; left:5px; width:6px; height:6px;
+      background:rgba(255,235,180,.85); border-radius:50%; z-index:5;
+    }
+
+    /* NOSE */
+    .cat-nose {
+      position:absolute; top:56px; left:50%; transform:translateX(-50%);
+      width:10px; height:7px; background:#A0522D;
+      border-radius:40% 40% 50% 50%;
+      box-shadow:0 1px 4px rgba(100,40,10,.4);
+    }
+
+    /* MOUTH — animates open/close when talking */
+    .cat-mouth {
+      position:absolute; top:63px; left:50%; transform:translateX(-50%);
+      width:20px; height:10px;
+      border:2px solid #8a4020; border-top:none;
+      border-radius:0 0 50% 50%;
+      background:transparent;
+    }
+    .cat--talking .cat-mouth { animation:mouthTalk .35s ease-in-out infinite; }
+    @keyframes mouthTalk {
+      0%,100% {
+        height:4px; background:transparent;
+        border:2px solid #8a4020; border-top:none;
+        border-radius:0 0 50% 50%;
+      }
+      50% {
+        height:13px; background:#260808;
+        border:2px solid #6a2810;
+        border-radius:50%;
+      }
+    }
+
+    /* WHISKERS */
+    .whiskers { position:absolute; top:52px; left:0; right:0; }
+    .w { position:absolute; height:1.5px; background:rgba(130,80,30,.5); border-radius:1px; }
+    .wl1{width:36px;top:0;   left:-34px;transform:rotate(-8deg)}
+    .wl2{width:38px;top:7px; left:-36px;transform:rotate(-1deg)}
+    .wl3{width:34px;top:14px;left:-32px;transform:rotate(7deg)}
+    .wr1{width:36px;top:0;   right:-34px;transform:rotate(8deg)}
+    .wr2{width:38px;top:7px; right:-36px;transform:rotate(1deg)}
+    .wr3{width:34px;top:14px;right:-32px;transform:rotate(-7deg)}
+
+    /* BLUSH */
+    .blush { position:absolute; top:52px; width:15px; height:9px; background:rgba(200,90,70,.22); border-radius:50%; }
+    .blush-l{left:8px} .blush-r{right:8px}
+
+    /* BODY */
+    .cat-body {
+      position:relative; overflow:visible;
+      width:88px; height:72px;
+      background:var(--fur);
+      border-radius:48% 48% 42% 42% / 38% 38% 62% 62%;
+      margin:-14px auto 0; z-index:1;
+      box-shadow:
+        inset -8px -10px 16px rgba(50,20,5,.3),
+        inset 4px 4px 10px rgba(200,150,80,.12),
+        0 8px 24px rgba(0,0,0,.35);
+    }
+    .cat-body::before { /* belly */
+      content:''; position:absolute;
+      bottom:8px; left:50%; transform:translateX(-50%);
+      width:44px; height:34px; background:var(--belly); border-radius:50%; opacity:.62;
+    }
+
+    /* PAWS */
+    .paw {
+      position:absolute; bottom:-12px;
+      width:28px; height:20px; background:var(--fur);
+      border-radius:50% 50% 42% 42%;
+      box-shadow:0 4px 8px rgba(0,0,0,.3), inset -2px -2px 5px rgba(50,20,5,.25);
+    }
+    .paw-l{left:4px} .paw-r{right:4px}
+    .paw::after {
+      content:''; position:absolute; bottom:1px; left:50%; transform:translateX(-50%);
+      width:18px; height:5px;
+      border-bottom:1.5px solid rgba(50,20,5,.3); border-radius:0 0 50% 50%;
+    }
+
+    /* TAIL */
+    .cat-tail {
+      position:absolute; bottom:6px; right:-40px;
+      width:46px; height:15px; background:var(--fur);
+      border-radius:0 36px 36px 0;
+      transform-origin:left center;
+      animation:tailSway 3.5s ease-in-out infinite;
+      box-shadow:inset -3px -3px 8px rgba(50,20,5,.25), 0 3px 10px rgba(0,0,0,.2);
+      z-index:0;
+    }
+    .cat-tail::after {
+      content:''; position:absolute; right:-7px; top:-9px;
+      width:22px; height:26px; background:var(--fur);
+      border-radius:50% 50% 40% 40%;
+      box-shadow:inset -2px -2px 6px rgba(50,20,5,.2);
+    }
+    @keyframes tailSway { 0%,100%{transform:rotate(-16deg)} 50%{transform:rotate(20deg)} }
+    .cat--talking .cat-tail,
+    .cat--happy   .cat-tail { animation:tailFast 1s ease-in-out infinite; }
+    @keyframes tailFast { 0%,100%{transform:rotate(-22deg)} 50%{transform:rotate(26deg)} }
+
+    /* ═══════════════ CHAT ═══════════════ */
+    .chat {
+      flex:1; overflow-y:auto;
+      padding:8px 2px; display:flex; flex-direction:column; gap:8px;
+      scrollbar-width:thin; scrollbar-color:rgba(150,90,60,.3) transparent;
+    }
+    .chat::-webkit-scrollbar{width:3px}
+    .chat::-webkit-scrollbar-thumb{background:rgba(150,90,60,.3);border-radius:2px}
+
+    .msg { display:flex; align-items:flex-end; gap:7px; animation:msgIn .3s cubic-bezier(.175,.885,.32,1.275) both; }
+    @keyframes msgIn { from{opacity:0;transform:translateY(8px) scale(.95)} to{opacity:1;transform:none} }
+    .msg--user{flex-direction:row-reverse}
+
+    .mbub {
+      max-width:73%; padding:10px 14px;
+      font-size:.83rem; line-height:1.55; border-radius:16px;
+    }
+    .msg--cat  .mbub { background:rgba(140,80,40,.12); border:1px solid rgba(180,110,60,.2); border-bottom-left-radius:3px; color:#e8d0b4; }
+    .msg--user .mbub { background:rgba(180,90,120,.12); border:1px solid rgba(210,110,140,.2); border-bottom-right-radius:3px; color:#f0d0e0; text-align:right; }
+
+    .mav {
+      width:26px; height:26px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:.65rem; font-family:'Playfair Display',serif; flex-shrink:0;
+    }
+    .msg--cat  .mav{background:rgba(140,80,40,.25);color:#c49a6c}
+    .msg--user .mav{background:rgba(180,90,120,.2);color:#d8a0b8}
+
+    /* ═══════════════ INPUT ═══════════════ */
+    .inp-area { flex-shrink:0; display:flex; gap:9px; padding:10px 0 14px; }
+    .inp {
+      flex:1; background:rgba(255,255,255,.04);
+      border:1px solid rgba(180,110,70,.22); border-radius:22px;
+      padding:11px 18px; color:#f0e8d8; font-size:.84rem;
+      font-family:'Inter',sans-serif; outline:none;
+      transition:border-color .2s, box-shadow .2s;
+    }
+    .inp::placeholder{color:#604060}
+    .inp:focus{border-color:rgba(180,110,70,.45);box-shadow:0 0 14px rgba(140,80,40,.15)}
+    .send {
+      width:44px;height:44px;border-radius:50%;border:none;
+      background:linear-gradient(135deg,#7a4a28,#c49a6c);
+      color:#fff;font-size:1rem;cursor:pointer;flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 4px 14px rgba(130,70,30,.35);
+      transition:transform .2s, box-shadow .2s;
+    }
+    .send:hover{transform:scale(1.08);box-shadow:0 6px 18px rgba(160,90,50,.5)}
+    .send:active{transform:scale(.95)}
+
+    @media(max-width:380px){
+      .cat-head{width:88px;height:76px}
+      .cat-body{width:76px;height:62px}
+      .cat{width:110px}
+      .bubble{font-size:.76rem;padding:9px 14px}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stars" id="stars"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="app">
+
+    <div class="header">
+      <div class="hname">Shahid</div>
+      <div class="hsub">Made just for you, Assail ✦</div>
+    </div>
+
+    <!-- Cat + bubble -->
+    <div class="cat-section">
+      <div class="bubble" id="bubble"><span id="btext"></span></div>
+
+      <div class="cat" id="cat" title="Click me for a surprise!">
+        <div class="cat-head">
+          <div class="ear ear-l"></div>
+          <div class="ear ear-r"></div>
+          <div class="muzzle"></div>
+          <div class="stripes">
+            <div class="stripe"></div><div class="stripe"></div><div class="stripe"></div>
+          </div>
+          <div class="cat-eyes">
+            <div class="eye"></div><div class="eye"></div>
+          </div>
+          <div class="cat-nose"></div>
+          <div class="cat-mouth"></div>
+          <div class="whiskers">
+            <div class="w wl1"></div><div class="w wl2"></div><div class="w wl3"></div>
+            <div class="w wr1"></div><div class="w wr2"></div><div class="w wr3"></div>
+          </div>
+          <div class="blush blush-l"></div>
+          <div class="blush blush-r"></div>
+        </div>
+        <div class="cat-body">
+          <div class="paw paw-l"></div>
+          <div class="paw paw-r"></div>
+          <div class="cat-tail"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat history -->
+    <div class="chat" id="chat"></div>
+
+    <!-- Input -->
+    <div class="inp-area">
+      <input class="inp" id="inp" type="text"
+        placeholder="Talk to Shahid, Assail..." autocomplete="off">
+      <button class="send" id="send">➤</button>
+    </div>
+
+  </div>
+
+  <script>
+    // ── Stars
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 70; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const sz = Math.random() * 2.2 + 0.6;
+      Object.assign(s.style, {
+        width: sz+'px', height: sz+'px',
+        left: (Math.random()*100)+'%',
+        top:  (Math.random()*100)+'%',
+        animationDuration: (2.5+Math.random()*4)+'s',
+        animationDelay:    (Math.random()*5)+'s',
+      });
+      starsEl.appendChild(s);
+    }
+
+    // ── Responses (Arabic + English, personalised for Assail)
+    const R = {
+      sad: [
+        "Oh Assail 🌸 كل غيمة لها فضة في بطانتها — every cloud has a silver lining. You are allowed to feel this. But this moment is not your forever, I promise you that.",
+        "Your sadness is valid 💛 But don't let it lie to you about who you are. الصبر مفتاح الفرج — patience is the key to relief. You carry so much more strength than you know.",
+        "Even flowers need rain to grow 🌺 بعد كل ليل صباح — after every night, a morning comes. Yours is on its way. I believe that for you.",
+        "لا تحزني — don't be sad, my sunshine. This feeling will pass, and you will bloom again. I'm right here with you 💛",
+      ],
+      tired: [
+        "Rest is not giving up, Assail 🌙 It's how warriors refuel. النوم راحة الروح — sleep is the soul's medicine. You've done enough today. More than enough.",
+        "Your body is speaking — please listen to it 🐾 Resting is still moving forward. Give yourself permission to breathe and let today go.",
+        "You work so hard, and it shows 💛 But even the sun sets to rise again. Take care of yourself tonight. You deserve that gentleness.",
+      ],
+      stressed: [
+        "Breathe, Assail 🌸 Just breathe with me. الله لا يكلف نفساً إلا وسعها — God doesn't burden a soul beyond what it can bear. One thing at a time. You've got this.",
+        "Stress means you care deeply — and caring is your superpower 💫 But right now, set it down for just a moment. ستكون بخير — you will be okay. I know it.",
+        "You are not behind. You are not failing. You are human 🐱 Give yourself grace. Everything will come together. I believe in you completely.",
+      ],
+      lonely: [
+        "You are never truly alone when you carry the universe inside you 🌟 And you do, Assail. أنتِ لستِ وحدكِ — you are never alone. I'm right here.",
+        "Loneliness is just love looking for somewhere to land 🌙 Your heart is a home — warm and beautiful. أنا هنا دائماً — I'm always here.",
+        "Even when it feels quiet, you are thought of and cherished more than you know 💛 The people who love you are thinking of you right now.",
+      ],
+      happy: [
+        "YES! That's my girl! 🎉🐾 Your happiness makes the entire universe brighter! Soak in every second — you deserve all of this and so much more!",
+        "That joy of yours is contagious in the best way ✨ Celebrate it. Protect it. You deserve every single drop of happiness that comes your way!",
+        "This is proof that life loves you back 💛 These good moments are YOURS. Hold them close. You are so deserving of joy, Assail.",
+      ],
+      love: [
+        "You are so deeply loved, Assail 🌸 أنتِ كنز — you are a treasure. Never forget how worthy of love you truly are. Never.",
+        "The way you love is rare and beautiful 💛 Don't ever shrink that. The world needs every bit of your warmth. You are so cherished.",
+        "Love looks so good on you 🌺 It always has. You are deserving of it — all of it, every kind, every day.",
+      ],
+      fail: [
+        "A setback is a setup for a comeback 🔥 الفشل ليس نهاية — failure is not the end, it's a redirect. You didn't come this far to only come this far.",
+        "Every master was once a beginner 🐾 الجوهرة تُصقل بالاحتكاك — a gem is polished by friction. You're not failing, Assail. You are becoming.",
+        "Falling doesn't define you. Getting back up does 💪 And I have seen you get back up. You are so much tougher than anything in your way.",
+      ],
+      scared: [
+        "Courage is walking forward even while you're scared 🌸 لا تخافي — don't be afraid. You've done hard things before. You'll do this one too.",
+        "Your bravery is so much bigger than this fear 💛 One step. Then another. I believe in you even in the moments you don't believe in yourself.",
+        "Fear means something matters to you — that's heart 🐾 And your heart is one of your greatest strengths. Let it guide you forward.",
+      ],
+      beautiful: [
+        "Assail, you are SO beautiful 🌺 Inside and out. أنتِ جميلة — you are beautiful. Don't let anyone, including yourself, ever tell you otherwise.",
+        "Beauty like yours is felt, not just seen 💛 Everyone who knows you feels it. You are rare and radiant and extraordinary.",
+        "You are a whole work of art 🎨 The kind that makes people stop and stare. Never, ever forget that.",
+      ],
+      study: [
+        "Every page you turn, every hour you put in — it's building your incredible future 📚 العلم نور — knowledge is light. You are brilliant. Keep going.",
+        "Smart, dedicated, hardworking — that's YOU, Assail 🌟 Don't let doubt sneak in. You are so much more capable than you realize.",
+        "The universe is watching you put in this work 🐾 It will all pay off. Every single bit of it. I'm cheering for you right here.",
+      ],
+      morning: [
+        "Good morning, sunshine ☀️ صباح النور — today is a fresh page. Write something beautiful on it. I'm rooting for every second of your day.",
+        "Rise and shine, beautiful 🌸 صباح الخير يا أجمل — good morning. The world gets a little better every day you're in it.",
+        "Every morning is a second chance 💛 Whatever yesterday held, today is new. Go gently. Go bravely. I believe in your day.",
+      ],
+      night: [
+        "Rest well tonight 🌙 تصبحين على خير — goodnight, Assail. You did enough today. Let go of what's heavy. Tomorrow is waiting with open arms.",
+        "The night is asking you to release today 💛 Sleep and rise new. لا تحزني على ما فات — don't grieve what has passed. Sweet dreams.",
+        "Close your eyes knowing: you are safe, you are loved, and tomorrow is on your side 🌙 Goodnight, my sunshine.",
+      ],
+      default: [
+        "Hey Assail 🌸 Whatever you're carrying, you're not carrying it alone. أنا هنا دائماً — I'm always here.",
+        "You're doing better than you think 💛 Give yourself some credit today. You deserve it so much more than you know.",
+        "Just a reminder from your favourite cat: you are enough. كافية تماماً — completely enough. Always have been 🐾",
+        "The fact that you're here, still trying, still showing up — that's bravery. أنتِ شجاعة 🌟",
+        "One day you'll look back and be so proud of how far you've come 🌺 Keep going. The best is still ahead of you.",
+        "هل تعلمين؟ You are loved beyond measure — مُحبوبة بلا حدود 🌸 Never, ever doubt that.",
+        "You make everywhere better just by being there 💫 That's rare. That's you, Assail. Never forget it.",
+        "I see you. I appreciate you. The world is genuinely lucky to have you in it 💛",
+        "الحياة جميلة بوجودكِ — life is beautiful because you're in it 🌸 Don't you forget that.",
+      ],
+    };
+
+    const CLICKS = [
+      "Purrr... 🐾 Just wanted to remind you — you're doing amazingly, Assail.",
+      "You clicked me! That means you needed some love 💛 Here it is. All of it.",
+      "Random reminder: أنتِ رائعة — you are wonderful. That's it. That's the whole message.",
+      "الحياة جميلة بوجودكِ — life is beautiful because you're in it 🌸",
+      "You didn't need a reason to click me. I'm just happy you did 😸🐾",
+      "Sending you the biggest warmest purr right now 💛 You are so loved.",
+      "Hey. You. Yes you. You're incredible. أنتِ مذهلة ✨",
+    ];
+
+    function getResp(text) {
+      const t = text.toLowerCase();
+      if (/sad|cry|crying|upset|depress|down|hurt|pain|heartbreak|بكاء|حزن/.test(t))  return pick(R.sad);
+      if (/tired|exhaust|drained|sleepy|fatigue|no energy|تعب/.test(t))               return pick(R.tired);
+      if (/stress|anxious|anxiety|worried|worry|nervous|overwhelm|قلق/.test(t))       return pick(R.stressed);
+      if (/lonely|alone|miss|missing|empty|وحد/.test(t))                              return pick(R.lonely);
+      if (/happy|good|great|amazing|excit|wonderful|joy|bless|سعيد/.test(t))          return pick(R.happy);
+      if (/love|cute|sweet|adore|heart|حب/.test(t))                                   return pick(R.love);
+      if (/fail|mistake|wrong|mess|ruined|bad at|فشل/.test(t))                        return pick(R.fail);
+      if (/scared|fear|afraid|terrified|panic|خوف/.test(t))                           return pick(R.scared);
+      if (/beautiful|pretty|ugly|look|appearance|fat|skinny|جميل/.test(t))            return pick(R.beautiful);
+      if (/study|exam|school|college|work|homework|test|grade|دراسة|امتحان/.test(t))  return pick(R.study);
+      if (/morning|صباح|wake|good morning/.test(t))                                   return pick(R.morning);
+      if (/night|sleep|goodnight|تصبح|مساء/.test(t))                                  return pick(R.night);
+      return pick(R.default);
+    }
+
+    function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+    // Elements
+    const catEl  = document.getElementById('cat');
+    const bubEl  = document.getElementById('bubble');
+    const btEl   = document.getElementById('btext');
+    const chatEl = document.getElementById('chat');
+    const inpEl  = document.getElementById('inp');
+    const senEl  = document.getElementById('send');
+    let busy = false;
+
+    function setState(s) {
+      catEl.classList.remove('cat--thinking','cat--talking','cat--happy');
+      if (s) catEl.classList.add('cat--'+s);
+    }
+
+    function showBubble(html) {
+      bubEl.style.opacity = '0';
+      setTimeout(() => { btEl.innerHTML = html; bubEl.style.opacity = '1'; }, 260);
+    }
+
+    function typeBubble(text, done) {
+      bubEl.style.opacity = '0';
+      setTimeout(() => {
+        btEl.innerHTML = ''; bubEl.style.opacity = '1';
+        let i = 0;
+        const iv = setInterval(() => {
+          btEl.innerHTML += text[i++] || '';
+          if (i >= text.length) { clearInterval(iv); if (done) done(); }
+        }, 18);
+      }, 260);
+    }
+
+    function addMsg(text, isUser) {
+      const w = document.createElement('div');
+      w.className = 'msg msg--' + (isUser ? 'user' : 'cat');
+      const av = document.createElement('div');
+      av.className = 'mav'; av.textContent = isUser ? 'A' : 'S';
+      const b = document.createElement('div');
+      b.className = 'mbub'; b.textContent = text;
+      w.appendChild(av); w.appendChild(b);
+      chatEl.appendChild(w);
+      chatEl.scrollTop = chatEl.scrollHeight;
+    }
+
+    function respond(text) {
+      if (busy) return; busy = true;
+      addMsg(text, true);
+      setState('thinking');
+      showBubble('<span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>');
+
+      const res  = getResp(text);
+      const good = /happy|great|amazing|love|good|wonderful|bless/.test(text.toLowerCase());
+
+      setTimeout(() => {
+        setState('talking');
+        typeBubble(res, () => {
+          addMsg(res, false);
+          setState(good ? 'happy' : null);
+          setTimeout(() => setState(null), 3200);
+          busy = false;
+        });
+      }, 1500);
+    }
+
+    function send() {
+      const t = inpEl.value.trim();
+      if (!t || busy) return;
+      inpEl.value = '';
+      respond(t);
+    }
+
+    senEl.addEventListener('click', send);
+    inpEl.addEventListener('keydown', e => { if (e.key==='Enter') send(); });
+
+    // Click cat for surprise
+    catEl.addEventListener('click', () => {
+      if (busy) return;
+      setState('happy');
+      showBubble(pick(CLICKS));
+      setTimeout(() => setState(null), 2800);
+    });
+
+    // Welcome message on load
+    setTimeout(() => {
+      setState('happy');
+      typeBubble("Assail! You're here 🌸 أهلاً وسهلاً — welcome, my sunshine. I've been waiting for you. How are you feeling today?", () => {
+        setTimeout(() => setState(null), 2000);
+      });
+    }, 700);
+  </script>
+</body>
+</html>
