@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Rainy Day Story 🌧️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height:100%; overflow:hidden; }
+    body {
+      background:linear-gradient(180deg,#0c1020 0%,#18223e 35%,#222e55 65%,#2a3860 100%);
+      font-family:'Inter',sans-serif;
+    }
+    .clouds { position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+    .cloud { position:absolute; background:rgba(35,50,90,.72); border-radius:80px; filter:blur(24px); }
+    .c1{width:400px;height:100px;top:0;left:-80px;animation:cd 40s ease-in-out infinite alternate}
+    .c2{width:320px;height:80px;top:55px;right:-60px;animation:cd 52s ease-in-out infinite alternate-reverse}
+    .c3{width:360px;height:92px;top:110px;left:22%;animation:cd 44s ease-in-out infinite alternate}
+    .c4{width:270px;height:68px;top:25px;left:55%;animation:cd 56s ease-in-out infinite alternate-reverse}
+    @keyframes cd{0%{transform:translateX(-22px)}100%{transform:translateX(22px)}}
+    .rain{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+    .drop{position:absolute;top:-55px;width:1.5px;background:linear-gradient(transparent,rgba(180,215,248,.52));border-radius:2px;animation:fall linear infinite;}
+    @keyframes fall{to{transform:translateY(110vh) translateX(-14px)}}
+    .town{position:fixed;bottom:0;left:0;right:0;z-index:3;pointer-events:none}
+    .ground{position:absolute;bottom:0;left:0;right:0;height:50px;background:linear-gradient(180deg,#283050,#1e2640);}
+    .ground::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(100,140,210,.45),transparent);}
+    .puddle{position:absolute;top:14px;left:calc(50% - 55px);width:110px;height:18px;background:rgba(50,90,160,.28);border-radius:50%;border:1px solid rgba(90,140,220,.2);}
+    .ripple{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:18px;height:7px;border:1px solid rgba(90,140,220,.4);border-radius:50%;animation:ripple 2.2s ease-out infinite;}
+    .ripple:nth-child(2){animation-delay:.7s}.ripple:nth-child(3){animation-delay:1.4s}
+    @keyframes ripple{0%{width:10px;height:5px;opacity:1}100%{width:75px;height:28px;opacity:0}}
+    .blds{position:absolute;bottom:50px;left:0;right:0;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;}
+    .b{position:relative;flex-shrink:0}
+    .wg{position:absolute;display:grid}
+    .w{width:13px;height:15px;background:rgba(22,32,58,.88);border-radius:2px}
+    .on{background:#ffd580;box-shadow:0 0 6px rgba(255,210,110,.75),0 0 2px rgba(255,210,110,1)}
+    .wm{background:#ffb347;box-shadow:0 0 5px rgba(255,175,60,.65)}
+    .wd{background:rgba(200,160,70,.32)}
+    .wb{background:rgba(80,170,255,.48);box-shadow:0 0 4px rgba(80,170,255,.38)}
+    .dr{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:18px;height:26px;background:#3a2810;border-radius:3px 3px 0 0;border:1px solid rgba(255,200,80,.14);}
+    .dr::after{content:'';position:absolute;top:50%;right:3px;transform:translateY(-50%);width:3px;height:3px;background:#ffd580;border-radius:50%;}
+    .awn{position:absolute;left:-5px;right:-5px;height:16px;background:repeating-linear-gradient(90deg,#b82828 0,#b82828 12px,#e8e8e8 12px,#e8e8e8 24px);border-radius:2px;}
+    .awn::after{content:'';position:absolute;bottom:-5px;left:0;right:0;height:5px;background:repeating-linear-gradient(90deg,#b82828 0,#b82828 12px,#e8e8e8 12px,#e8e8e8 24px);clip-path:polygon(0 0,4% 100%,8% 0,12% 100%,16% 0,20% 100%,24% 0,28% 100%,32% 0,36% 100%,40% 0,44% 100%,48% 0,52% 100%,56% 0,60% 100%,64% 0,68% 100%,72% 0,76% 100%,80% 0,84% 100%,88% 0,92% 100%,96% 0,100% 100%,100% 0);}
+    .bsign{position:absolute;left:50%;transform:translateX(-50%);font-size:7px;padding:2px 6px;border-radius:3px;white-space:nowrap;font-weight:700;letter-spacing:.5px;}
+    .girl{position:fixed;bottom:50px;left:calc(50% - 250px);z-index:5;pointer-events:none;display:flex;flex-direction:column;align-items:center;animation:gbob 3.5s ease-in-out infinite;}
+    @keyframes gbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+    .umb{display:flex;flex-direction:column;align-items:center;margin-bottom:-2px}
+    .udome{width:80px;height:44px;background:linear-gradient(155deg,#bf2535,#d93242);border-radius:40px 40px 0 0;position:relative;overflow:hidden;}
+    .udome::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(0,0,0,.1) 0,rgba(0,0,0,.1) 1px,transparent 1px,transparent calc(100%/7));}
+    .udome::after{content:'';position:absolute;top:7px;left:13px;width:28px;height:9px;background:rgba(255,255,255,.14);border-radius:50%;transform:rotate(-8deg);}
+    .ustick{width:3px;height:46px;background:linear-gradient(180deg,#7a1515,#5a1010);border-radius:0 0 4px 4px}
+    .udrip{position:absolute;bottom:0;width:3px;height:5px;background:rgba(174,214,241,.7);border-radius:0 0 3px 3px;animation:udrip .95s ease-in infinite;}
+    .udrip:nth-child(1){left:5px}.udrip:nth-child(2){left:22px;animation-delay:.3s}.udrip:nth-child(3){left:46px;animation-delay:.58s}.udrip:nth-child(4){left:66px;animation-delay:.15s}
+    @keyframes udrip{0%{height:4px;opacity:1}70%{height:15px;opacity:1}100%{height:4px;opacity:0;transform:translateY(12px)}}
+    .ghg{position:relative;width:46px;margin:0 auto}
+    .ghb{position:absolute;bottom:-10px;left:-7px;width:60px;height:56px;background:#0d0b1a;border-radius:50% 50% 38% 38%;z-index:0}
+    .ghs{position:absolute;bottom:-24px;width:14px;height:34px;background:#0d0b1a;border-radius:0 0 8px 8px;z-index:0}
+    .ghs.l{left:-10px}.ghs.r{right:-10px}
+    .ghead{position:relative;width:42px;height:42px;background:#f5d3bc;border-radius:50%;margin:0 auto;z-index:1;box-shadow:inset -4px -4px 10px rgba(200,110,70,.2);}
+    .ght{position:absolute;top:-12px;left:-4px;width:50px;height:28px;background:#0d0b1a;border-radius:50% 50% 20% 20%;z-index:2}
+    .ghf{position:absolute;top:14px;left:2px;width:38px;height:12px;background:#0d0b1a;border-radius:0 0 40% 55%;z-index:3}
+    .geys{position:absolute;top:18px;left:0;right:0;display:flex;justify-content:space-around;padding:0 8px;z-index:4}
+    .gey{position:relative;width:7px;height:8px;background:#18102e;border-radius:50%}
+    .gey::before{content:'';position:absolute;top:1px;right:1px;width:2px;height:2px;background:rgba(255,255,255,.92);border-radius:50%}
+    .gbl{position:absolute;top:23px;width:9px;height:5px;background:rgba(220,110,110,.3);border-radius:50%;z-index:4}
+    .gbl.l{left:3px}.gbl.r{right:3px}
+    .gmo{position:absolute;top:28px;left:50%;transform:translateX(-50%);width:10px;height:5px;border-bottom:1.5px solid rgba(175,85,85,.62);border-radius:0 0 50% 50%;z-index:4}
+    .gbody{position:relative;width:40px;height:48px;background:linear-gradient(180deg,#e87490,#d46080);border-radius:8px 8px 16px 16px;margin:0 auto;margin-top:-5px;z-index:1;box-shadow:inset -3px -6px 12px rgba(140,20,50,.2);}
+    .gbody::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:14px;height:9px;background:#f8e0d4;border-radius:0 0 50% 50%}
+    .garm{position:absolute;top:8px;width:10px;height:26px;background:#f5d3bc;border-radius:6px}
+    .garm.l{left:-8px;transform:rotate(12deg);transform-origin:top center}
+    .garm.r{right:-8px;transform:rotate(-76deg);transform-origin:top center}
+    .gsk{width:52px;height:16px;background:linear-gradient(180deg,#d46080,#c05070);border-radius:4px 4px 40% 40%;margin:0 auto;margin-top:-3px}
+    .glegs{display:flex;justify-content:center;gap:5px;margin:1px auto 0}
+    .gleg{width:11px;height:24px;background:#f5d3bc;border-radius:4px}
+    .gshoes{display:flex;justify-content:center;gap:5px}
+    .gshoe{width:14px;height:7px;background:#7a2848;border-radius:4px}
+    .catpeek{position:fixed;z-index:4;pointer-events:none;animation:peek 4.5s ease-in-out infinite}
+    @keyframes peek{0%,35%{transform:translateY(0)}45%,88%{transform:translateY(-13px)}100%{transform:translateY(0)}}
+    .pkh{width:22px;height:19px;background:#8B5E3C;border-radius:50% 50% 40% 40%;position:relative}
+    .pkel,.pker{position:absolute;top:-6px;width:0;height:0}
+    .pkel{left:1px;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:11px solid #8B5E3C}
+    .pker{right:1px;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:11px solid #8B5E3C}
+    .pkEyes{position:absolute;top:6px;left:0;right:0;display:flex;justify-content:space-around;padding:0 3px}
+    .pkEye{width:4px;height:4px;background:#8B5513;border-radius:50%}
+    .swrap{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;pointer-events:none;}
+    .scard{background:rgba(255,252,244,.94);backdrop-filter:blur(22px);border:1.5px solid rgba(200,158,108,.28);border-radius:26px;padding:24px 28px;max-width:420px;width:100%;box-shadow:0 22px 55px rgba(0,0,0,.52),inset 0 1px 0 rgba(255,255,255,.95);pointer-events:all;max-height:92vh;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(180,120,70,.3) transparent;}
+    .scard::-webkit-scrollbar{width:3px}.scard::-webkit-scrollbar-thumb{background:rgba(180,120,70,.3);border-radius:2px}
+    .progbar{display:flex;justify-content:center;gap:6px;margin-bottom:14px}
+    .pdot{width:8px;height:8px;border-radius:50%;background:rgba(180,130,80,.2);transition:all .4s}
+    .pdot.on{background:#c47040;transform:scale(1.3);box-shadow:0 0 7px rgba(196,112,64,.55)}
+    .pdot.done{background:#a06030}
+    .sc{display:none}.sc.act{display:block}
+    .stitle{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:#2a1a0a;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+    .stxt{font-size:.83rem;line-height:1.78;color:#5a4030;margin-bottom:14px}
+    .stxt strong{color:#8a4020;font-weight:600}
+    .stxt em{font-family:'Playfair Display',serif;font-style:italic}
+    .opts{display:flex;flex-direction:column;gap:7px}
+    .opt{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.75);border:1.5px solid rgba(180,130,80,.24);border-radius:12px;padding:10px 14px;font-size:.82rem;cursor:pointer;color:#4a3020;text-align:left;font-family:'Inter',sans-serif;transition:all .2s;}
+    .opt:hover{background:rgba(255,240,215,.95);border-color:rgba(180,90,40,.46);transform:translateX(5px);box-shadow:0 4px 12px rgba(160,70,30,.12);}
+    .oem{font-size:1.05rem;flex-shrink:0}
+    .cta{width:100%;margin-top:10px;padding:13px;background:linear-gradient(135deg,#a85525,#ce7040);border:none;border-radius:14px;color:#fff;font-size:.87rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 6px 18px rgba(150,60,20,.35);transition:all .2s;}
+    .cta:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(150,60,20,.52)}
+    .fb{background:rgba(255,234,208,.96);border:1px solid rgba(200,100,50,.28);border-radius:11px;padding:10px 13px;margin-bottom:12px;font-size:.79rem;color:#8a3a10;line-height:1.5;display:none;animation:fbin .3s ease;}
+    .fb.show{display:block}
+    @keyframes fbin{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+    .celeb{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column}
+    .celeb.show{display:flex}
+    .celeb-bg{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(180,50,120,.22),rgba(80,20,140,.15),transparent 68%);animation:cpulse 2.5s ease-in-out infinite;}
+    @keyframes cpulse{0%,100%{opacity:.55}50%{opacity:1}}
+    #cc{position:absolute;inset:0;pointer-events:none}
+    .floaters{position:fixed;inset:0;z-index:19;pointer-events:none}
+    .flt{position:absolute;animation:fltup linear infinite;opacity:0}
+    @keyframes fltup{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-100vh) rotate(360deg);opacity:0}}
+    .bcard{position:relative;z-index:21;background:rgba(255,252,248,.97);border:2px solid rgba(220,158,108,.38);border-radius:30px;padding:28px 32px;max-width:385px;width:90%;text-align:center;box-shadow:0 28px 75px rgba(0,0,0,.58),inset 0 1px 0 rgba(255,255,255,.98);animation:cardIn .88s cubic-bezier(.175,.885,.32,1.275) both;animation-delay:.35s;max-height:90vh;overflow-y:auto;}
+    @keyframes cardIn{from{opacity:0;transform:scale(.58) translateY(44px)}to{opacity:1;transform:none}}
+    .bc-icon{font-size:2.8rem;display:block;margin-bottom:5px;animation:ibounce .6s ease-in-out infinite alternate}
+    @keyframes ibounce{0%{transform:translateY(0) rotate(-5deg)}100%{transform:translateY(-10px) rotate(5deg)}}
+    .bc-t{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;background:linear-gradient(120deg,#e04060,#b030a0,#7040d0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:3px;}
+    .bc-n{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;font-style:italic;background:linear-gradient(120deg,#c030a0,#6030d0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;}
+    .bc-msg{font-size:.83rem;line-height:1.75;color:#5a3020;margin-bottom:18px}
+    .bc-msg em{font-family:'Playfair Display',serif;font-style:italic}
+    .cdlabel{font-size:.58rem;letter-spacing:3px;text-transform:uppercase;color:#a07050;margin-bottom:8px}
+    .cdrow{display:flex;justify-content:center;gap:6px;align-items:center;flex-wrap:wrap}
+    .cdt{background:linear-gradient(145deg,#c85525,#a03e18);border-radius:12px;padding:8px 9px;min-width:54px;box-shadow:0 4px 10px rgba(150,50,15,.32)}
+    .cdn{font-family:'Playfair Display',serif;font-size:1.65rem;font-weight:700;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
+    .cdl{font-size:.5rem;color:rgba(255,255,255,.75);text-transform:uppercase;letter-spacing:1.5px;margin-top:2px}
+    .cdsep{font-size:1.55rem;color:#b04020;padding-bottom:8px;font-family:'Playfair Display',serif}
+    .bc-heart{display:block;font-size:1.55rem;margin-top:12px;animation:hbeat .75s ease-in-out infinite}
+    @keyframes hbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.28)}}
+    @media(max-width:500px){.girl{left:2px}.scard{padding:18px 16px}}
+    @media(max-width:370px){.girl{display:none}.scard{padding:16px 14px}}
+  </style>
+</head>
+<body>
+
+<div class="clouds">
+  <div class="cloud c1"></div><div class="cloud c2"></div>
+  <div class="cloud c3"></div><div class="cloud c4"></div>
+</div>
+<div class="rain" id="rain"></div>
+
+<div class="town">
+  <div class="ground">
+    <div class="puddle">
+      <div class="ripple"></div><div class="ripple"></div><div class="ripple"></div>
+    </div>
+  </div>
+  <div class="blds">
+    <div class="b" style="width:72px;height:188px;background:#1a2438;border-radius:3px 3px 0 0">
+      <div class="wg" style="top:18px;left:10px;grid-template-columns:repeat(2,1fr);gap:9px 7px">
+        <div class="w on"></div><div class="w wd"></div><div class="w"></div><div class="w on"></div>
+        <div class="w wm"></div><div class="w"></div><div class="w on"></div><div class="w wd"></div>
+      </div>
+    </div>
+    <div class="b" style="width:82px;height:228px;background:#1c2840;border-radius:3px 3px 0 0">
+      <div class="wg" style="top:15px;left:10px;grid-template-columns:repeat(3,1fr);gap:8px 4px">
+        <div class="w on"></div><div class="w"></div><div class="w on"></div>
+        <div class="w wd"></div><div class="w on"></div><div class="w"></div>
+        <div class="w wm"></div><div class="w"></div><div class="w on"></div>
+        <div class="w"></div><div class="w wb"></div><div class="w wm"></div>
+        <div class="w on"></div><div class="w wd"></div><div class="w on"></div>
+      </div>
+    </div>
+    <div class="b" style="width:115px;height:154px;background:#243250;border-radius:4px 4px 0 0;position:relative">
+      <div class="awn" style="bottom:154px"></div>
+      <div class="bsign" style="bottom:170px;background:#7a2818;color:#ffd580">&#9749; Caf&eacute; du Soir</div>
+      <div class="wg" style="top:18px;left:14px;grid-template-columns:repeat(2,1fr);gap:14px 12px">
+        <div class="w on" style="width:22px;height:24px"></div><div class="w wm" style="width:22px;height:24px"></div>
+        <div class="w on" style="width:22px;height:24px"></div><div class="w wd" style="width:22px;height:24px"></div>
+      </div>
+      <div class="dr"></div>
+    </div>
+    <div class="b" style="width:88px;height:124px;background:#273455;border-radius:3px 3px 0 0;position:relative">
+      <div class="bsign" style="bottom:124px;background:#3a3060;color:#ffd580">&#128218; Books</div>
+      <div class="wg" style="top:18px;left:12px;grid-template-columns:repeat(2,1fr);gap:10px 8px">
+        <div class="w wm" style="width:19px;height:21px"></div><div class="w on" style="width:19px;height:21px"></div>
+        <div class="w wd" style="width:19px;height:21px"></div><div class="w on" style="width:19px;height:21px"></div>
+      </div>
+      <div class="dr"></div>
+    </div>
+    <div class="b" style="width:96px;height:240px;background:#1e2840;border-radius:3px 3px 0 0">
+      <div class="wg" style="top:14px;left:9px;grid-template-columns:repeat(3,1fr);gap:8px 4px">
+        <div class="w on"></div><div class="w"></div><div class="w on"></div>
+        <div class="w"></div><div class="w wm"></div><div class="w wd"></div>
+        <div class="w on"></div><div class="w on"></div><div class="w"></div>
+        <div class="w wd"></div><div class="w"></div><div class="w on"></div>
+        <div class="w wm"></div><div class="w on"></div><div class="w"></div>
+        <div class="w on"></div><div class="w wb"></div><div class="w on"></div>
+        <div class="w"></div><div class="w on"></div><div class="w wd"></div>
+      </div>
+    </div>
+    <div class="b" style="width:84px;height:120px;background:#243050;border-radius:3px 3px 0 0;position:relative">
+      <div class="bsign" style="bottom:120px;background:#284828;color:#80e090">&#127800; Floral</div>
+      <div class="wg" style="top:16px;left:10px;grid-template-columns:repeat(2,1fr);gap:10px 7px">
+        <div class="w on" style="width:19px;height:21px"></div><div class="w wm" style="width:19px;height:21px"></div>
+        <div class="w wd" style="width:19px;height:21px"></div><div class="w on" style="width:19px;height:21px"></div>
+      </div>
+      <div class="dr"></div>
+    </div>
+    <div class="b" style="width:70px;height:165px;background:#1c2438;border-radius:3px 3px 0 0">
+      <div class="wg" style="top:18px;left:9px;grid-template-columns:repeat(2,1fr);gap:9px 6px">
+        <div class="w on"></div><div class="w wd"></div><div class="w wm"></div><div class="w on"></div>
+        <div class="w"></div><div class="w on"></div><div class="w on"></div><div class="w wd"></div>
+      </div>
+    </div>
+  </div>
+  <!-- Lamp -->
+  <div style="position:absolute;bottom:50px;left:calc(50% + 18px);z-index:4;pointer-events:none;width:30px;height:90px">
+    <div style="position:absolute;top:-30px;left:-48px;width:125px;height:105px;background:radial-gradient(circle,rgba(255,220,100,.13) 0%,transparent 70%);border-radius:50%"></div>
+    <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:5px;height:90px;background:#3a4870;border-radius:2px"></div>
+    <div style="position:absolute;top:2px;left:4px;width:22px;height:4px;background:#3a4870;border-radius:2px">
+      <div style="position:absolute;right:-3px;top:-12px;width:25px;height:14px;background:#3a4870;border-radius:6px 6px 0 0">
+        <div style="position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);width:9px;height:9px;background:#ffe080;border-radius:50%;box-shadow:0 0 18px rgba(255,225,100,.95),0 0 42px rgba(255,200,80,.55)"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Girl -->
+<div class="girl">
+  <div class="umb">
+    <div class="udome"><div class="udrip"></div><div class="udrip"></div><div class="udrip"></div><div class="udrip"></div></div>
+    <div class="ustick"></div>
+  </div>
+  <div class="ghg">
+    <div class="ghb"></div><div class="ghs l"></div><div class="ghs r"></div>
+    <div class="ghead">
+      <div class="ght"></div><div class="ghf"></div>
+      <div class="geys"><div class="gey"></div><div class="gey"></div></div>
+      <div class="gbl l"></div><div class="gbl r"></div><div class="gmo"></div>
+    </div>
+  </div>
+  <div class="gbody"><div class="garm l"></div><div class="garm r"></div></div>
+  <div class="gsk"></div>
+  <div class="glegs"><div class="gleg"></div><div class="gleg"></div></div>
+  <div class="gshoes"><div class="gshoe"></div><div class="gshoe"></div></div>
+</div>
+
+<!-- Cat peek -->
+<div class="catpeek" style="bottom:calc(50px + 92px);left:calc(50% - 152px)">
+  <div class="pkh">
+    <div class="pkel"></div><div class="pker"></div>
+    <div class="pkEyes"><div class="pkEye"></div><div class="pkEye"></div></div>
+  </div>
+</div>
+
+<!-- Story Panel -->
+<div class="swrap">
+  <div class="scard">
+    <div class="progbar" id="prog" style="display:none">
+      <div class="pdot" id="p1"></div><div class="pdot" id="p2"></div>
+      <div class="pdot" id="p3"></div><div class="pdot" id="p4"></div>
+    </div>
+
+    <!-- INTRO -->
+    <div class="sc act" id="s0">
+      <div class="stitle">&#9748; A Rainy Day in Our Town</div>
+      <div class="stxt">
+        Rain falls softly on the cobblestones. You pull your umbrella close, boots making little splashes.<br><br>
+        Suddenly &mdash; a brown cat darts out from under the caf&eacute; awning and skids to a stop right in front of you. It&rsquo;s <strong>Shahid</strong>. Of course it is.<br><br>
+        He looks up with those big brown eyes, tail flicking despite the rain.<br><br>
+        <em>&ldquo;I&rsquo;ve been waiting for you, Assail. Answer four questions about yourself&hellip; and unlock something very special.&rdquo;</em><br><br>
+        He grins. <em>&ldquo;Ready?&rdquo;</em>
+      </div>
+      <button class="cta" data-go="s1">Ready, let&rsquo;s go! &#9749;</button>
+    </div>
+
+    <!-- Q1 -->
+    <div class="sc" id="s1">
+      <div class="stitle">&#127769; Question 1 of 4</div>
+      <div class="fb" id="f1"></div>
+      <div class="stxt">
+        Shahid sits up very straight, looking extremely official for a cat in the rain.<br><br>
+        <em>&ldquo;Question one. What do you, Assail, love most in the whole world?&rdquo;</em><br><br>
+        He watches you with a very knowing look.
+      </div>
+      <div class="opts">
+        <button class="opt" data-ans-q="1" data-ans-type="w" data-ans-msg="q1a"><span class="oem">&#128164;</span> 24 hours &mdash; basically hibernation</button>
+        <button class="opt" data-ans-q="1" data-ans-type="r" data-ans-msg=""><span class="oem">&#127769;</span> 14 hours of blissful sleep</button>
+        <button class="opt" data-ans-q="1" data-ans-type="w" data-ans-msg="q1b"><span class="oem">&#9201;</span> 6 hours and ready to go!</button>
+      </div>
+    </div>
+
+    <!-- Q1 correct -->
+    <div class="sc" id="s1r">
+      <div class="stitle">&#10024; That&rsquo;s the one!</div>
+      <div class="stxt">
+        Shahid&rsquo;s eyes light up!<br><br>
+        <em>&ldquo;14 HOURS! Yes! I once watched you sleep through a thunderstorm, two phone calls, and a cat sitting on your face.&rdquo;</em><br><br>
+        He grins. <em>&ldquo;That was me, by the way. You didn&rsquo;t even move.&rdquo;</em><br><br>
+        <strong>One down! Three to go. &#127800;</strong>
+      </div>
+      <button class="cta" data-go="s2">Keep going! &#128062;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="sc" id="s2">
+      <div class="stitle">&#128062; Question 2 of 4</div>
+      <div class="fb" id="f2"></div>
+      <div class="stxt">
+        Shahid does a little spin on the wet cobblestones. He is very pleased with himself.<br><br>
+        <em>&ldquo;Question two! What is your absolute favourite animal?&rdquo;</em><br><br>
+        He watches you <em>very</em> carefully. Almost suspiciously.
+      </div>
+      <div class="opts">
+        <button class="opt" data-ans-q="2" data-ans-type="w" data-ans-msg="q2a"><span class="oem">&#128054;</span> Dog &mdash; loyal and fluffy</button>
+        <button class="opt" data-ans-q="2" data-ans-type="r" data-ans-msg=""><span class="oem">&#128049;</span> Cat &mdash; mysterious and perfect</button>
+        <button class="opt" data-ans-q="2" data-ans-type="w" data-ans-msg="q2b"><span class="oem">&#128048;</span> Rabbit &mdash; soft and sweet</button>
+        <button class="opt" data-ans-q="2" data-ans-type="w" data-ans-msg="q2c"><span class="oem">&#128060;</span> Panda &mdash; chaotic and adorable</button>
+      </div>
+    </div>
+
+    <!-- Q2 correct -->
+    <div class="sc" id="s2r">
+      <div class="stitle">&#10024; Obviously! &#128062;</div>
+      <div class="stxt">
+        <em>&ldquo;CAT!&rdquo;</em> Shahid does a tiny spin of joy and almost falls in a puddle.<br><br>
+        <em>&ldquo;Obviously! And your FAVOURITE cat&mdash;&rdquo;</em> he gestures to himself very dramatically &mdash; <em>&ldquo;is standing right here in the rain for you. You have excellent taste, Assail.&rdquo;</em><br><br>
+        <strong>Halfway there! &#128155;</strong>
+      </div>
+      <button class="cta" data-go="s3">Onwards! &#9748;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="sc" id="s3">
+      <div class="stitle">&#127851; Question 3 of 4</div>
+      <div class="fb" id="f3"></div>
+      <div class="stxt">
+        You both duck under the caf&eacute; awning as the rain picks up. The smell of warm pastries drifts out.<br><br>
+        Shahid hops onto the windowsill and clears his throat.<br><br>
+        <em>&ldquo;Question three! What is Assail&rsquo;s absolute favourite drink? The one that makes everything better?&rdquo;</em>
+      </div>
+      <div class="opts">
+        <button class="opt" data-ans-q="3" data-ans-type="w" data-ans-msg="q3a"><span class="oem">&#127827;</span> Strawberry Milk</button>
+        <button class="opt" data-ans-q="3" data-ans-type="r" data-ans-msg=""><span class="oem">&#127851;</span> Chocolate Milk</button>
+        <button class="opt" data-ans-q="3" data-ans-type="w" data-ans-msg="q3b"><span class="oem">&#129483;</span> Bubble Tea</button>
+        <button class="opt" data-ans-q="3" data-ans-type="w" data-ans-msg="q3c"><span class="oem">&#9749;</span> Hot Coffee</button>
+      </div>
+    </div>
+
+    <!-- Q3 correct -->
+    <div class="sc" id="s3r">
+      <div class="stitle">&#10024; She knows herself!</div>
+      <div class="stxt">
+        <em>&ldquo;CHOCOLATE MILK!&rdquo;</em> Shahid pounds the windowsill (very gently &mdash; he&rsquo;s a polite cat).<br><br>
+        <em>&ldquo;I KNEW IT. If love had a flavour, it would taste exactly like chocolate milk to you, wouldn&rsquo;t it?&rdquo;</em><br><br>
+        He&rsquo;s not wrong. He&rsquo;s literally never wrong.<br><br>
+        <strong>One more question! You are so close. &#128155;</strong>
+      </div>
+      <button class="cta" data-go="s4">Last question! &#127769;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="sc" id="s4">
+      <div class="stitle">&#127874; Question 4 of 4</div>
+      <div class="fb" id="f4"></div>
+      <div class="stxt">
+        The rain softens to a gentle drizzle. Silver light filters through the clouds.<br><br>
+        Shahid hops down and sits beside you on the caf&eacute; steps, tail curling neatly around his paws. He looks up at you very seriously.<br><br>
+        <em>&ldquo;Last question. The most important one.&rdquo;</em><br><br>
+        A pause.<br><br>
+        <em>&ldquo;When is your birthday, Assail?&rdquo;</em>
+      </div>
+      <div class="opts">
+        <button class="opt" data-ans-q="4" data-ans-type="r" data-ans-msg=""><span class="oem">&#128197;</span> 12th April</button>
+        <button class="opt" data-ans-q="4" data-ans-type="w" data-ans-msg="q4a"><span class="oem">&#128197;</span> 15th March</button>
+        <button class="opt" data-ans-q="4" data-ans-type="w" data-ans-msg="q4b"><span class="oem">&#128197;</span> 22nd June</button>
+        <button class="opt" data-ans-q="4" data-ans-type="w" data-ans-msg="q4c"><span class="oem">&#128197;</span> 8th November</button>
+      </div>
+    </div>
+
+    <!-- Q4 correct -->
+    <div class="sc" id="s4r">
+      <div class="stitle">&#127881; 12th April!!</div>
+      <div class="stxt">
+        <em>&ldquo;12th APRIL!!&rdquo;</em><br><br>
+        Shahid leaps to his feet so fast he nearly falls off the step. His eyes go wide. His tail is going <em>absolutely wild.</em><br><br>
+        <em>&ldquo;YES! YES! I&rsquo;ve been waiting for this moment!&rdquo;</em><br><br>
+        He throws open his arms &mdash; a cat, somehow, throwing open his arms.<br><br>
+        <em>&ldquo;Are you ready? Because something very, very special is about to happen&hellip;&rdquo;</em><br><br>
+        The rain stops. The clouds part. And then &mdash;
+      </div>
+      <button class="cta" data-celebrate="true">&#10024; Let the magic happen! &#10024;</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Celebration -->
+<div class="celeb" id="celeb">
+  <div class="celeb-bg"></div>
+  <canvas id="cc"></canvas>
+  <div class="floaters" id="floaters"></div>
+  <div class="bcard">
+    <span class="bc-icon">&#127874;</span>
+    <div class="bc-t">Happy Birthday,</div>
+    <div class="bc-n">Assail &#127800;</div>
+    <div class="bc-msg">
+      You answered every question perfectly &mdash;<br>
+      because you are perfectly, wonderfully <em>you</em>.<br><br>
+      Every laugh, every hug, every chocolate milk. &#127851;<br><br>
+      <strong>Today the whole universe celebrates you. &#128155;</strong>
+    </div>
+    <div class="cdlabel">&#127800; Your special day arrives in &#127800;</div>
+    <div class="cdrow">
+      <div class="cdt"><div class="cdn" id="cd-d">--</div><div class="cdl">Days</div></div>
+      <div class="cdsep">:</div>
+      <div class="cdt"><div class="cdn" id="cd-h">--</div><div class="cdl">Hours</div></div>
+      <div class="cdsep">:</div>
+      <div class="cdt"><div class="cdn" id="cd-m">--</div><div class="cdl">Mins</div></div>
+      <div class="cdsep">:</div>
+      <div class="cdt"><div class="cdn" id="cd-s">--</div><div class="cdl">Secs</div></div>
+    </div>
+    <span class="bc-heart">&#128149;</span>
+  </div>
+</div>
+
+<script>
+  /* Rain */
+  const rainEl = document.getElementById('rain');
+  for (let i = 0; i < 130; i++) {
+    const d = document.createElement('div');
+    d.className = 'drop';
+    Object.assign(d.style, {
+      left: (Math.random() * 112 - 6) + '%',
+      height: (14 + Math.random() * 24) + 'px',
+      width: (Math.random() < 0.3 ? 1 : 1.5) + 'px',
+      animationDuration: (0.45 + Math.random() * 0.5) + 's',
+      animationDelay: -(Math.random() * 2) + 's',
+      opacity: 0.3 + Math.random() * 0.45,
+    });
+    rainEl.appendChild(d);
+  }
+
+  /* Wrong-answer messages (apostrophes safe here in JS) */
+  const MSGS = {
+    q1a: "24 hours? That's basically a coma, not sleep. Think about the real number, sleepyhead! \uD83D\uDE38",
+    q1b: "Shahid stares in horror. '6 HOURS?! ONLY 6?! Do you even know yourself?!' He shudders dramatically. Try again! \uD83D\uDE31",
+    q2a: "Shahid stares at you. Then at himself. Then back at you. '...REALLY?! Look who's asking the question! \uD83D\uDC3E TRY AGAIN.'",
+    q2b: "'A rabbit?!' Shahid looks genuinely hurt. 'After everything we've been through?! I'm RIGHT HERE. Try again! \uD83D\uDC3E'",
+    q2c: "Shahid tilts his head very slowly. 'A... panda.' Long silence. 'I'm not hurt. I'm completely fine. TRY AGAIN. \uD83D\uDE10'",
+    q3a: "'Strawberry milk is cute,' Shahid says diplomatically. 'But is it really YOUR favourite? Think richer, more chocolatey. \uD83C\uDF6B Try again!'",
+    q3b: "'Bubble tea is a solid choice,' Shahid nods. 'But we're looking for YOUR favourite. The one you always reach for. Try again! \uD83E\uDDCB'",
+    q3c: "'Coffee?' Shahid raises an eyebrow. 'Right now? Think comfort. Think creamy. Think chocolate. Try again! \u2615'",
+    q4a: "Shahid stares. A long, deliberate stare. '...You don't know your own birthday.' He shakes his head. 'The universe is deeply concerned. Try again. \uD83C\uDF19'",
+    q4b: "'June?!' Shahid blinks slowly. 'June. She says June.' He gazes into the distance. 'Your own birthday. Try again. \uD83D\uDE14'",
+    q4c: "Shahid stands. Sits. Stands again. 'November. NOVEMBER?!' Deep breath. 'Think spring. Think flowers. Think YOU. Try again! \uD83C\uDF38'",
+  };
+
+  /* State */
+  const Q = { 1: false, 2: false, 3: false, 4: false };
+
+  function go(id) {
+    document.querySelectorAll('.sc').forEach(function(s) { s.classList.remove('act'); });
+    var el = document.getElementById(id);
+    if (el) el.classList.add('act');
+    var qMap = { s1:1, s1r:1, s2:2, s2r:2, s3:3, s3r:3, s4:4, s4r:4 };
+    var q = qMap[id];
+    if (q) updateProg(q);
+    var card = document.querySelector('.scard');
+    if (card) card.scrollTop = 0;
+  }
+
+  function updateProg(q) {
+    document.getElementById('prog').style.display = 'flex';
+    for (var i = 1; i <= 4; i++) {
+      var d = document.getElementById('p' + i);
+      d.classList.remove('on', 'done');
+      if (Q[i] && i < q) d.classList.add('done');
+      else if (i === q) d.classList.add('on');
+    }
+  }
+
+  function ans(q, type, msgKey) {
+    var fb = document.getElementById('f' + q);
+    if (type === 'r') {
+      Q[q] = true;
+      fb.classList.remove('show');
+      setTimeout(function() { go('s' + q + 'r'); }, 80);
+    } else {
+      fb.textContent = '\uD83D\uDC31 ' + MSGS[msgKey];
+      fb.classList.remove('show');
+      void fb.offsetWidth;
+      fb.classList.add('show');
+    }
+  }
+
+  /* Event delegation — no inline onclick needed */
+  document.addEventListener('click', function(e) {
+    var goBtn = e.target.closest('[data-go]');
+    if (goBtn) { go(goBtn.getAttribute('data-go')); return; }
+
+    var ansBtn = e.target.closest('[data-ans-q]');
+    if (ansBtn) {
+      ans(
+        parseInt(ansBtn.getAttribute('data-ans-q')),
+        ansBtn.getAttribute('data-ans-type'),
+        ansBtn.getAttribute('data-ans-msg')
+      );
+      return;
+    }
+
+    var celebBtn = e.target.closest('[data-celebrate]');
+    if (celebBtn) { celebrate(); return; }
+  });
+
+  /* Celebration */
+  function celebrate() {
+    document.getElementById('celeb').classList.add('show');
+    launchConfetti();
+    launchFloaters();
+    startTimer();
+  }
+
+  function launchConfetti() {
+    var canvas = document.getElementById('cc');
+    var ctx = canvas.getContext('2d');
+    function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+    var cols = ['#e04080','#c030c0','#8040e0','#e08030','#40c0a0','#e0d030','#ff6090','#60d0ff','#ff9040'];
+    var ps = [];
+    for (var i = 0; i < 220; i++) {
+      ps.push({
+        x: Math.random() * innerWidth,
+        y: Math.random() * innerHeight - innerHeight,
+        w: 5 + Math.random() * 9, h: 3 + Math.random() * 5,
+        col: cols[Math.floor(Math.random() * cols.length)],
+        rot: Math.random() * Math.PI * 2,
+        rv: (Math.random() - 0.5) * 0.08,
+        vx: (Math.random() - 0.5) * 2.5,
+        vy: 1.8 + Math.random() * 3,
+        circle: Math.random() < 0.35,
+      });
+    }
+    (function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ps.forEach(function(p) {
+        p.x += p.vx; p.y += p.vy; p.rot += p.rv; p.vy += 0.04;
+        if (p.y > canvas.height + 20) { p.y = -20; p.x = Math.random() * canvas.width; p.vy = 1.8 + Math.random() * 3; }
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.fillStyle = p.col;
+        if (p.circle) { ctx.beginPath(); ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2); ctx.fill(); }
+        else { ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); }
+        ctx.restore();
+      });
+      requestAnimationFrame(draw);
+    })();
+  }
+
+  function launchFloaters() {
+    var el = document.getElementById('floaters');
+    var ems = ['\uD83C\uDF38','\uD83D\uDC95','\u2728','\uD83C\uDF89','\uD83C\uDF82','\uD83D\uDCAB','\uD83C\uDF1F','\uD83D\uDC9B','\uD83E\uDD73','\uD83C\uDF80','\uD83C\uDF3A','\uD83D\uDC9D','\uD83C\uDF88'];
+    function spawn() {
+      var e = document.createElement('div');
+      e.className = 'flt';
+      e.textContent = ems[Math.floor(Math.random() * ems.length)];
+      var dur = 4 + Math.random() * 4;
+      e.style.left = (Math.random() * 90) + '%';
+      e.style.bottom = '-30px';
+      e.style.animationDuration = dur + 's';
+      e.style.fontSize = (0.85 + Math.random() * 0.7) + 'rem';
+      el.appendChild(e);
+      setTimeout(function() { if (e.parentNode) e.parentNode.removeChild(e); }, (dur + 0.5) * 1000);
+    }
+    for (var i = 0; i < 18; i++) { (function(i){ setTimeout(spawn, i * 120); })(i); }
+    setInterval(spawn, 400);
+  }
+
+  function startTimer() {
+    var target = new Date('2026-04-12T00:00:00');
+    function pad(n) { return String(n).padStart(2, '0'); }
+    function tick() {
+      var diff = target - Date.now();
+      if (diff <= 0) {
+        ['d','h','m','s'].forEach(function(k) { document.getElementById('cd-' + k).textContent = '00'; });
+        return;
+      }
+      document.getElementById('cd-d').textContent = pad(Math.floor(diff / 86400000));
+      document.getElementById('cd-h').textContent = pad(Math.floor((diff % 86400000) / 3600000));
+      document.getElementById('cd-m').textContent = pad(Math.floor((diff % 3600000) / 60000));
+      document.getElementById('cd-s').textContent = pad(Math.floor((diff % 60000) / 1000));
+    }
+    tick();
+    setInterval(tick, 1000);
+  }
+</script>
+</body>
+</html>
