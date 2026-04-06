@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assail's Magic Garden</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:100vw;height:100vh;overflow:hidden;font-family:Georgia,serif;
+background:linear-gradient(180deg,#87ceeb 0%,#b8e4ff 45%,#a8d878 75%,#78b840 100%)}
+
+.title{position:fixed;top:14px;left:50%;transform:translateX(-50%);
+font-size:1.5rem;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.35);z-index:10;
+background:rgba(0,0,0,.18);padding:5px 22px;border-radius:20px;white-space:nowrap;
+backdrop-filter:blur(4px)}
+
+/* CLOUDS */
+.cloud{position:fixed;background:#fff;border-radius:60px;opacity:.88}
+.cloud::before,.cloud::after{content:'';position:absolute;background:#fff;border-radius:50%}
+.c1{width:120px;height:38px;top:8%;animation:drift 28s linear infinite}
+.c1::before{width:60px;height:50px;top:-24px;left:18px}
+.c1::after{width:45px;height:38px;top:-18px;right:14px}
+.c2{width:90px;height:30px;top:14%;animation:drift 36s linear infinite;animation-delay:-14s}
+.c2::before{width:48px;height:40px;top:-20px;left:14px}
+.c2::after{width:36px;height:30px;top:-14px;right:10px}
+.c3{width:140px;height:42px;top:5%;animation:drift 44s linear infinite;animation-delay:-22s}
+.c3::before{width:70px;height:58px;top:-28px;left:20px}
+.c3::after{width:52px;height:44px;top:-20px;right:18px}
+@keyframes drift{from{transform:translateX(-300px)}to{transform:translateX(110vw)}}
+
+/* GRASS */
+.grass{position:fixed;bottom:0;left:0;right:0;height:22%;
+background:linear-gradient(180deg,#78b840 0%,#5a9428 100%);z-index:0}
+
+/* CAT - SHAHID */
+.cat{position:fixed;bottom:60px;right:28px;z-index:30;animation:catBob 3s ease-in-out infinite}
+@keyframes catBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.cat-body{width:64px;height:52px;background:#8B5E3C;border-radius:50% 50% 45% 45%;position:relative}
+.cat-head{width:54px;height:50px;background:#8B5E3C;border-radius:50%;
+position:absolute;top:-42px;left:5px}
+.cat-ear-l,.cat-ear-r{position:absolute;top:-14px;
+width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:18px solid #8B5E3C}
+.cat-ear-l{left:6px;transform:rotate(-8deg)}
+.cat-ear-r{right:6px;transform:rotate(8deg)}
+.cat-inner-l,.cat-inner-r{position:absolute;top:-10px;
+width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:11px solid #D4907A}
+.cat-inner-l{left:10px;transform:rotate(-8deg)}
+.cat-inner-r{right:10px;transform:rotate(8deg)}
+.cat-eye-l,.cat-eye-r{position:absolute;top:18px;width:9px;height:9px;
+background:#5a3000;border-radius:50%}
+.cat-eye-l{left:10px}.cat-eye-r{right:10px}
+.cat-eye-l::after,.cat-eye-r::after{content:'';position:absolute;top:1px;right:1px;
+width:3px;height:3px;background:#fff;border-radius:50%}
+.cat-nose{position:absolute;top:30px;left:50%;transform:translateX(-50%);
+width:7px;height:5px;background:#c97070;border-radius:50%}
+.cat-wl1,.cat-wl2,.cat-wr1,.cat-wr2{position:absolute;height:1px;
+background:rgba(200,170,140,.85);top:32px}
+.cat-wl1{left:-16px;width:16px;transform:rotate(-5deg);transform-origin:right}
+.cat-wl2{left:-16px;width:16px;top:36px;transform:rotate(5deg);transform-origin:right}
+.cat-wr1{right:-16px;width:16px;transform:rotate(5deg);transform-origin:left}
+.cat-wr2{right:-16px;width:16px;top:36px;transform:rotate(-5deg);transform-origin:left}
+.cat-tail{position:absolute;bottom:4px;right:-24px;width:30px;height:13px;
+background:#8B5E3C;border-radius:0 14px 14px 0;
+animation:wag 2s ease-in-out infinite;transform-origin:left center}
+@keyframes wag{0%,100%{transform:rotate(-15deg)}50%{transform:rotate(15deg)}}
+.cat-paws{display:flex;justify-content:center;gap:10px;margin-top:4px}
+.paw{width:16px;height:10px;background:#7a5030;border-radius:50%}
+.cat-bubble{position:absolute;top:-64px;right:0;background:#fff;
+border:2px solid #d4a8ff;border-radius:12px;padding:6px 10px;
+font-size:.65rem;color:#6a3a9a;white-space:nowrap;display:none}
+.cat-bubble::after{content:'';position:absolute;bottom:-10px;right:20px;
+border-left:6px solid transparent;border-right:6px solid transparent;border-top:10px solid #fff}
+
+/* GARDEN */
+.garden-wrap{position:fixed;bottom:55px;left:50%;transform:translateX(-50%);
+width:min(680px,90vw);z-index:5}
+.garden-scene{perspective:720px;perspective-origin:50% -10%}
+.garden-floor{transform:rotateX(28deg);transform-origin:center bottom;
+background:linear-gradient(180deg,#5c3a1e 0%,#6b4828 60%,#7a5535 100%);
+border-radius:16px 16px 4px 4px;
+border:6px solid #3d2710;border-bottom:18px solid #2a1a08;
+padding:22px 20px 18px;
+box-shadow:0 30px 60px rgba(0,0,0,.55);position:relative}
+.garden-floor::before{content:'ASSAIL\'S GARDEN';position:absolute;
+bottom:-14px;left:50%;transform:translateX(-50%);
+font-size:.55rem;color:#c8a060;letter-spacing:3px}
+
+.plot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+
+.plot{position:relative;min-height:110px;
+background:radial-gradient(ellipse at 50% 25%,#7a5030 0%,#4a2e12 70%,#3a2008 100%);
+border-radius:10px;border:2px solid #2a1808;cursor:pointer;
+display:flex;align-items:flex-end;justify-content:center;
+overflow:visible;transition:box-shadow .2s;
+box-shadow:inset 0 6px 12px rgba(0,0,0,.4)}
+.plot:hover:not(.planted):not(.locked){
+box-shadow:inset 0 6px 12px rgba(0,0,0,.4),0 0 24px rgba(120,220,80,.45)}
+.plot.planted{cursor:default}
+.plot.locked{cursor:not-allowed;
+background:radial-gradient(ellipse at 50% 25%,#2e2e2e,#111);border-color:#333}
+.plot.legendary-unlocked{
+border-color:rgba(147,51,234,.9);
+animation:legPulse 2s ease-in-out infinite}
+@keyframes legPulse{
+0%,100%{box-shadow:inset 0 6px 12px rgba(0,0,0,.4),0 0 20px rgba(147,51,234,.4)}
+50%{box-shadow:inset 0 6px 12px rgba(0,0,0,.4),0 0 50px rgba(147,51,234,.9)}}
+.phint{font-size:1.8rem;color:rgba(255,255,255,.28);
+padding-bottom:22px;user-select:none;transition:opacity .2s}
+.plot:hover:not(.planted):not(.locked) .phint{color:rgba(255,255,255,.55)}
+.plot-label{position:absolute;top:6px;left:50%;transform:translateX(-50%);
+font-size:.5rem;color:rgba(255,255,255,.35);letter-spacing:1px;white-space:nowrap}
+
+/* FLOWERS */
+.flower-wrap{position:absolute;bottom:0;left:50%;
+transform:translateX(-50%) scaleY(0);
+transform-origin:bottom center;
+transition:transform 1.3s cubic-bezier(.175,.885,.32,1.275);
+width:70px;pointer-events:none}
+.flower-wrap.grow{transform:translateX(-50%) scaleY(1)}
+.flower-wrap svg{width:100%;height:auto;display:block}
+.legendary-flower{width:85px;
+filter:drop-shadow(0 0 14px rgba(139,0,255,.8)) drop-shadow(0 0 6px rgba(100,0,200,.6))}
+
+/* HEARTS */
+.heart{position:absolute;pointer-events:none;
+animation:floatUp linear forwards}
+@keyframes floatUp{
+0%{transform:translateY(0) scale(.6);opacity:0}
+15%{opacity:1}
+85%{opacity:.8}
+100%{transform:translateY(-90px) scale(1.1);opacity:0}}
+
+/* SEED TRAY */
+.seed-tray{position:fixed;bottom:0;left:0;right:0;height:52px;
+background:rgba(35,18,6,.95);backdrop-filter:blur(8px);
+border-top:3px solid #8B5E3C;
+display:flex;align-items:center;justify-content:center;gap:14px;z-index:20}
+.s-item{display:flex;flex-direction:column;align-items:center;gap:3px}
+.s-dot{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.2)}
+.s-name{font-size:.5rem;color:#c8a870;text-align:center;max-width:55px}
+.s-item.used .s-dot{opacity:.28;filter:grayscale(1)}
+.s-item.seed-locked .s-dot{background:#222;opacity:.4;filter:grayscale(1)}
+
+/* PROGRESS */
+.prog{position:fixed;top:56px;left:50%;transform:translateX(-50%);
+background:rgba(0,0,0,.28);backdrop-filter:blur(6px);
+border-radius:20px;padding:5px 16px;
+display:flex;align-items:center;gap:10px;z-index:10}
+.ptrack{width:130px;height:6px;background:rgba(255,255,255,.15);border-radius:3px}
+.pfill{height:100%;background:linear-gradient(90deg,#a78bfa,#60a5fa);
+border-radius:3px;width:0%;transition:width .6s ease}
+.ptxt{color:#d4e8ff;font-size:.7rem}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.65);
+backdrop-filter:blur(4px);z-index:50;display:none;
+align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:linear-gradient(135deg,#1a0a2e,#2d1050);
+border:1px solid rgba(180,120,255,.4);border-radius:20px;
+padding:28px 24px;width:min(400px,92vw);text-align:center;
+color:#e8deff;position:relative;
+animation:popIn .3s cubic-bezier(.175,.885,.32,1.275)}
+@keyframes popIn{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-close{position:absolute;top:10px;right:14px;background:none;border:none;
+color:rgba(255,255,255,.35);font-size:1.2rem;cursor:pointer;line-height:1}
+.modal-close:hover{color:rgba(255,255,255,.7)}
+.m-preview{width:72px;height:72px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center}
+.m-preview svg{width:100%;height:100%}
+.m-title{font-size:1.1rem;color:#d4a8ff;margin-bottom:4px}
+.m-hint{font-size:.75rem;color:#9880cc;margin-bottom:14px}
+.m-q{font-size:2rem;font-weight:bold;color:#fff;
+background:rgba(255,255,255,.05);padding:14px;border-radius:12px;
+margin-bottom:14px;letter-spacing:4px}
+.m-inp{width:100%;padding:12px;font-size:1.1rem;text-align:center;
+background:rgba(255,255,255,.08);border:1px solid rgba(180,120,255,.3);
+border-radius:10px;color:#fff;outline:none;margin-bottom:12px;font-family:Georgia,serif}
+.m-inp:focus{border-color:rgba(200,150,255,.7)}
+.m-btn{width:100%;padding:12px;
+background:linear-gradient(135deg,#7b2d8b,#4a1a9a);
+color:#fff;border:none;border-radius:10px;cursor:pointer;
+font-size:1rem;font-family:Georgia,serif;letter-spacing:1px;
+transition:transform .15s,box-shadow .15s;
+box-shadow:0 4px 18px rgba(120,40,180,.5)}
+.m-btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(120,40,180,.7)}
+.m-fb{margin-top:10px;padding:8px;border-radius:8px;
+font-size:.85rem;min-height:28px}
+.m-fb.wrong{color:#fca5a5;background:rgba(239,68,68,.12)}
+.m-fb.right{color:#86efac;background:rgba(34,197,94,.12)}
+
+/* CELEBRATION */
+#conf{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:200}
+.celeb{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+width:min(460px,92vw);background:rgba(4,0,18,.95);backdrop-filter:blur(20px);
+border:1px solid rgba(200,150,255,.5);border-radius:24px;
+padding:34px 28px;text-align:center;z-index:201;display:none}
+.celeb.show{display:block;animation:cardPop .8s cubic-bezier(.175,.885,.32,1.275)}
+@keyframes cardPop{
+from{transform:translate(-50%,-50%) scale(.3);opacity:0}
+to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+.celeb h1{font-size:1.8rem;
+background:linear-gradient(135deg,#ff9de2,#a78bfa,#60a5fa);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+background-clip:text;margin-bottom:8px}
+.celeb p{color:#c8b0ff;line-height:1.7;font-size:.9rem;margin-bottom:16px}
+.cd-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:16px 0}
+.cd-box{background:rgba(80,40,120,.5);border:1px solid rgba(180,120,255,.3);
+border-radius:12px;padding:12px 16px;min-width:64px}
+.cd-n{font-size:1.8rem;font-weight:bold;color:#d4a8ff;display:block}
+.cd-l{font-size:.58rem;color:#a890cc;letter-spacing:1px;text-transform:uppercase}
+.celeb-close{margin-top:12px;padding:10px 24px;
+background:rgba(100,60,160,.4);border:1px solid rgba(180,120,255,.3);
+color:#d4c0ff;border-radius:10px;cursor:pointer;font-family:Georgia,serif}
+</style>
+</head>
+<body>
+
+<div class="title">🌸 Assail's Magic Garden</div>
+
+<!-- Clouds -->
+<div class="cloud c1"></div>
+<div class="cloud c2"></div>
+<div class="cloud c3"></div>
+
+<!-- Grass -->
+<div class="grass"></div>
+
+<!-- Progress -->
+<div class="prog">
+  <div class="ptrack"><div class="pfill" id="pfill"></div></div>
+  <div class="ptxt" id="ptxt">0 / 5 flowers</div>
+</div>
+
+<!-- Cat Shahid -->
+<div class="cat">
+  <div class="cat-head">
+    <div class="cat-ear-l"></div><div class="cat-ear-r"></div>
+    <div class="cat-inner-l"></div><div class="cat-inner-r"></div>
+    <div class="cat-eye-l"></div><div class="cat-eye-r"></div>
+    <div class="cat-nose"></div>
+    <div class="cat-wl1"></div><div class="cat-wl2"></div>
+    <div class="cat-wr1"></div><div class="cat-wr2"></div>
+    <div class="cat-bubble" id="cat-bubble">Welcome to your garden! 🌱</div>
+  </div>
+  <div class="cat-body">
+    <div class="cat-tail"></div>
+  </div>
+  <div class="cat-paws"><div class="paw"></div><div class="paw"></div></div>
+</div>
+
+<!-- Garden -->
+<div class="garden-wrap">
+  <div class="garden-scene">
+    <div class="garden-floor">
+      <div class="plot-grid">
+        <div class="plot" id="plot-0" data-idx="0">
+          <div class="plot-label">TULIP</div>
+          <div class="phint">+</div>
+        </div>
+        <div class="plot" id="plot-1" data-idx="1">
+          <div class="plot-label">SUNFLOWER</div>
+          <div class="phint">+</div>
+        </div>
+        <div class="plot" id="plot-2" data-idx="2">
+          <div class="plot-label">LAVENDER</div>
+          <div class="phint">+</div>
+        </div>
+        <div class="plot" id="plot-3" data-idx="3">
+          <div class="plot-label">DAISY</div>
+          <div class="phint">+</div>
+        </div>
+        <div class="plot" id="plot-4" data-idx="4" style="grid-column:2">
+          <div class="plot-label" style="color:rgba(147,51,234,.5)">LEGENDARY</div>
+          <div class="phint">🔒</div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Seed Tray -->
+<div class="seed-tray">
+  <div class="s-item" id="si-0"><div class="s-dot" style="background:#f472b6"></div><div class="s-name">Pink Tulip</div></div>
+  <div class="s-item" id="si-1"><div class="s-dot" style="background:#fbbf24"></div><div class="s-name">Sunflower</div></div>
+  <div class="s-item" id="si-2"><div class="s-dot" style="background:#a855f7"></div><div class="s-name">Lavender</div></div>
+  <div class="s-item" id="si-3"><div class="s-dot" style="background:#fef9c3;border-color:#a0a0a0"></div><div class="s-name">Daisy</div></div>
+  <div class="s-item seed-locked" id="si-4"><div class="s-dot" style="background:#1a001f"></div><div class="s-name">??? Rose</div></div>
+</div>
+
+<!-- Quiz Modal -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <button class="modal-close" id="modal-close">✕</button>
+    <div class="m-preview" id="m-preview"></div>
+    <div class="m-title" id="m-title">Plant Flower</div>
+    <div class="m-hint">Answer correctly to plant!</div>
+    <div class="m-q" id="m-q">? + ? = ?</div>
+    <input class="m-inp" id="m-inp" type="number" placeholder="Your answer..." autocomplete="off">
+    <button class="m-btn" id="m-btn">Plant It! 🌱</button>
+    <div class="m-fb" id="m-fb"></div>
+  </div>
+</div>
+
+<!-- Confetti -->
+<canvas id="conf"></canvas>
+
+<!-- Celebration -->
+<div class="celeb" id="celeb">
+  <h1>Happy Birthday Assail! 🌹</h1>
+  <p>You grew every flower in our garden — including the rarest rose in the world, just like you are the rarest, most beautiful person in mine. 💜</p>
+  <div class="cd-row">
+    <div class="cd-box"><span class="cd-n" id="cd-d">-</span><span class="cd-l">Days</span></div>
+    <div class="cd-box"><span class="cd-n" id="cd-h">-</span><span class="cd-l">Hours</span></div>
+    <div class="cd-box"><span class="cd-n" id="cd-m">-</span><span class="cd-l">Mins</span></div>
+    <div class="cd-box"><span class="cd-n" id="cd-s">-</span><span class="cd-l">Secs</span></div>
+  </div>
+  <p style="font-size:.8rem;color:#a890cc">Until your special day 🎂 12th April 2026</p>
+  <button class="celeb-close" id="celeb-close">Keep Gardening 🌸</button>
+</div>
+
+<script>
+// ---- SVG FLOWER STRINGS ----
+var SVG = {};
+
+SVG[0] = '<svg viewBox="0 0 60 110" xmlns="http://www.w3.org/2000/svg">'
+  + '<rect x="27" y="58" width="6" height="50" fill="#2d8a3e" rx="3"/>'
+  + '<path d="M30,80 Q12,72 14,55 Q24,68 30,80" fill="#3ea84d"/>'
+  + '<path d="M30,80 Q48,72 46,55 Q36,68 30,80" fill="#2d8a3e"/>'
+  + '<ellipse cx="22" cy="40" rx="10" ry="24" fill="#f472b6" transform="rotate(-14 22 40)"/>'
+  + '<ellipse cx="30" cy="36" rx="10" ry="26" fill="#ec4899"/>'
+  + '<ellipse cx="38" cy="40" rx="10" ry="24" fill="#f472b6" transform="rotate(14 38 40)"/>'
+  + '<ellipse cx="30" cy="46" rx="6" ry="9" fill="#fce7f3" opacity=".45"/>'
+  + '</svg>';
+
+SVG[1] = '<svg viewBox="0 0 70 120" xmlns="http://www.w3.org/2000/svg">'
+  + '<rect x="32" y="62" width="6" height="56" fill="#4caf50" rx="3"/>'
+  + '<path d="M35,88 Q16,80 18,60 Q28,74 35,88" fill="#66bb6a"/>'
+  + '<path d="M35,88 Q54,80 52,60 Q42,74 35,88" fill="#388e3c"/>'
+  + '<g transform="translate(35,40)">'
+  + '<ellipse cx="0" cy="-20" rx="7" ry="14" fill="#fbbf24" transform="rotate(0)"/>'
+  + '<ellipse cx="0" cy="-20" rx="7" ry="14" fill="#f59e0b" transform="rotate(45)"/>'
+  + '<ellipse cx="0" cy="-20" rx="7" ry="14" fill="#fbbf24" transform="rotate(90)"/>'
+  + '<ellipse cx="0" cy="-20" rx="7" ry="14" fill="#f59e0b" transform="rotate(135)"/>'
+  + '<ellipse cx="0" cy="-20" rx="7" ry="14" fill="#fbbf24" transform="rotate(180)"/>'
+  + '<ellipse cx="0" cy="-20" rx="7" ry="14" fill="#f59e0b" transform="rotate(225)"/>'
+  + '<ellipse cx="0" cy="-20" rx="7" ry="14" fill="#fbbf24" transform="rotate(270)"/>'
+  + '<ellipse cx="0" cy="-20" rx="7" ry="14" fill="#f59e0b" transform="rotate(315)"/>'
+  + '</g>'
+  + '<circle cx="35" cy="40" r="13" fill="#78350f"/>'
+  + '<circle cx="35" cy="40" r="9" fill="#92400e"/>'
+  + '<circle cx="32" cy="38" r="1.4" fill="#3d1f00"/>'
+  + '<circle cx="38" cy="38" r="1.4" fill="#3d1f00"/>'
+  + '<circle cx="35" cy="43" r="1.4" fill="#3d1f00"/>'
+  + '</svg>';
+
+SVG[2] = '<svg viewBox="0 0 50 115" xmlns="http://www.w3.org/2000/svg">'
+  + '<rect x="23" y="62" width="4" height="52" fill="#558b2f" rx="2"/>'
+  + '<line x1="25" y1="62" x2="12" y2="44" stroke="#558b2f" stroke-width="2.5" stroke-linecap="round"/>'
+  + '<line x1="25" y1="62" x2="25" y2="42" stroke="#558b2f" stroke-width="2.5" stroke-linecap="round"/>'
+  + '<line x1="25" y1="62" x2="38" y2="44" stroke="#558b2f" stroke-width="2.5" stroke-linecap="round"/>'
+  + '<line x1="25" y1="74" x2="14" y2="58" stroke="#558b2f" stroke-width="2" stroke-linecap="round"/>'
+  + '<line x1="25" y1="74" x2="36" y2="58" stroke="#558b2f" stroke-width="2" stroke-linecap="round"/>'
+  + '<ellipse cx="12" cy="42" rx="3" ry="5" fill="#9c6fdb"/><ellipse cx="12" cy="36" rx="3" ry="5" fill="#a855f7"/><ellipse cx="12" cy="30" rx="2.5" ry="4" fill="#c084fc"/><ellipse cx="12" cy="25" rx="2" ry="3" fill="#d8b4fe"/>'
+  + '<ellipse cx="25" cy="40" rx="3" ry="5" fill="#9c6fdb"/><ellipse cx="25" cy="34" rx="3" ry="5" fill="#a855f7"/><ellipse cx="25" cy="28" rx="2.5" ry="4" fill="#c084fc"/><ellipse cx="25" cy="22" rx="2" ry="3" fill="#d8b4fe"/><ellipse cx="25" cy="17" rx="1.5" ry="2.5" fill="#e9d5ff"/>'
+  + '<ellipse cx="38" cy="42" rx="3" ry="5" fill="#9c6fdb"/><ellipse cx="38" cy="36" rx="3" ry="5" fill="#a855f7"/><ellipse cx="38" cy="30" rx="2.5" ry="4" fill="#c084fc"/><ellipse cx="38" cy="25" rx="2" ry="3" fill="#d8b4fe"/>'
+  + '<ellipse cx="14" cy="56" rx="2.5" ry="4" fill="#a855f7"/><ellipse cx="14" cy="50" rx="2" ry="3.5" fill="#c084fc"/>'
+  + '<ellipse cx="36" cy="56" rx="2.5" ry="4" fill="#a855f7"/><ellipse cx="36" cy="50" rx="2" ry="3.5" fill="#c084fc"/>'
+  + '</svg>';
+
+SVG[3] = '<svg viewBox="0 0 60 110" xmlns="http://www.w3.org/2000/svg">'
+  + '<rect x="27" y="58" width="6" height="50" fill="#4caf50" rx="3"/>'
+  + '<path d="M30,80 Q14,73 16,56 Q24,70 30,80" fill="#66bb6a"/>'
+  + '<path d="M30,80 Q46,73 44,56 Q36,70 30,80" fill="#388e3c"/>'
+  + '<g transform="translate(30,44)">'
+  + '<ellipse cx="0" cy="-16" rx="4.5" ry="13" fill="#f9fafb" transform="rotate(0)"/>'
+  + '<ellipse cx="0" cy="-16" rx="4.5" ry="13" fill="#f1f5f9" transform="rotate(36)"/>'
+  + '<ellipse cx="0" cy="-16" rx="4.5" ry="13" fill="#f9fafb" transform="rotate(72)"/>'
+  + '<ellipse cx="0" cy="-16" rx="4.5" ry="13" fill="#f1f5f9" transform="rotate(108)"/>'
+  + '<ellipse cx="0" cy="-16" rx="4.5" ry="13" fill="#f9fafb" transform="rotate(144)"/>'
+  + '<ellipse cx="0" cy="-16" rx="4.5" ry="13" fill="#f1f5f9" transform="rotate(180)"/>'
+  + '<ellipse cx="0" cy="-16" rx="4.5" ry="13" fill="#f9fafb" transform="rotate(216)"/>'
+  + '<ellipse cx="0" cy="-16" rx="4.5" ry="13" fill="#f1f5f9" transform="rotate(252)"/>'
+  + '<ellipse cx="0" cy="-16" rx="4.5" ry="13" fill="#f9fafb" transform="rotate(288)"/>'
+  + '<ellipse cx="0" cy="-16" rx="4.5" ry="13" fill="#f1f5f9" transform="rotate(324)"/>'
+  + '</g>'
+  + '<circle cx="30" cy="44" r="11" fill="#fbbf24"/>'
+  + '<circle cx="30" cy="44" r="7.5" fill="#f59e0b"/>'
+  + '<circle cx="28" cy="42" r="1.3" fill="#78350f"/>'
+  + '<circle cx="32" cy="42" r="1.3" fill="#78350f"/>'
+  + '<circle cx="30" cy="46" r="1.3" fill="#78350f"/>'
+  + '</svg>';
+
+SVG[4] = '<svg viewBox="0 0 80 135" xmlns="http://www.w3.org/2000/svg">'
+  + '<defs><filter id="glow4"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'
+  + '<ellipse cx="40" cy="44" rx="32" ry="30" fill="none" stroke="rgba(120,0,255,.28)" stroke-width="8" filter="url(#glow4)"/>'
+  + '<rect x="37" y="70" width="6" height="62" fill="#1a0a2e" rx="3"/>'
+  + '<polygon points="37,86 26,83 37,90" fill="#2d0a40"/>'
+  + '<polygon points="43,104 54,101 43,108" fill="#2d0a40"/>'
+  + '<polygon points="37,118 26,115 37,122" fill="#2d0a40"/>'
+  + '<path d="M40,96 Q20,86 22,68 Q34,82 40,96" fill="#0d0a22"/>'
+  + '<path d="M40,96 Q60,86 58,68 Q46,82 40,96" fill="#1a0a2e"/>'
+  + '<g transform="translate(40,44)">'
+  + '<ellipse cx="0" cy="-2" rx="26" ry="20" fill="#0a0014" transform="rotate(0)"/>'
+  + '<ellipse cx="0" cy="-2" rx="26" ry="20" fill="#0d0018" transform="rotate(60)"/>'
+  + '<ellipse cx="0" cy="-2" rx="26" ry="20" fill="#0a0014" transform="rotate(120)"/>'
+  + '<ellipse cx="0" cy="-4" rx="18" ry="13" fill="#130020" transform="rotate(30)"/>'
+  + '<ellipse cx="0" cy="-4" rx="18" ry="13" fill="#180028" transform="rotate(90)"/>'
+  + '<ellipse cx="0" cy="-4" rx="18" ry="13" fill="#130020" transform="rotate(150)"/>'
+  + '<ellipse cx="0" cy="-5" rx="11" ry="8" fill="#1e0030" transform="rotate(15)"/>'
+  + '<ellipse cx="0" cy="-5" rx="11" ry="8" fill="#240038" transform="rotate(75)"/>'
+  + '<ellipse cx="0" cy="-5" rx="11" ry="8" fill="#1e0030" transform="rotate(135)"/>'
+  + '</g>'
+  + '<circle cx="40" cy="42" r="6" fill="#0a000e"/>'
+  + '<circle cx="40" cy="40" r="3" fill="#14001c"/>'
+  + '<ellipse cx="40" cy="44" rx="26" ry="20" fill="none" stroke="rgba(147,51,234,.5)" stroke-width="1.5"/>'
+  + '</svg>';
+
+// ---- GAME DATA ----
+var FLOWERS = [
+  {id:0, name:'Pink Tulip',       rarity:'Common',    color:'#f472b6',
+   qs:[{q:'6 + 9 = ?',a:15},{q:'8 + 7 = ?',a:15},{q:'13 + 2 = ?',a:15}]},
+  {id:1, name:'Sunflower',        rarity:'Uncommon',  color:'#fbbf24',
+   qs:[{q:'4 x 5 = ?',a:20},{q:'12 + 8 = ?',a:20},{q:'25 - 5 = ?',a:20}]},
+  {id:2, name:'Lavender',         rarity:'Rare',      color:'#a855f7',
+   qs:[{q:'6 x 4 = ?',a:24},{q:'8 x 3 = ?',a:24},{q:'20 + 4 = ?',a:24}]},
+  {id:3, name:'Daisy',            rarity:'Uncommon',  color:'#fef9c3',
+   qs:[{q:'3 x 7 = ?',a:21},{q:'14 + 7 = ?',a:21},{q:'28 - 7 = ?',a:21}]},
+  {id:4, name:'Eternal Black Rose',rarity:'Legendary',color:'#9333ea', legendary:true,
+   qs:[{q:'8 x 6 = ?',a:48},{q:'12 x 4 = ?',a:48},{q:'50 - 2 = ?',a:48}]}
+];
+
+var planted = [false,false,false,false,false];
+var activePlot = -1;
+var correctAns = 0;
+var heartInt = null;
+var catTimer = null;
+
+// ---- CAT ----
+function catSay(msg, dur) {
+  var b = document.getElementById('cat-bubble');
+  b.textContent = msg;
+  b.style.display = 'block';
+  clearTimeout(catTimer);
+  catTimer = setTimeout(function(){ b.style.display = 'none'; }, dur || 3500);
+}
+
+// ---- PROGRESS ----
+function updateProg() {
+  var n = planted.filter(Boolean).length;
+  document.getElementById('pfill').style.width = (n/5*100) + '%';
+  document.getElementById('ptxt').textContent = n + ' / 5 flowers';
+}
+
+// ---- OPEN QUIZ ----
+function openPlot(idx) {
+  if (planted[idx]) return;
+  var f = FLOWERS[idx];
+  if (f.legendary) {
+    if (!planted[0]||!planted[1]||!planted[2]||!planted[3]) {
+      catSay('Plant all 4 flowers first to unlock the Legendary Rose! 🌸');
+      return;
+    }
+  }
+  activePlot = idx;
+  var qList = f.qs;
+  var qObj = qList[Math.floor(Math.random() * qList.length)];
+  correctAns = qObj.a;
+  document.getElementById('m-title').textContent = 'Plant ' + f.name;
+  document.getElementById('m-q').textContent = qObj.q;
+  document.getElementById('m-inp').value = '';
+  document.getElementById('m-fb').textContent = '';
+  document.getElementById('m-fb').className = 'm-fb';
+  document.getElementById('m-preview').innerHTML = SVG[idx];
+  document.getElementById('modal-bg').classList.add('open');
+  setTimeout(function(){ document.getElementById('m-inp').focus(); }, 120);
+}
+
+function closeModal() {
+  document.getElementById('modal-bg').classList.remove('open');
+  activePlot = -1;
+}
+
+// ---- CHECK ANSWER ----
+function checkAnswer() {
+  var raw = document.getElementById('m-inp').value.trim();
+  var val = parseInt(raw, 10);
+  var fb = document.getElementById('m-fb');
+  if (raw === '' || isNaN(val)) {
+    fb.textContent = 'Enter a number! 🔢';
+    fb.className = 'm-fb wrong';
+    return;
+  }
+  if (val === correctAns) {
+    fb.textContent = 'Correct! Planting your flower... 🌟';
+    fb.className = 'm-fb right';
+    document.getElementById('m-btn').disabled = true;
+    var idx = activePlot;
+    setTimeout(function() {
+      closeModal();
+      document.getElementById('m-btn').disabled = false;
+      doPlant(idx);
+    }, 950);
+  } else {
+    fb.textContent = 'Not quite! Try again 💪';
+    fb.className = 'm-fb wrong';
+    document.getElementById('m-inp').value = '';
+    document.getElementById('m-inp').focus();
+  }
+}
+
+// ---- PLANT FLOWER ----
+function doPlant(idx) {
+  planted[idx] = true;
+  var plot = document.getElementById('plot-' + idx);
+  plot.classList.add('planted');
+
+  // Remove hint
+  var hint = plot.querySelector('.phint');
+  if (hint) hint.parentNode.removeChild(hint);
+
+  // Create flower element
+  var fw = document.createElement('div');
+  fw.className = 'flower-wrap' + (FLOWERS[idx].legendary ? ' legendary-flower' : '');
+  fw.id = 'fw-' + idx;
+  fw.innerHTML = SVG[idx];
+  plot.appendChild(fw);
+
+  // Mark seed tray
+  var si = document.getElementById('si-' + idx);
+  if (si) si.classList.add('used');
+
+  // Trigger grow via double rAF
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      fw.classList.add('grow');
+    });
+  });
+
+  if (FLOWERS[idx].legendary) {
+    startHearts(plot);
+    setTimeout(celebrate, 2200);
+    catSay('The Eternal Black Rose is yours! 🌹🖤', 8000);
+  } else {
+    var msgs = ['Beautiful! 🌸','It\'s blooming! 🌱','Amazing work! ✨','So pretty! 💕','Brilliant! 🎉'];
+    catSay(msgs[idx % msgs.length]);
+    var allNormal = planted[0] && planted[1] && planted[2] && planted[3];
+    if (allNormal) {
+      setTimeout(unlockLegendary, 1200);
+    }
+  }
+  updateProg();
+}
+
+// ---- UNLOCK LEGENDARY ----
+function unlockLegendary() {
+  var lp = document.getElementById('plot-4');
+  lp.classList.remove('locked');
+  lp.classList.add('legendary-unlocked');
+  var si4 = document.getElementById('si-4');
+  if (si4) {
+    si4.classList.remove('seed-locked');
+    si4.querySelector('.s-name').textContent = 'Black Rose';
+    si4.querySelector('.s-dot').style.background = '#3b0764';
+    si4.querySelector('.s-dot').style.boxShadow = '0 0 8px rgba(147,51,234,.7)';
+  }
+  var hint = lp.querySelector('.phint');
+  if (hint) { hint.textContent = '✦'; hint.style.color = '#9333ea'; hint.style.fontSize = '2.2rem'; }
+  catSay('The Legendary Seed has appeared! Click the glowing plot! 🌑✨', 6000);
+}
+
+// ---- HEARTS ----
+function startHearts(container) {
+  var emojis = ['❤️','🖤','💜','💕','🌹','✨'];
+  heartInt = setInterval(function() {
+    var h = document.createElement('span');
+    h.className = 'heart';
+    h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    h.style.left = (18 + Math.random() * 60) + '%';
+    h.style.bottom = '75%';
+    h.style.fontSize = (.7 + Math.random() * .9) + 'rem';
+    h.style.animationDuration = (1.4 + Math.random() * 1.2) + 's';
+    container.appendChild(h);
+    setTimeout(function(){ if (h.parentNode) h.parentNode.removeChild(h); }, 2800);
+  }, 340);
+}
+
+// ---- CELEBRATE ----
+function celebrate() {
+  document.getElementById('celeb').classList.add('show');
+  launchConfetti();
+  startCountdown();
+}
+
+// ---- COUNTDOWN ----
+function startCountdown() {
+  var target = new Date('2026-04-12T00:00:00');
+  function tick() {
+    var diff = target - new Date();
+    if (diff < 0) diff = 0;
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor((diff % 86400000) / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cd-d').textContent = d;
+    document.getElementById('cd-h').textContent = h;
+    document.getElementById('cd-m').textContent = m;
+    document.getElementById('cd-s').textContent = s;
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+// ---- CONFETTI ----
+function launchConfetti() {
+  var cv = document.getElementById('conf');
+  var ctx = cv.getContext('2d');
+  cv.width = window.innerWidth;
+  cv.height = window.innerHeight;
+  var cols = ['#ff9de2','#a78bfa','#60a5fa','#fbbf24','#34d399','#fb7185','#fff'];
+  var pts = [];
+  for (var i = 0; i < 220; i++) {
+    pts.push({
+      x: Math.random() * cv.width,
+      y: Math.random() * cv.height - cv.height,
+      w: 6 + Math.random() * 8,
+      h: 4 + Math.random() * 5,
+      c: cols[Math.floor(Math.random() * cols.length)],
+      vx: -1 + Math.random() * 2,
+      vy: 2 + Math.random() * 3.5,
+      r: Math.random() * Math.PI * 2,
+      vr: .02 + Math.random() * .06
+    });
+  }
+  (function draw() {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    for (var i = 0; i < pts.length; i++) {
+      var p = pts[i];
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.r);
+      ctx.fillStyle = p.c;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+      p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      if (p.y > cv.height + 20) { p.y = -20; p.x = Math.random() * cv.width; }
+    }
+    requestAnimationFrame(draw);
+  })();
+}
+
+// ---- INIT ----
+document.addEventListener('DOMContentLoaded', function() {
+  // Plot clicks
+  var plots = document.querySelectorAll('.plot');
+  for (var i = 0; i < plots.length; i++) {
+    (function(el) {
+      el.addEventListener('click', function() {
+        openPlot(parseInt(el.getAttribute('data-idx'), 10));
+      });
+    })(plots[i]);
+  }
+
+  // Plot 4 locked initially
+  document.getElementById('plot-4').classList.add('locked');
+
+  // Modal buttons
+  document.getElementById('m-btn').addEventListener('click', checkAnswer);
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('m-inp').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') checkAnswer();
+  });
+  document.getElementById('modal-bg').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Celeb close
+  document.getElementById('celeb-close').addEventListener('click', function() {
+    document.getElementById('celeb').classList.remove('show');
+  });
+
+  // Initial cat message
+  catSay('Welcome Assail! Click a plot to plant a flower 🌱', 5000);
+  updateProg();
+});
+</script>
+</body>
+</html>
