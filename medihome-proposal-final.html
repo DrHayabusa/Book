@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediHome Project Proposal</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 0.85in;
+    }
+
+    body {
+      font-family: "Georgia", "Times New Roman", serif;
+      color: #222;
+      line-height: 1.55;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 24px;
+      background: #ffffff;
+    }
+
+    .cover {
+      border: 1px solid #d7dbe0;
+      padding: 28px 30px;
+      margin-bottom: 28px;
+    }
+
+    .cover .meta {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #5f6b78;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 0 0 8px;
+      line-height: 1.2;
+      color: #173b59;
+    }
+
+    h2 {
+      font-size: 18px;
+      color: #173b59;
+      margin: 26px 0 10px;
+      border-bottom: 1px solid #dfe4e8;
+      padding-bottom: 4px;
+    }
+
+    p {
+      margin: 0 0 12px;
+      text-align: justify;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      font-weight: 700;
+      color: #384a59;
+      margin-bottom: 18px;
+    }
+
+    .info-grid {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 18px;
+      font-size: 14px;
+    }
+
+    .info-grid td {
+      border: 1px solid #dfe4e8;
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+
+    .info-grid td:first-child {
+      width: 180px;
+      font-weight: 700;
+      background: #f7f9fb;
+    }
+
+    ul {
+      margin: 0 0 12px 22px;
+    }
+
+    li {
+      margin: 0 0 6px;
+    }
+
+    table.plan {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    table.plan th,
+    table.plan td {
+      border: 1px solid #dfe4e8;
+      padding: 10px 11px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    table.plan th {
+      background: #eff4f8;
+      color: #173b59;
+    }
+
+    .note {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-left: 4px solid #2f6da3;
+      background: #f6fbff;
+    }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <div class="meta">Software Engineering Fundamentals (SE2111)</div>
+    <h1>Course Project Proposal</h1>
+    <div class="subtitle">MediHome: A Smarter Way to Manage Medicines at Home</div>
+
+    <table class="info-grid">
+      <tr>
+        <td>Course</td>
+        <td>Software Engineering Fundamentals (SE2111)</td>
+      </tr>
+      <tr>
+        <td>Project Type</td>
+        <td>Course Project Proposal</td>
+      </tr>
+      <tr>
+        <td>Project Title</td>
+        <td>MediHome: A Smarter Way to Manage Medicines at Home</td>
+      </tr>
+      <tr>
+        <td>Prepared By</td>
+        <td>Assail and Team</td>
+      </tr>
+    </table>
+  </section>
+
+  <h2>1. Introduction</h2>
+  <p>
+    Medicines are part of daily life in many households, especially when family members need regular treatment,
+    vitamins, pain relief, or medicine for chronic conditions. However, in most homes, medicines are stored in
+    drawers, shelves, bags, or cabinets without any organized tracking system. As time passes, people may forget
+    which medicines are available, how much is left, whether they are expired, or when they should be taken.
+    This creates inconvenience and, in some cases, risk.
+  </p>
+  <p>
+    The proposed project, <strong>MediHome</strong>, is a home medicine management system designed to help families keep
+    their medicine storage under control. The system focuses on practical household needs such as medicine reminders,
+    expiry-date monitoring, low-stock alerts, and simple medicine inventory tracking. The main purpose of the project
+    is to provide a structured and easy-to-use software solution that improves medicine organization and reduces common
+    mistakes at home.
+  </p>
+
+  <h2>2. Problem Statement</h2>
+  <p>
+    Many families do not have a reliable way to manage the medicines they keep at home. As a result, they may forget
+    dosage times, keep medicines after they expire, buy duplicates, or suddenly discover that an important medicine is
+    out of stock. These problems often happen because medicine information is not stored in one clear place and is
+    instead managed through memory, paper notes, or manual checking.
+  </p>
+  <p>
+    The problem is not only about storing medicine, but also about keeping track of essential details such as quantity,
+    expiry date, reminder times, and medicine use for different household members. Therefore, there is a clear need for
+    a simple software system that helps users manage home medicines in a safer and more organized way.
+  </p>
+
+  <h2>3. Background Survey</h2>
+  <p>
+    Several digital solutions already exist in the area of medicine management, but most of them address only part of
+    the problem. Some mobile applications mainly focus on reminders for a single user, which is useful but limited.
+    Other systems are built for pharmacies or hospitals, where the design is too complex for everyday home use. In
+    many cases, people still depend on handwritten notes or manual inspection of medicine boxes, which does not provide
+    alerts, stock awareness, or shared household visibility.
+  </p>
+  <p>
+    MediHome is different because it is designed specifically for the home environment. It combines several useful
+    functions in one system: medicine inventory, reminder scheduling, expiry warnings, and low-stock tracking. Instead
+    of acting as a clinical or pharmacy platform, the project focuses on simple household medicine control. This makes
+    the solution more practical, more understandable for regular users, and better aligned with the real problem that
+    families face.
+  </p>
+
+  <h2>4. Proposed Approach</h2>
+  <p>
+    The proposed solution is to design a user-friendly application that allows users to register and monitor the
+    medicines available at home. Each medicine entry can store details such as medicine name, category, dosage
+    instructions, quantity, expiry date, and reminder schedule. The system will then use this data to support users
+    through clear monitoring and timely alerts.
+  </p>
+  <p>
+    The expected core features of MediHome include:
+  </p>
+  <ul>
+    <li>adding and updating medicines stored at home,</li>
+    <li>setting reminders for medicines that must be taken on schedule,</li>
+    <li>tracking current stock levels,</li>
+    <li>warning users when a medicine is close to expiry or already expired,</li>
+    <li>notifying users when stock becomes low,</li>
+    <li>allowing household-level organization of medicine information.</li>
+  </ul>
+  <p>
+    The project is intended to improve awareness and organization rather than replace professional medical advice.
+    For that reason, MediHome is positioned as a home management solution, not a diagnosis or treatment system.
+  </p>
+
+  <h2>5. Selected Software Process Model</h2>
+  <p>
+    The most suitable software process model for this project is <strong>Agile</strong>. MediHome contains several features
+    that can be developed and improved step by step, such as medicine registration, reminders, stock alerts, and
+    expiry monitoring. Agile is appropriate because it supports incremental development and allows the team to refine
+    requirements after receiving feedback during the project.
+  </p>
+  <p>
+    Agile is also a practical choice for a student group project. The work can be divided into short iterations, and
+    each team member can focus on a specific area such as requirements, interface design, UML modelling, reminder logic,
+    or testing. This makes planning more flexible and supports continuous progress throughout the semester.
+  </p>
+
+  <h2>6. Initial Work Plan</h2>
+  <table class="plan">
+    <thead>
+      <tr>
+        <th>Week / Stage</th>
+        <th>Planned Work</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Week 6</td>
+        <td>Finalize project topic and prepare the project proposal.</td>
+      </tr>
+      <tr>
+        <td>Week 7</td>
+        <td>Gather and document functional and non-functional requirements.</td>
+      </tr>
+      <tr>
+        <td>Week 8</td>
+        <td>Create the activity diagram and identify the main process flow.</td>
+      </tr>
+      <tr>
+        <td>Week 9</td>
+        <td>Prepare the use case diagram and write use case scenarios.</td>
+      </tr>
+      <tr>
+        <td>Week 10</td>
+        <td>Create sequence diagrams for the most important use cases.</td>
+      </tr>
+      <tr>
+        <td>Week 11</td>
+        <td>Design the class diagram and refine object relationships.</td>
+      </tr>
+      <tr>
+        <td>Week 12</td>
+        <td>Prepare user interface sketches for the main application screens.</td>
+      </tr>
+      <tr>
+        <td>Week 13</td>
+        <td>Write the testing plan and prepare test cases with expected results.</td>
+      </tr>
+      <tr>
+        <td>Week 14</td>
+        <td>Review all documentation, prepare the final submission, and if possible build an MVP demo.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <strong>Summary:</strong> MediHome is a strong project topic because it solves a real-life problem, fits the course
+    requirements well, and provides enough material for requirements analysis, UML modelling, UI design, and testing.
+  </div>
+</body>
+</html>
