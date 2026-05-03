@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>MediHome – UML Diagrams</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
+:root{
+  --bg:#0f1117;--surface:#161b22;--card:#1c2330;
+  --border:#2d3748;--accent:#63b3ed;--green:#68d391;
+  --yellow:#f6e05e;--red:#fc8181;--purple:#b794f4;
+  --orange:#f6ad55;--teal:#4fd1c5;--text:#e2e8f0;--muted:#718096;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(15,17,23,.96);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.logo{font-weight:900;font-size:16px;color:var(--accent);margin-right:14px;}
+nav a{color:var(--muted);text-decoration:none;font-size:12px;font-weight:600;padding:4px 12px;
+  border-radius:20px;border:1px solid transparent;transition:.2s;}
+nav a:hover{color:var(--text);border-color:var(--border);background:var(--surface)}
+
+.hero{text-align:center;padding:52px 20px 36px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(99,179,237,.1),transparent);pointer-events:none;}
+.hero h1{font-size:clamp(26px,5vw,48px);font-weight:900;
+  background:linear-gradient(135deg,var(--accent),var(--teal));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
+.hero p{color:var(--muted);font-size:14px;}
+.badge{display:inline-flex;align-items:center;gap:6px;
+  background:rgba(99,179,237,.12);border:1px solid rgba(99,179,237,.3);
+  color:var(--accent);font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;
+  margin-bottom:14px;letter-spacing:.5px;}
+
+.page{max-width:1300px;margin:0 auto;padding:20px 16px 60px;}
+section{margin-bottom:48px;}
+.section-title{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;overflow:auto;}
+.card.blue{border-color:rgba(99,179,237,.25);}
+.card.green{border-color:rgba(104,211,145,.25);}
+.card.purple{border-color:rgba(183,148,244,.25);}
+.card.orange{border-color:rgba(246,173,85,.25);}
+.card-title{font-size:14px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+.dot{width:10px;height:10px;border-radius:50%;}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(500px,1fr));gap:18px;}
+@media(max-width:600px){.grid2{grid-template-columns:1fr;}}
+
+/* UML base styles */
+.uml-box{fill:#1c2330;stroke:var(--border);stroke-width:1.5;}
+.uml-box-blue{fill:#1a2740;stroke:rgba(99,179,237,.5);stroke-width:1.5;}
+.uml-box-green{fill:#1a2e26;stroke:rgba(104,211,145,.5);stroke-width:1.5;}
+.uml-box-yellow{fill:#2a2518;stroke:rgba(246,224,94,.5);stroke-width:1.5;}
+.uml-box-purple{fill:#221a38;stroke:rgba(183,148,244,.5);stroke-width:1.5;}
+.uml-box-red{fill:#2a1a1a;stroke:rgba(252,129,129,.5);stroke-width:1.5;}
+.uml-box-orange{fill:#2a2018;stroke:rgba(246,173,85,.5);stroke-width:1.5;}
+.uml-header{fill:#0d1520;stroke:rgba(99,179,237,.5);stroke-width:1.5;}
+.uml-header-green{fill:#0d2018;stroke:rgba(104,211,145,.5);stroke-width:1.5;}
+.uml-header-purple{fill:#180d30;stroke:rgba(183,148,244,.5);stroke-width:1.5;}
+.uml-header-orange{fill:#201508;stroke:rgba(246,173,85,.5);stroke-width:1.5;}
+.uml-text{fill:#e2e8f0;font-family:'Inter',sans-serif;font-size:12px;}
+.uml-title{fill:#63b3ed;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;}
+.uml-title-green{fill:#68d391;}
+.uml-title-purple{fill:#b794f4;}
+.uml-title-orange{fill:#f6ad55;}
+.uml-attr{fill:#a0aec0;font-family:'JetBrains Mono',monospace;font-size:10.5px;}
+.uml-method{fill:#4fd1c5;font-family:'JetBrains Mono',monospace;font-size:10.5px;}
+.uml-arrow{fill:none;stroke:#4a5568;stroke-width:1.5;}
+.uml-arrow-blue{fill:none;stroke:var(--accent);stroke-width:1.5;}
+.uml-arrow-green{fill:none;stroke:var(--green);stroke-width:1.5;}
+.uml-arrow-red{fill:none;stroke:var(--red);stroke-width:1.5;}
+.arrowhead{fill:#4a5568;}
+.arrowhead-blue{fill:var(--accent);}
+.arrowhead-green{fill:var(--green);}
+.arrowhead-red{fill:var(--red);}
+.label{fill:#a0aec0;font-family:'Inter',sans-serif;font-size:10px;}
+.label-green{fill:#68d391;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;}
+.label-red{fill:#fc8181;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;}
+.label-blue{fill:#63b3ed;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">💊 MediHome UML</span>
+  <a href="#activity">Activity Diagram</a>
+  <a href="#usecase">Use Case</a>
+  <a href="#class">Class Diagram</a>
+  <a href="#sequence">Sequence Diagram</a>
+  <a href="#inventory">Inventory UML</a>
+</nav>
+
+<div class="hero">
+  <div class="badge">📋 UML DESIGN DOCUMENT</div>
+  <h1>MediHome Project<br>UML Diagrams</h1>
+  <p>Activity · Use Case · Class · Sequence diagrams</p>
+</div>
+
+<div class="page">
+
+<!-- ═══════════════════════════════════════════════
+     ACTIVITY DIAGRAM
+═══════════════════════════════════════════════ -->
+<section id="activity">
+  <div class="section-title">Activity Diagram — Medication Management Flow</div>
+  <div class="card blue">
+    <div class="card-title">
+      <span class="dot" style="background:var(--accent)"></span>
+      Main Flow: Add &amp; Track Medication
+    </div>
+    <div style="overflow-x:auto">
+    <svg width="900" height="1020" viewBox="0 0 900 1020" style="min-width:640px">
+      <defs>
+        <marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#4a5568"/>
+        </marker>
+        <marker id="ah-b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#63b3ed"/>
+        </marker>
+        <marker id="ah-g" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#68d391"/>
+        </marker>
+        <marker id="ah-r" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#fc8181"/>
+        </marker>
+        <marker id="ah-y" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#f6e05e"/>
+        </marker>
+      </defs>
+
+      <!-- SWIMLANE BACKGROUNDS -->
+      <rect x="0" y="0" width="300" height="1020" fill="rgba(99,179,237,.03)" rx="0"/>
+      <rect x="300" y="0" width="300" height="1020" fill="rgba(104,211,145,.03)" rx="0"/>
+      <rect x="600" y="0" width="300" height="1020" fill="rgba(183,148,244,.03)" rx="0"/>
+      <line x1="300" y1="0" x2="300" y2="1020" stroke="#2d3748" stroke-width="1" stroke-dasharray="4,4"/>
+      <line x1="600" y1="0" x2="600" y2="1020" stroke="#2d3748" stroke-width="1" stroke-dasharray="4,4"/>
+
+      <!-- SWIMLANE HEADERS -->
+      <rect x="0" y="0" width="300" height="36" fill="#0d1520"/>
+      <rect x="300" y="0" width="300" height="36" fill="#0d2018"/>
+      <rect x="600" y="0" width="300" height="36" fill="#180d30"/>
+      <text x="150" y="23" text-anchor="middle" fill="#63b3ed" font-size="13" font-weight="700" font-family="Inter">👤 User</text>
+      <text x="450" y="23" text-anchor="middle" fill="#68d391" font-size="13" font-weight="700" font-family="Inter">⚙️ MediHome System</text>
+      <text x="750" y="23" text-anchor="middle" fill="#b794f4" font-size="13" font-weight="700" font-family="Inter">🔔 Notification Engine</text>
+
+      <!-- START NODE -->
+      <circle cx="150" cy="75" r="14" fill="#63b3ed"/>
+      <text x="150" y="100" text-anchor="middle" class="label-blue">START</text>
+
+      <!-- Arrow: Start → Create Profile -->
+      <line x1="150" y1="89" x2="150" y2="118" stroke="#63b3ed" stroke-width="1.5" marker-end="url(#ah-b)"/>
+
+      <!-- 1. Create/Join Household Profile -->
+      <rect x="30" y="120" width="240" height="46" rx="23" class="uml-box-blue"/>
+      <text x="150" y="140" text-anchor="middle" class="uml-text" font-weight="700">Create / Join</text>
+      <text x="150" y="156" text-anchor="middle" class="uml-text" font-weight="700">Household Profile</text>
+
+      <!-- Arrow -->
+      <line x1="150" y1="166" x2="150" y2="194" stroke="#63b3ed" stroke-width="1.5" marker-end="url(#ah-b)"/>
+
+      <!-- 2. Add Medication -->
+      <rect x="30" y="196" width="240" height="46" rx="23" class="uml-box-blue"/>
+      <text x="150" y="216" text-anchor="middle" class="uml-text" font-weight="700">Add Medication</text>
+      <text x="150" y="232" text-anchor="middle" class="uml-attr">(scan barcode / manual entry)</text>
+
+      <!-- Arrow: crosses lanes -->
+      <line x1="270" y1="219" x2="360" y2="219" stroke="#63b3ed" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ah-b)"/>
+
+      <!-- 3. Validate & Store Medication (System) -->
+      <rect x="312" y="196" width="240" height="46" rx="23" class="uml-box-green"/>
+      <text x="432" y="216" text-anchor="middle" class="uml-text" font-weight="700">Validate &amp; Store</text>
+      <text x="432" y="232" text-anchor="middle" class="uml-attr">Medication Data</text>
+
+      <!-- Arrow down -->
+      <line x1="432" y1="242" x2="432" y2="278" stroke="#68d391" stroke-width="1.5" marker-end="url(#ah-g)"/>
+
+      <!-- 4. DDI Check Decision Diamond -->
+      <polygon points="432,280 530,320 432,360 334,320" class="uml-box-yellow" stroke="rgba(246,224,94,.5)" stroke-width="1.5"/>
+      <text x="432" y="313" text-anchor="middle" fill="#f6e05e" font-size="12" font-weight="700" font-family="Inter">Conflict</text>
+      <text x="432" y="329" text-anchor="middle" fill="#f6e05e" font-size="12" font-weight="700" font-family="Inter">Detected?</text>
+
+      <!-- YES arrow right -->
+      <line x1="530" y1="320" x2="610" y2="320" stroke="#fc8181" stroke-width="1.5" marker-end="url(#ah-r)"/>
+      <text x="568" y="313" text-anchor="middle" class="label-red">Yes</text>
+
+      <!-- Display DDI Warning (purple lane) -->
+      <rect x="612" y="296" width="240" height="46" rx="23" class="uml-box-red"/>
+      <text x="732" y="316" text-anchor="middle" class="uml-text" font-weight="700">Display DDI</text>
+      <text x="732" y="332" text-anchor="middle" class="uml-attr">Safety Warning</text>
+
+      <!-- Arrow down from DDI warning -->
+      <line x1="732" y1="342" x2="732" y2="388" stroke="#fc8181" stroke-width="1.5" marker-end="url(#ah-r)"/>
+
+      <!-- Proceed? diamond (right lane) -->
+      <polygon points="732,390 800,420 732,450 664,420" fill="#2a1a1a" stroke="rgba(252,129,129,.5)" stroke-width="1.5"/>
+      <text x="732" y="413" text-anchor="middle" fill="#fc8181" font-size="11" font-weight="700" font-family="Inter">User</text>
+      <text x="732" y="427" text-anchor="middle" fill="#fc8181" font-size="11" font-weight="700" font-family="Inter">Proceeds?</text>
+
+      <!-- No → Cancel (end) -->
+      <line x1="800" y1="420" x2="860" y2="420" stroke="#fc8181" stroke-width="1.5" marker-end="url(#ah-r)"/>
+      <text x="825" y="413" class="label-red">No</text>
+      <circle cx="873" cy="420" r="10" fill="none" stroke="#fc8181" stroke-width="2"/>
+      <circle cx="873" cy="420" r="6" fill="#fc8181"/>
+      <text x="873" y="445" text-anchor="middle" fill="#fc8181" font-size="10" font-family="Inter">CANCEL</text>
+
+      <!-- Yes → merge back to NO path -->
+      <line x1="732" y1="450" x2="732" y2="490" stroke="#68d391" stroke-width="1.5"/>
+      <line x1="732" y1="490" x2="432" y2="490" stroke="#68d391" stroke-width="1.5"/>
+      <line x1="432" y1="490" x2="432" y2="480" stroke="#68d391" stroke-width="1.5" marker-end="url(#ah-g)"/>
+      <text x="640" y="484" text-anchor="middle" class="label-green">Yes (Override)</text>
+
+      <!-- NO arrow from DDI diamond -->
+      <line x1="432" y1="360" x2="432" y2="478" stroke="#68d391" stroke-width="1.5" marker-end="url(#ah-g)"/>
+      <text x="418" y="415" text-anchor="end" class="label-green">No</text>
+
+      <!-- 5. Set Schedule & Reminders (System) -->
+      <rect x="312" y="480" width="240" height="46" rx="23" class="uml-box-green"/>
+      <text x="432" y="500" text-anchor="middle" class="uml-text" font-weight="700">Set Schedule</text>
+      <text x="432" y="516" text-anchor="middle" class="uml-attr">&amp; Reminders</text>
+
+      <!-- Arrow crosses to user lane -->
+      <line x1="312" y1="503" x2="270" y2="503" stroke="#68d391" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ah-g)"/>
+
+      <!-- 6. User Confirms Schedule -->
+      <rect x="30" y="480" width="240" height="46" rx="23" class="uml-box-blue"/>
+      <text x="150" y="500" text-anchor="middle" class="uml-text" font-weight="700">User Confirms</text>
+      <text x="150" y="516" text-anchor="middle" class="uml-attr">Schedule &amp; Dosage</text>
+
+      <!-- Arrow down -->
+      <line x1="150" y1="526" x2="150" y2="554" stroke="#63b3ed" stroke-width="1.5" marker-end="url(#ah-b)"/>
+
+      <!-- Fork bar -->
+      <rect x="60" y="556" width="180" height="6" rx="3" fill="#63b3ed"/>
+      <text x="150" y="575" text-anchor="middle" class="label-blue">Parallel flows</text>
+
+      <!-- Branch 1: Notifications -->
+      <line x1="90" y1="562" x2="90" y2="594" stroke="#63b3ed" stroke-width="1.5" marker-end="url(#ah-b)"/>
+
+      <!-- Branch 2: Logs -->
+      <line x1="210" y1="562" x2="210" y2="594" stroke="#63b3ed" stroke-width="1.5" marker-end="url(#ah-b)"/>
+
+      <!-- 7a. Notification branch (crosses to purple) -->
+      <line x1="90" y1="594" x2="90" y2="610" stroke="#b794f4" stroke-width="1.5"/>
+      <line x1="90" y1="610" x2="640" y2="610" stroke="#b794f4" stroke-width="1.5" marker-end="url(#ah)"/>
+
+      <!-- 8. Send Persistent Notifications (purple lane) -->
+      <rect x="612" y="594" width="240" height="46" rx="23" class="uml-box-purple"/>
+      <text x="732" y="614" text-anchor="middle" fill="#b794f4" font-weight="700" font-family="Inter" font-size="12">Send Persistent</text>
+      <text x="732" y="630" text-anchor="middle" class="uml-attr">Notifications</text>
+
+      <!-- 7b. Log to history (system) -->
+      <rect x="312" y="594" width="240" height="46" rx="23" class="uml-box-green"/>
+      <text x="432" y="614" text-anchor="middle" class="uml-text" font-weight="700">Log Medication</text>
+      <text x="432" y="630" text-anchor="middle" class="uml-attr">History Entry</text>
+
+      <!-- Arrow: Notification → Medication Due? -->
+      <line x1="732" y1="640" x2="732" y2="678" stroke="#b794f4" stroke-width="1.5" marker-end="url(#ah)"/>
+
+      <!-- 9. Medication Due? diamond -->
+      <polygon points="732,680 810,715 732,750 654,715" fill="#221a38" stroke="rgba(183,148,244,.5)" stroke-width="1.5"/>
+      <text x="732" y="708" text-anchor="middle" fill="#b794f4" font-size="11" font-weight="700" font-family="Inter">Medication</text>
+      <text x="732" y="722" text-anchor="middle" fill="#b794f4" font-size="11" font-weight="700" font-family="Inter">Taken?</text>
+
+      <!-- Yes → Mark taken (user) -->
+      <line x1="654" y1="715" x2="580" y2="715" stroke="#63b3ed" stroke-width="1.5"/>
+      <line x1="580" y1="715" x2="270" y2="715" stroke="#63b3ed" stroke-width="1.5" marker-end="url(#ah-b)"/>
+      <text x="440" y="708" text-anchor="middle" class="label-blue">Yes</text>
+
+      <!-- 10. User marks taken -->
+      <rect x="30" y="692" width="240" height="46" rx="23" class="uml-box-blue"/>
+      <text x="150" y="712" text-anchor="middle" class="uml-text" font-weight="700">Mark as Taken</text>
+      <text x="150" y="728" text-anchor="middle" class="uml-attr">Update Log</text>
+
+      <!-- No → Resend reminder -->
+      <line x1="732" y1="750" x2="732" y2="790" stroke="#fc8181" stroke-width="1.5" marker-end="url(#ah-r)"/>
+      <text x="748" y="775" class="label-red">No</text>
+
+      <!-- 11. Resend Reminder -->
+      <rect x="612" y="792" width="240" height="46" rx="23" class="uml-box-red"/>
+      <text x="732" y="812" text-anchor="middle" fill="#fc8181" font-weight="700" font-family="Inter" font-size="12">Resend Reminder</text>
+      <text x="732" y="828" text-anchor="middle" class="uml-attr">Escalate Alert</text>
+
+      <!-- Loop back arrow -->
+      <line x1="852" y1="815" x2="880" y2="815" stroke="#fc8181" stroke-width="1.5"/>
+      <line x1="880" y1="815" x2="880" y2="615" stroke="#fc8181" stroke-width="1.5"/>
+      <line x1="880" y1="615" x2="853" y2="615" stroke="#fc8181" stroke-width="1.5" marker-end="url(#ah-r)"/>
+      <text x="886" y="720" text-anchor="start" fill="#fc8181" font-size="10" font-family="Inter">retry</text>
+
+      <!-- Join bar from parallel branches -->
+      <line x1="150" y1="738" x2="150" y2="870" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <line x1="432" y1="640" x2="432" y2="870" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <rect x="60" y="870" width="450" height="6" rx="3" fill="#4a5568"/>
+
+      <!-- 12. Update Dashboard -->
+      <line x1="285" y1="876" x2="285" y2="904" stroke="#4a5568" stroke-width="1.5" marker-end="url(#ah)"/>
+      <rect x="165" y="906" width="240" height="46" rx="23" class="uml-box"/>
+      <text x="285" y="926" text-anchor="middle" class="uml-text" font-weight="700">Update Dashboard</text>
+      <text x="285" y="942" text-anchor="middle" class="uml-attr">&amp; Analytics</text>
+
+      <!-- End node -->
+      <line x1="285" y1="952" x2="285" y2="978" stroke="#4a5568" stroke-width="1.5" marker-end="url(#ah)"/>
+      <circle cx="285" cy="990" r="12" fill="none" stroke="#63b3ed" stroke-width="2"/>
+      <circle cx="285" cy="990" r="8" fill="#63b3ed"/>
+      <text x="285" y="1012" text-anchor="middle" class="label-blue">END</text>
+    </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     USE CASE DIAGRAM
+═══════════════════════════════════════════════ -->
+<section id="usecase">
+  <div class="section-title">Use Case Diagram — MediHome System</div>
+  <div class="card green">
+    <div class="card-title">
+      <span class="dot" style="background:var(--green)"></span>
+      Actors &amp; Use Cases
+    </div>
+    <div style="overflow-x:auto">
+    <svg width="860" height="660" viewBox="0 0 860 660" style="min-width:640px">
+
+      <!-- System boundary -->
+      <rect x="160" y="40" width="540" height="580" rx="12" fill="rgba(99,179,237,.04)" stroke="rgba(99,179,237,.3)" stroke-width="1.5"/>
+      <text x="430" y="68" text-anchor="middle" fill="#63b3ed" font-size="14" font-weight="700" font-family="Inter">MediHome System</text>
+
+      <!-- ── ACTOR: Patient ── -->
+      <!-- Stick figure -->
+      <circle cx="60" cy="180" r="18" fill="none" stroke="#63b3ed" stroke-width="2"/>
+      <line x1="60" y1="198" x2="60" y2="250" stroke="#63b3ed" stroke-width="2"/>
+      <line x1="30" y1="220" x2="90" y2="220" stroke="#63b3ed" stroke-width="2"/>
+      <line x1="60" y1="250" x2="36" y2="280" stroke="#63b3ed" stroke-width="2"/>
+      <line x1="60" y1="250" x2="84" y2="280" stroke="#63b3ed" stroke-width="2"/>
+      <text x="60" y="298" text-anchor="middle" fill="#63b3ed" font-size="12" font-weight="700" font-family="Inter">Patient</text>
+
+      <!-- ── ACTOR: Admin ── -->
+      <circle cx="60" cy="430" r="18" fill="none" stroke="#68d391" stroke-width="2"/>
+      <line x1="60" y1="448" x2="60" y2="500" stroke="#68d391" stroke-width="2"/>
+      <line x1="30" y1="470" x2="90" y2="470" stroke="#68d391" stroke-width="2"/>
+      <line x1="60" y1="500" x2="36" y2="530" stroke="#68d391" stroke-width="2"/>
+      <line x1="60" y1="500" x2="84" y2="530" stroke="#68d391" stroke-width="2"/>
+      <text x="60" y="548" text-anchor="middle" fill="#68d391" font-size="12" font-weight="700" font-family="Inter">Admin</text>
+      <text x="60" y="562" text-anchor="middle" fill="#68d391" font-size="10" font-family="Inter">(Head of House)</text>
+
+      <!-- ── ACTOR: Doctor (external) ── -->
+      <circle cx="800" cy="300" r="18" fill="none" stroke="#f6ad55" stroke-width="2"/>
+      <line x1="800" y1="318" x2="800" y2="370" stroke="#f6ad55" stroke-width="2"/>
+      <line x1="770" y1="340" x2="830" y2="340" stroke="#f6ad55" stroke-width="2"/>
+      <line x1="800" y1="370" x2="776" y2="400" stroke="#f6ad55" stroke-width="2"/>
+      <line x1="800" y1="370" x2="824" y2="400" stroke="#f6ad55" stroke-width="2"/>
+      <text x="800" y="418" text-anchor="middle" fill="#f6ad55" font-size="12" font-weight="700" font-family="Inter">Doctor</text>
+      <text x="800" y="432" text-anchor="middle" fill="#f6ad55" font-size="10" font-family="Inter">(External)</text>
+
+      <!-- ── USE CASES ── -->
+      <!-- UC1: Create/Join Profile -->
+      <ellipse cx="310" cy="120" rx="120" ry="28" fill="#1a2740" stroke="rgba(99,179,237,.5)" stroke-width="1.5"/>
+      <text x="310" y="116" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700" font-family="Inter">Create / Join</text>
+      <text x="310" y="130" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700" font-family="Inter">Household Profile</text>
+
+      <!-- UC2: Add Medication -->
+      <ellipse cx="310" cy="210" rx="120" ry="28" fill="#1a2740" stroke="rgba(99,179,237,.5)" stroke-width="1.5"/>
+      <text x="310" y="206" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700" font-family="Inter">Add Medication</text>
+      <text x="310" y="220" text-anchor="middle" fill="#a0aec0" font-size="10" font-family="Inter">«scan / manual»</text>
+
+      <!-- UC3: View Medication -->
+      <ellipse cx="310" cy="300" rx="120" ry="28" fill="#1a2740" stroke="rgba(99,179,237,.5)" stroke-width="1.5"/>
+      <text x="310" y="296" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700" font-family="Inter">View Medication</text>
+      <text x="310" y="310" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700" font-family="Inter">Details &amp; History</text>
+
+      <!-- UC4: Set Reminders -->
+      <ellipse cx="310" cy="390" rx="120" ry="28" fill="#1a2740" stroke="rgba(99,179,237,.5)" stroke-width="1.5"/>
+      <text x="310" y="386" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700" font-family="Inter">Set Schedule</text>
+      <text x="310" y="400" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700" font-family="Inter">&amp; Reminders</text>
+
+      <!-- UC5: Receive Notifications -->
+      <ellipse cx="310" cy="480" rx="120" ry="28" fill="#1a2740" stroke="rgba(99,179,237,.5)" stroke-width="1.5"/>
+      <text x="310" y="476" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700" font-family="Inter">Receive</text>
+      <text x="310" y="490" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700" font-family="Inter">Notifications</text>
+
+      <!-- UC6: Mark as Taken -->
+      <ellipse cx="310" cy="570" rx="120" ry="28" fill="#1a2740" stroke="rgba(99,179,237,.5)" stroke-width="1.5"/>
+      <text x="310" y="566" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700" font-family="Inter">Mark Medication</text>
+      <text x="310" y="580" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700" font-family="Inter">as Taken</text>
+
+      <!-- UC7: Check DDI -->
+      <ellipse cx="560" cy="165" rx="120" ry="28" fill="#2a1a1a" stroke="rgba(252,129,129,.5)" stroke-width="1.5"/>
+      <text x="560" y="161" text-anchor="middle" fill="#fc8181" font-size="11" font-weight="700" font-family="Inter">Check Drug-Drug</text>
+      <text x="560" y="175" text-anchor="middle" fill="#fc8181" font-size="11" font-weight="700" font-family="Inter">Interactions (DDI)</text>
+
+      <!-- UC8: Display DDI Warning -->
+      <ellipse cx="560" cy="255" rx="120" ry="28" fill="#2a1a1a" stroke="rgba(252,129,129,.5)" stroke-width="1.5"/>
+      <text x="560" y="251" text-anchor="middle" fill="#fc8181" font-size="11" font-weight="700" font-family="Inter">Display Safety</text>
+      <text x="560" y="265" text-anchor="middle" fill="#fc8181" font-size="11" font-weight="700" font-family="Inter">Warning</text>
+
+      <!-- UC9: Manage Members -->
+      <ellipse cx="560" cy="390" rx="120" ry="28" fill="#1a2e26" stroke="rgba(104,211,145,.5)" stroke-width="1.5"/>
+      <text x="560" y="386" text-anchor="middle" fill="#68d391" font-size="11" font-weight="700" font-family="Inter">Manage Household</text>
+      <text x="560" y="400" text-anchor="middle" fill="#68d391" font-size="11" font-weight="700" font-family="Inter">Members</text>
+
+      <!-- UC10: View Reports -->
+      <ellipse cx="560" cy="480" rx="120" ry="28" fill="#1a2e26" stroke="rgba(104,211,145,.5)" stroke-width="1.5"/>
+      <text x="560" y="476" text-anchor="middle" fill="#68d391" font-size="11" font-weight="700" font-family="Inter">View Reports</text>
+      <text x="560" y="490" text-anchor="middle" fill="#68d391" font-size="11" font-weight="700" font-family="Inter">&amp; Analytics</text>
+
+      <!-- UC11: Export to Doctor -->
+      <ellipse cx="560" cy="570" rx="120" ry="28" fill="#201508" stroke="rgba(246,173,85,.5)" stroke-width="1.5"/>
+      <text x="560" y="566" text-anchor="middle" fill="#f6ad55" font-size="11" font-weight="700" font-family="Inter">Export Medication</text>
+      <text x="560" y="580" text-anchor="middle" fill="#f6ad55" font-size="11" font-weight="700" font-family="Inter">Report to Doctor</text>
+
+      <!-- ── ASSOCIATIONS: Patient → UCs ── -->
+      <line x1="78" y1="180" x2="190" y2="124" stroke="#63b3ed" stroke-width="1.5"/>
+      <line x1="78" y1="200" x2="190" y2="212" stroke="#63b3ed" stroke-width="1.5"/>
+      <line x1="78" y1="210" x2="190" y2="298" stroke="#63b3ed" stroke-width="1.5"/>
+      <line x1="78" y1="220" x2="190" y2="390" stroke="#63b3ed" stroke-width="1.5"/>
+      <line x1="78" y1="225" x2="190" y2="478" stroke="#63b3ed" stroke-width="1.5"/>
+      <line x1="78" y1="230" x2="190" y2="568" stroke="#63b3ed" stroke-width="1.5"/>
+
+      <!-- ── ASSOCIATIONS: Admin → UCs ── -->
+      <line x1="78" y1="430" x2="190" y2="124" stroke="#68d391" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <line x1="78" y1="445" x2="440" y2="388" stroke="#68d391" stroke-width="1.5"/>
+      <line x1="78" y1="455" x2="440" y2="478" stroke="#68d391" stroke-width="1.5"/>
+
+      <!-- ── ASSOCIATIONS: Doctor → UC ── -->
+      <line x1="782" y1="300" x2="680" y2="570" stroke="#f6ad55" stroke-width="1.5"/>
+      <line x1="782" y1="295" x2="680" y2="480" stroke="#f6ad55" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+      <!-- ── include: AddMed includes CheckDDI ── -->
+      <line x1="430" y1="210" x2="440" y2="168" stroke="#a0aec0" stroke-width="1" stroke-dasharray="5,3" marker-end="url(#ah)"/>
+      <text x="460" y="192" fill="#a0aec0" font-size="9" font-family="Inter">«include»</text>
+
+      <!-- ── extend: DDI warning extends CheckDDI ── -->
+      <line x1="560" y1="237" x2="560" y2="193" stroke="#a0aec0" stroke-width="1" stroke-dasharray="5,3" marker-end="url(#ah)"/>
+      <text x="568" y="220" fill="#a0aec0" font-size="9" font-family="Inter">«extend»</text>
+
+      <!-- ── include: SetReminders includes Notifications ── -->
+      <line x1="310" y1="418" x2="310" y2="452" stroke="#a0aec0" stroke-width="1" stroke-dasharray="5,3" marker-end="url(#ah)"/>
+      <text x="316" y="440" fill="#a0aec0" font-size="9" font-family="Inter">«include»</text>
+    </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     CLASS DIAGRAM
+═══════════════════════════════════════════════ -->
+<section id="class">
+  <div class="section-title">Class Diagram — Domain Model</div>
+  <div class="card purple">
+    <div class="card-title">
+      <span class="dot" style="background:var(--purple)"></span>
+      Core Entities &amp; Relationships
+    </div>
+    <div style="overflow-x:auto">
+    <svg width="960" height="780" viewBox="0 0 960 780" style="min-width:860px">
+
+      <!-- ── CLASS: User ── -->
+      <rect x="20" y="80" width="190" height="200" rx="6" class="uml-box-blue"/>
+      <rect x="20" y="80" width="190" height="36" rx="6" class="uml-header"/>
+      <rect x="20" y="116" width="190" height="0" fill="none"/>
+      <text x="115" y="103" text-anchor="middle" class="uml-title">User</text>
+      <line x1="20" y1="116" x2="210" y2="116" stroke="rgba(99,179,237,.4)" stroke-width="1"/>
+      <text x="30" y="134" class="uml-attr">- userId: String</text>
+      <text x="30" y="150" class="uml-attr">- name: String</text>
+      <text x="30" y="166" class="uml-attr">- email: String</text>
+      <text x="30" y="182" class="uml-attr">- passwordHash: String</text>
+      <text x="30" y="198" class="uml-attr">- role: Enum(admin,member)</text>
+      <text x="30" y="214" class="uml-attr">- profilePhoto: String</text>
+      <line x1="20" y1="222" x2="210" y2="222" stroke="rgba(99,179,237,.4)" stroke-width="1"/>
+      <text x="30" y="238" class="uml-method">+ login()</text>
+      <text x="30" y="254" class="uml-method">+ updateProfile()</text>
+      <text x="30" y="270" class="uml-method">+ getHistory()</text>
+
+      <!-- ── CLASS: HouseholdProfile ── -->
+      <rect x="270" y="20" width="200" height="190" rx="6" class="uml-box-green"/>
+      <rect x="270" y="20" width="200" height="36" rx="6" class="uml-header-green"/>
+      <text x="370" y="43" text-anchor="middle" class="uml-title-green">HouseholdProfile</text>
+      <line x1="270" y1="56" x2="470" y2="56" stroke="rgba(104,211,145,.4)" stroke-width="1"/>
+      <text x="280" y="74" class="uml-attr">- profileId: String</text>
+      <text x="280" y="90" class="uml-attr">- name: String</text>
+      <text x="280" y="106" class="uml-attr">- createdBy: UserId</text>
+      <text x="280" y="122" class="uml-attr">- members: User[]</text>
+      <text x="280" y="138" class="uml-attr">- createdAt: DateTime</text>
+      <line x1="270" y1="148" x2="470" y2="148" stroke="rgba(104,211,145,.4)" stroke-width="1"/>
+      <text x="280" y="164" class="uml-method">+ addMember()</text>
+      <text x="280" y="180" class="uml-method">+ removeMember()</text>
+      <text x="280" y="196" class="uml-method">+ getMedications()</text>
+
+      <!-- ── CLASS: Medication ── -->
+      <rect x="540" y="20" width="200" height="220" rx="6" class="uml-box-yellow"/>
+      <rect x="540" y="20" width="200" height="36" rx="6" class="uml-header"/>
+      <text x="640" y="43" text-anchor="middle" fill="#f6e05e" font-size="13" font-weight="700" font-family="Inter">Medication</text>
+      <line x1="540" y1="56" x2="740" y2="56" stroke="rgba(246,224,94,.4)" stroke-width="1"/>
+      <text x="550" y="74" class="uml-attr">- medicationId: String</text>
+      <text x="550" y="90" class="uml-attr">- name: String</text>
+      <text x="550" y="106" class="uml-attr">- genericName: String</text>
+      <text x="550" y="122" class="uml-attr">- barcode: String</text>
+      <text x="550" y="138" class="uml-attr">- dosage: String</text>
+      <text x="550" y="154" class="uml-attr">- frequency: String</text>
+      <text x="550" y="170" class="uml-attr">- profileId: String</text>
+      <text x="550" y="186" class="uml-attr">- addedBy: UserId</text>
+      <line x1="540" y1="196" x2="740" y2="196" stroke="rgba(246,224,94,.4)" stroke-width="1"/>
+      <text x="550" y="212" class="uml-method">+ scanBarcode()</text>
+      <text x="550" y="228" class="uml-method">+ checkInteractions()</text>
+
+      <!-- ── CLASS: Schedule ── -->
+      <rect x="20" y="360" width="190" height="200" rx="6" class="uml-box-blue"/>
+      <rect x="20" y="360" width="190" height="36" rx="6" class="uml-header"/>
+      <text x="115" y="383" text-anchor="middle" class="uml-title">Schedule</text>
+      <line x1="20" y1="396" x2="210" y2="396" stroke="rgba(99,179,237,.4)" stroke-width="1"/>
+      <text x="30" y="414" class="uml-attr">- scheduleId: String</text>
+      <text x="30" y="430" class="uml-attr">- medicationId: String</text>
+      <text x="30" y="446" class="uml-attr">- userId: String</text>
+      <text x="30" y="462" class="uml-attr">- times: Time[]</text>
+      <text x="30" y="478" class="uml-attr">- startDate: Date</text>
+      <text x="30" y="494" class="uml-attr">- endDate: Date</text>
+      <line x1="20" y1="504" x2="210" y2="504" stroke="rgba(99,179,237,.4)" stroke-width="1"/>
+      <text x="30" y="520" class="uml-method">+ activate()</text>
+      <text x="30" y="536" class="uml-method">+ pause()</text>
+      <text x="30" y="552" class="uml-method">+ generateSlots()</text>
+
+      <!-- ── CLASS: Notification ── -->
+      <rect x="270" y="320" width="200" height="190" rx="6" class="uml-box-purple"/>
+      <rect x="270" y="320" width="200" height="36" rx="6" class="uml-header-purple"/>
+      <text x="370" y="343" text-anchor="middle" class="uml-title-purple">Notification</text>
+      <line x1="270" y1="356" x2="470" y2="356" stroke="rgba(183,148,244,.4)" stroke-width="1"/>
+      <text x="280" y="374" class="uml-attr">- notifId: String</text>
+      <text x="280" y="390" class="uml-attr">- userId: String</text>
+      <text x="280" y="406" class="uml-attr">- scheduleId: String</text>
+      <text x="280" y="422" class="uml-attr">- message: String</text>
+      <text x="280" y="438" class="uml-attr">- type: Enum</text>
+      <text x="280" y="454" class="uml-attr">- sentAt: DateTime</text>
+      <line x1="270" y1="464" x2="470" y2="464" stroke="rgba(183,148,244,.4)" stroke-width="1"/>
+      <text x="280" y="480" class="uml-method">+ send()</text>
+      <text x="280" y="496" class="uml-method">+ dismiss()</text>
+      <text x="280" y="512" class="uml-method">+ snooze()</text>
+
+      <!-- ── CLASS: DDIAlert ── -->
+      <rect x="540" y="310" width="200" height="200" rx="6" class="uml-box-red"/>
+      <rect x="540" y="310" width="200" height="36" rx="6" fill="#0d1520" stroke="rgba(252,129,129,.5)" stroke-width="1.5"/>
+      <text x="640" y="333" text-anchor="middle" fill="#fc8181" font-size="13" font-weight="700" font-family="Inter">DDIAlert</text>
+      <line x1="540" y1="346" x2="740" y2="346" stroke="rgba(252,129,129,.4)" stroke-width="1"/>
+      <text x="550" y="364" class="uml-attr">- alertId: String</text>
+      <text x="550" y="380" class="uml-attr">- medication1Id: String</text>
+      <text x="550" y="396" class="uml-attr">- medication2Id: String</text>
+      <text x="550" y="412" class="uml-attr">- severity: Enum</text>
+      <text x="550" y="428" class="uml-attr">- description: String</text>
+      <text x="550" y="444" class="uml-attr">- detectedAt: DateTime</text>
+      <line x1="540" y1="454" x2="740" y2="454" stroke="rgba(252,129,129,.4)" stroke-width="1"/>
+      <text x="550" y="470" fill="#fc8181" font-family="'JetBrains Mono',monospace" font-size="10.5px">+ display()</text>
+      <text x="550" y="486" fill="#fc8181" font-family="'JetBrains Mono',monospace" font-size="10.5px">+ acknowledge()</text>
+      <text x="550" y="502" fill="#fc8181" font-family="'JetBrains Mono',monospace" font-size="10.5px">+ override()</text>
+
+      <!-- ── CLASS: MedicationLog ── -->
+      <rect x="760" y="160" width="190" height="200" rx="6" class="uml-box-orange"/>
+      <rect x="760" y="160" width="190" height="36" rx="6" class="uml-header-orange"/>
+      <text x="855" y="183" text-anchor="middle" class="uml-title-orange">MedicationLog</text>
+      <line x1="760" y1="196" x2="950" y2="196" stroke="rgba(246,173,85,.4)" stroke-width="1"/>
+      <text x="770" y="214" class="uml-attr">- logId: String</text>
+      <text x="770" y="230" class="uml-attr">- userId: String</text>
+      <text x="770" y="246" class="uml-attr">- medicationId: String</text>
+      <text x="770" y="262" class="uml-attr">- scheduledAt: DateTime</text>
+      <text x="770" y="278" class="uml-attr">- takenAt: DateTime</text>
+      <text x="770" y="294" class="uml-attr">- status: Enum</text>
+      <line x1="760" y1="304" x2="950" y2="304" stroke="rgba(246,173,85,.4)" stroke-width="1"/>
+      <text x="770" y="320" fill="#f6ad55" font-family="'JetBrains Mono',monospace" font-size="10.5px">+ markTaken()</text>
+      <text x="770" y="336" fill="#f6ad55" font-family="'JetBrains Mono',monospace" font-size="10.5px">+ markSkipped()</text>
+      <text x="770" y="352" fill="#f6ad55" font-family="'JetBrains Mono',monospace" font-size="10.5px">+ getAdherence()</text>
+
+      <!-- ── RELATIONSHIPS ── -->
+      <!-- User 1 --* HouseholdProfile (User belongs to profile) -->
+      <line x1="210" y1="120" x2="270" y2="80" stroke="#4a5568" stroke-width="1.5" marker-end="url(#ah)"/>
+      <text x="228" y="95" fill="#a0aec0" font-size="10" font-family="Inter">1..*</text>
+      <text x="255" y="68" fill="#a0aec0" font-size="10" font-family="Inter">1</text>
+      <text x="225" y="82" fill="#a0aec0" font-size="9" font-family="Inter" font-style="italic">belongs to</text>
+
+      <!-- HouseholdProfile 1 --* Medication -->
+      <line x1="470" y1="110" x2="540" y2="110" stroke="#4a5568" stroke-width="1.5" marker-end="url(#ah)"/>
+      <text x="476" y="104" fill="#a0aec0" font-size="10" font-family="Inter">1</text>
+      <text x="518" y="104" fill="#a0aec0" font-size="10" font-family="Inter">0..*</text>
+      <text x="485" y="96" fill="#a0aec0" font-size="9" font-family="Inter" font-style="italic">has</text>
+
+      <!-- Medication 1 -- * Schedule -->
+      <line x1="640" y1="240" x2="640" y2="280" stroke="#4a5568" stroke-width="1.5"/>
+      <line x1="640" y1="280" x2="115" y2="280" stroke="#4a5568" stroke-width="1.5"/>
+      <line x1="115" y1="280" x2="115" y2="360" stroke="#4a5568" stroke-width="1.5" marker-end="url(#ah)"/>
+      <text x="380" y="273" fill="#a0aec0" font-size="9" font-family="Inter" font-style="italic">schedules</text>
+
+      <!-- Schedule 1 --* Notification -->
+      <line x1="210" y1="480" x2="270" y2="460" stroke="#4a5568" stroke-width="1.5" marker-end="url(#ah)"/>
+      <text x="218" y="468" fill="#a0aec0" font-size="9" font-family="Inter" font-style="italic">triggers</text>
+
+      <!-- Medication --* DDIAlert -->
+      <line x1="740" y1="130" x2="780" y2="130" stroke="#4a5568" stroke-width="1.5"/>
+      <line x1="780" y1="130" x2="780" y2="160" stroke="#4a5568" stroke-width="1.5" marker-end="url(#ah)"/>
+      <text x="748" y="124" fill="#a0aec0" font-size="9" font-family="Inter" font-style="italic">logged in</text>
+
+      <line x1="740" y1="150" x2="760" y2="150" stroke="#fc8181" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <line x1="700" y1="240" x2="700" y2="360" stroke="#fc8181" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah-r)"/>
+      <text x="706" y="300" fill="#fc8181" font-size="9" font-family="Inter" font-style="italic">«check»</text>
+
+      <!-- User -- MedicationLog -->
+      <line x1="210" y1="200" x2="760" y2="250" stroke="#f6ad55" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah-y)"/>
+      <text x="450" y="218" fill="#f6ad55" font-size="9" font-family="Inter" font-style="italic">records</text>
+
+      <!-- Medication -- MedicationLog -->
+      <line x1="740" y1="140" x2="855" y2="160" stroke="#4a5568" stroke-width="1.5" marker-end="url(#ah)"/>
+
+      <!-- Legend -->
+      <rect x="20" y="620" width="700" height="120" rx="8" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+      <text x="36" y="642" fill="#718096" font-size="11" font-weight="700" font-family="Inter">LEGEND</text>
+      <line x1="36" y1="660" x2="80" y2="660" stroke="#4a5568" stroke-width="1.5" marker-end="url(#ah)"/>
+      <text x="88" y="664" fill="#a0aec0" font-size="10" font-family="Inter">Association</text>
+      <line x1="36" y1="685" x2="80" y2="685" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah)"/>
+      <text x="88" y="689" fill="#a0aec0" font-size="10" font-family="Inter">Dependency / «include»</text>
+      <text x="36" y="714" fill="#63b3ed" font-size="10" font-family="JetBrains Mono">- attr</text>
+      <text x="88" y="714" fill="#a0aec0" font-size="10" font-family="Inter">private attribute</text>
+      <text x="200" y="714" fill="#4fd1c5" font-size="10" font-family="JetBrains Mono">+ method()</text>
+      <text x="280" y="714" fill="#a0aec0" font-size="10" font-family="Inter">public method</text>
+      <text x="400" y="664" fill="#a0aec0" font-size="10" font-family="Inter">1 — one</text>
+      <text x="460" y="664" fill="#a0aec0" font-size="10" font-family="Inter">0..* — zero or many</text>
+      <text x="400" y="685" fill="#a0aec0" font-size="10" font-family="Inter">1..* — one or many</text>
+    </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SEQUENCE DIAGRAM
+═══════════════════════════════════════════════ -->
+<section id="sequence">
+  <div class="section-title">Sequence Diagram — Add Medication &amp; DDI Check</div>
+  <div class="card orange">
+    <div class="card-title">
+      <span class="dot" style="background:var(--orange)"></span>
+      Interaction: User adds a new medication with conflict check
+    </div>
+    <div style="overflow-x:auto">
+    <svg width="860" height="620" viewBox="0 0 860 620" style="min-width:700px">
+
+      <!-- Lifeline headers -->
+      <rect x="20" y="20" width="110" height="44" rx="6" fill="#1a2740" stroke="rgba(99,179,237,.5)" stroke-width="1.5"/>
+      <text x="75" y="38" text-anchor="middle" fill="#63b3ed" font-size="11" font-weight="700" font-family="Inter">User</text>
+      <text x="75" y="53" text-anchor="middle" fill="#63b3ed" font-size="10" font-family="Inter">(Mobile App)</text>
+
+      <rect x="190" y="20" width="110" height="44" rx="6" fill="#1a2e26" stroke="rgba(104,211,145,.5)" stroke-width="1.5"/>
+      <text x="245" y="38" text-anchor="middle" fill="#68d391" font-size="11" font-weight="700" font-family="Inter">MediHome</text>
+      <text x="245" y="53" text-anchor="middle" fill="#68d391" font-size="10" font-family="Inter">API Server</text>
+
+      <rect x="360" y="20" width="110" height="44" rx="6" fill="#2a1818" stroke="rgba(252,129,129,.5)" stroke-width="1.5"/>
+      <text x="415" y="38" text-anchor="middle" fill="#fc8181" font-size="11" font-weight="700" font-family="Inter">DDI</text>
+      <text x="415" y="53" text-anchor="middle" fill="#fc8181" font-size="10" font-family="Inter">Service</text>
+
+      <rect x="530" y="20" width="110" height="44" rx="6" fill="#221a38" stroke="rgba(183,148,244,.5)" stroke-width="1.5"/>
+      <text x="585" y="38" text-anchor="middle" fill="#b794f4" font-size="11" font-weight="700" font-family="Inter">Notification</text>
+      <text x="585" y="53" text-anchor="middle" fill="#b794f4" font-size="10" font-family="Inter">Service</text>
+
+      <rect x="700" y="20" width="110" height="44" rx="6" fill="#201508" stroke="rgba(246,173,85,.5)" stroke-width="1.5"/>
+      <text x="755" y="38" text-anchor="middle" fill="#f6ad55" font-size="11" font-weight="700" font-family="Inter">Database</text>
+      <text x="755" y="53" text-anchor="middle" fill="#f6ad55" font-size="10" font-family="Inter">(Firebase)</text>
+
+      <!-- Lifelines -->
+      <line x1="75" y1="64" x2="75" y2="600" stroke="#63b3ed" stroke-width="1" stroke-dasharray="5,4" opacity=".4"/>
+      <line x1="245" y1="64" x2="245" y2="600" stroke="#68d391" stroke-width="1" stroke-dasharray="5,4" opacity=".4"/>
+      <line x1="415" y1="64" x2="415" y2="600" stroke="#fc8181" stroke-width="1" stroke-dasharray="5,4" opacity=".4"/>
+      <line x1="585" y1="64" x2="585" y2="600" stroke="#b794f4" stroke-width="1" stroke-dasharray="5,4" opacity=".4"/>
+      <line x1="755" y1="64" x2="755" y2="600" stroke="#f6ad55" stroke-width="1" stroke-dasharray="5,4" opacity=".4"/>
+
+      <!-- Activation boxes -->
+      <rect x="68" y="100" width="14" height="480" rx="2" fill="rgba(99,179,237,.2)" stroke="rgba(99,179,237,.4)" stroke-width="1"/>
+      <rect x="238" y="130" width="14" height="380" rx="2" fill="rgba(104,211,145,.2)" stroke="rgba(104,211,145,.4)" stroke-width="1"/>
+      <rect x="408" y="200" width="14" height="120" rx="2" fill="rgba(252,129,129,.2)" stroke="rgba(252,129,129,.4)" stroke-width="1"/>
+      <rect x="578" y="380" width="14" height="120" rx="2" fill="rgba(183,148,244,.2)" stroke="rgba(183,148,244,.4)" stroke-width="1"/>
+      <rect x="748" y="150" width="14" height="340" rx="2" fill="rgba(246,173,85,.2)" stroke="rgba(246,173,85,.4)" stroke-width="1"/>
+
+      <!-- ── MESSAGES ── -->
+
+      <!-- 1. User → API: addMedication(data) -->
+      <line x1="82" y1="110" x2="238" y2="110" stroke="#63b3ed" stroke-width="1.5" marker-end="url(#ah-b)"/>
+      <text x="155" y="104" text-anchor="middle" fill="#63b3ed" font-size="10" font-family="JetBrains Mono">addMedication(data)</text>
+      <text x="25" y="126" fill="#718096" font-size="10" font-family="Inter">1.</text>
+
+      <!-- 2. API → DB: saveMedication() -->
+      <line x1="252" y1="155" x2="748" y2="155" stroke="#68d391" stroke-width="1.5" marker-end="url(#ah-g)"/>
+      <text x="490" y="149" text-anchor="middle" fill="#68d391" font-size="10" font-family="JetBrains Mono">saveMedication(data)</text>
+      <text x="25" y="171" fill="#718096" font-size="10" font-family="Inter">2.</text>
+
+      <!-- 3. DB → API: ack -->
+      <line x1="748" y1="178" x2="252" y2="178" stroke="#f6ad55" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#ah-y)"/>
+      <text x="490" y="173" text-anchor="middle" fill="#f6ad55" font-size="10" font-family="JetBrains Mono">medicationId</text>
+
+      <!-- 4. API → DDI: checkInteractions() -->
+      <line x1="252" y1="210" x2="408" y2="210" stroke="#fc8181" stroke-width="1.5" marker-end="url(#ah-r)"/>
+      <text x="320" y="204" text-anchor="middle" fill="#fc8181" font-size="10" font-family="JetBrains Mono">checkInteractions(meds[])</text>
+      <text x="25" y="220" fill="#718096" font-size="10" font-family="Inter">3.</text>
+
+      <!-- 5. DDI → DDI: internal lookup -->
+      <path d="M 422 235 Q 470 235 470 250 Q 470 265 422 265" fill="none" stroke="#fc8181" stroke-width="1.5" marker-end="url(#ah-r)"/>
+      <text x="475" y="252" fill="#fc8181" font-size="10" font-family="JetBrains Mono">lookup DB</text>
+
+      <!-- 6. DDI → API: conflicts[] -->
+      <line x1="408" y1="285" x2="252" y2="285" stroke="#fc8181" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#ah-r)"/>
+      <text x="320" y="279" text-anchor="middle" fill="#fc8181" font-size="10" font-family="JetBrains Mono">conflicts[]</text>
+      <text x="25" y="295" fill="#718096" font-size="10" font-family="Inter">4.</text>
+
+      <!-- ALT frame -->
+      <rect x="140" y="305" width="660" height="130" rx="4" fill="none" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="6,3"/>
+      <rect x="140" y="305" width="80" height="20" rx="4" fill="#4a5568"/>
+      <text x="180" y="319" text-anchor="middle" fill="#e2e8f0" font-size="10" font-weight="700" font-family="Inter">alt</text>
+      <text x="220" y="319" fill="#68d391" font-size="10" font-family="Inter">[conflicts found]</text>
+      <line x1="140" y1="360" x2="800" y2="360" stroke="#4a5568" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="220" y="375" fill="#a0aec0" font-size="10" font-family="Inter">[no conflict]</text>
+
+      <!-- 5a. API → User: showDDIWarning -->
+      <line x1="238" y1="338" x2="82" y2="338" stroke="#fc8181" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah-r)"/>
+      <text x="155" y="332" text-anchor="middle" fill="#fc8181" font-size="10" font-family="JetBrains Mono">showDDIWarning()</text>
+      <text x="25" y="348" fill="#718096" font-size="10" font-family="Inter">5a.</text>
+
+      <!-- 5b. No conflict - proceed -->
+      <text x="220" y="395" fill="#68d391" font-size="10" font-family="JetBrains Mono">proceed normally</text>
+      <text x="25" y="400" fill="#718096" font-size="10" font-family="Inter">5b.</text>
+
+      <!-- 6. API → Notification: scheduleReminders() -->
+      <line x1="252" y1="450" x2="578" y2="450" stroke="#b794f4" stroke-width="1.5" marker-end="url(#ah)"/>
+      <text x="405" y="444" text-anchor="middle" fill="#b794f4" font-size="10" font-family="JetBrains Mono">scheduleReminders(schedule)</text>
+      <text x="25" y="460" fill="#718096" font-size="10" font-family="Inter">6.</text>
+
+      <!-- 7. Notif → DB: saveSchedule() -->
+      <line x1="592" y1="472" x2="748" y2="472" stroke="#b794f4" stroke-width="1.5" marker-end="url(#ah)"/>
+      <text x="660" y="466" text-anchor="middle" fill="#b794f4" font-size="10" font-family="JetBrains Mono">saveSchedule()</text>
+      <text x="25" y="480" fill="#718096" font-size="10" font-family="Inter">7.</text>
+
+      <!-- 8. Notif → User: push notification -->
+      <line x1="578" y1="495" x2="82" y2="495" stroke="#b794f4" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah)"/>
+      <text x="320" y="489" text-anchor="middle" fill="#b794f4" font-size="10" font-family="JetBrains Mono">pushNotification(time, dose)</text>
+      <text x="25" y="505" fill="#718096" font-size="10" font-family="Inter">8.</text>
+
+      <!-- 9. API → User: success response -->
+      <line x1="238" y1="520" x2="82" y2="520" stroke="#68d391" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#ah-g)"/>
+      <text x="155" y="514" text-anchor="middle" fill="#68d391" font-size="10" font-family="JetBrains Mono">{ success: true }</text>
+      <text x="25" y="530" fill="#718096" font-size="10" font-family="Inter">9.</text>
+
+      <!-- Solid vs dashed legend -->
+      <line x1="36" y1="570" x2="76" y2="570" stroke="#a0aec0" stroke-width="1.5" marker-end="url(#ah)"/>
+      <text x="84" y="574" fill="#a0aec0" font-size="10" font-family="Inter">synchronous call</text>
+      <line x1="200" y1="570" x2="240" y2="570" stroke="#a0aec0" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#ah)"/>
+      <text x="248" y="574" fill="#a0aec0" font-size="10" font-family="Inter">return / async</text>
+      <rect x="360" y="562" width="36" height="16" rx="2" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+      <text x="378" y="574" text-anchor="middle" fill="#a0aec0" font-size="9" font-weight="700" font-family="Inter">alt</text>
+      <text x="402" y="574" fill="#a0aec0" font-size="10" font-family="Inter">conditional / alternative flow</text>
+    </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     INVENTORY MANAGEMENT UML
+═══════════════════════════════════════════════ -->
+<section id="inventory">
+  <div class="section-title">Inventory Management — UML Diagrams</div>
+
+  <!-- Inventory Activity Diagram -->
+  <div class="card blue" style="margin-bottom:18px">
+    <div class="card-title">
+      <span class="dot" style="background:var(--accent)"></span>
+      Activity Diagram — Medication Inventory Flow
+    </div>
+    <div style="overflow-x:auto">
+    <svg width="720" height="840" viewBox="0 0 720 840" style="min-width:580px">
+      <defs>
+        <marker id="iv-ah" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#4a5568"/>
+        </marker>
+        <marker id="iv-ah-b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#63b3ed"/>
+        </marker>
+        <marker id="iv-ah-g" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#68d391"/>
+        </marker>
+        <marker id="iv-ah-r" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#fc8181"/>
+        </marker>
+        <marker id="iv-ah-y" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#f6e05e"/>
+        </marker>
+        <marker id="iv-ah-o" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#f6ad55"/>
+        </marker>
+        <marker id="iv-ah-p" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#b794f4"/>
+        </marker>
+      </defs>
+
+      <!-- SWIMLANE BACKGROUNDS -->
+      <rect x="0" y="0" width="360" height="840" fill="rgba(99,179,237,.03)"/>
+      <rect x="360" y="0" width="360" height="840" fill="rgba(104,211,145,.03)"/>
+      <line x1="360" y1="0" x2="360" y2="840" stroke="#2d3748" stroke-width="1" stroke-dasharray="4,4"/>
+
+      <!-- SWIMLANE HEADERS -->
+      <rect x="0" y="0" width="360" height="36" fill="#0d1520"/>
+      <rect x="360" y="0" width="360" height="36" fill="#0d2018"/>
+      <text x="180" y="23" text-anchor="middle" fill="#63b3ed" font-size="13" font-weight="700" font-family="Inter">👤 User / Admin</text>
+      <text x="540" y="23" text-anchor="middle" fill="#68d391" font-size="13" font-weight="700" font-family="Inter">⚙️ MediHome System</text>
+
+      <!-- START NODE -->
+      <circle cx="180" cy="66" r="13" fill="#63b3ed"/>
+      <text x="180" y="92" text-anchor="middle" class="label-blue">START</text>
+      <line x1="180" y1="79" x2="180" y2="107" stroke="#63b3ed" stroke-width="1.5" marker-end="url(#iv-ah-b)"/>
+
+      <!-- 1. Scan / Enter (User lane) -->
+      <rect x="25" y="109" width="305" height="44" rx="22" class="uml-box-blue"/>
+      <text x="177" y="127" text-anchor="middle" class="uml-text" font-weight="700">Scan Barcode</text>
+      <text x="177" y="143" text-anchor="middle" class="uml-attr">or Enter Medicine Manually</text>
+
+      <!-- Dashed cross-lane arrow -->
+      <line x1="330" y1="131" x2="390" y2="131" stroke="#63b3ed" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#iv-ah-b)"/>
+
+      <!-- 2. Lookup Repository (System lane) -->
+      <rect x="392" y="109" width="295" height="44" rx="22" class="uml-box-green"/>
+      <text x="540" y="127" text-anchor="middle" class="uml-text" font-weight="700">Lookup Medicine</text>
+      <text x="540" y="143" text-anchor="middle" class="uml-attr">in Medicine Repository</text>
+
+      <!-- Arrow down from lookup -->
+      <line x1="540" y1="153" x2="540" y2="177" stroke="#68d391" stroke-width="1.5" marker-end="url(#iv-ah-g)"/>
+
+      <!-- 3. Diamond: Found in Repo? — System lane cx=540, cy=204 -->
+      <polygon points="540,179 628,204 540,229 452,204" fill="#2a2518" stroke="rgba(246,224,94,.5)" stroke-width="1.5"/>
+      <text x="540" y="198" text-anchor="middle" fill="#f6e05e" font-size="11" font-weight="700" font-family="Inter">In</text>
+      <text x="540" y="213" text-anchor="middle" fill="#f6e05e" font-size="11" font-weight="700" font-family="Inter">Repository?</text>
+
+      <!-- YES: bottom of diamond → down to "Load Existing" -->
+      <line x1="540" y1="229" x2="540" y2="258" stroke="#68d391" stroke-width="1.5" marker-end="url(#iv-ah-g)"/>
+      <text x="556" y="248" class="label-green">Yes</text>
+
+      <!-- Load Existing Record (System) -->
+      <rect x="392" y="260" width="295" height="44" rx="22" class="uml-box-green"/>
+      <text x="540" y="278" text-anchor="middle" class="uml-text" font-weight="700">Load Existing</text>
+      <text x="540" y="294" text-anchor="middle" class="uml-attr">Medicine Record</text>
+
+      <!-- NO: left of diamond → User lane "Register New Medicine" -->
+      <line x1="452" y1="204" x2="180" y2="204" stroke="#fc8181" stroke-width="1.5" marker-end="url(#iv-ah-r)"/>
+      <text x="318" y="197" text-anchor="middle" class="label-red">No</text>
+
+      <!-- Register New Medicine (User lane) -->
+      <rect x="25" y="260" width="305" height="44" rx="22" class="uml-box-red"/>
+      <text x="177" y="278" text-anchor="middle" fill="#fc8181" font-weight="700" font-family="Inter" font-size="12">Register as New Medicine</text>
+      <text x="177" y="294" text-anchor="middle" class="uml-attr">Add to Repository</text>
+
+      <!-- Merge paths at y=332 -->
+      <line x1="177" y1="304" x2="177" y2="332" stroke="#fc8181" stroke-width="1.5"/>
+      <line x1="540" y1="304" x2="540" y2="332" stroke="#68d391" stroke-width="1.5"/>
+      <!-- Merge bar spanning both lanes -->
+      <rect x="172" y="329" width="373" height="6" rx="3" fill="#4a5568"/>
+      <!-- Arrow from merge bar center downward -->
+      <line x1="360" y1="335" x2="360" y2="356" stroke="#4a5568" stroke-width="1.5"/>
+      <!-- Arrow to User lane (center → left) -->
+      <line x1="360" y1="356" x2="177" y2="356" stroke="#4a5568" stroke-width="1.5" marker-end="url(#iv-ah)"/>
+
+      <!-- 4. Enter Stock Qty & Expiry (User lane) -->
+      <line x1="177" y1="356" x2="177" y2="376" stroke="#63b3ed" stroke-width="1.5" marker-end="url(#iv-ah-b)"/>
+      <rect x="25" y="378" width="305" height="44" rx="22" class="uml-box-blue"/>
+      <text x="177" y="396" text-anchor="middle" class="uml-text" font-weight="700">Enter / Update Stock</text>
+      <text x="177" y="412" text-anchor="middle" class="uml-attr">Quantity, Unit &amp; Expiry Date</text>
+
+      <!-- Cross-lane arrow to System -->
+      <line x1="330" y1="400" x2="390" y2="400" stroke="#63b3ed" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#iv-ah-b)"/>
+
+      <!-- 5. Validate & Save (System) -->
+      <rect x="392" y="378" width="295" height="44" rx="22" class="uml-box-green"/>
+      <text x="540" y="396" text-anchor="middle" class="uml-text" font-weight="700">Validate &amp; Save</text>
+      <text x="540" y="412" text-anchor="middle" class="uml-attr">Stock Data to Inventory DB</text>
+
+      <!-- Arrow down -->
+      <line x1="540" y1="422" x2="540" y2="450" stroke="#68d391" stroke-width="1.5" marker-end="url(#iv-ah-g)"/>
+
+      <!-- 6. Diamond: Expiry Check? System cx=540, cy=478 -->
+      <polygon points="540,452 620,478 540,504 460,478" fill="#2a1a1a" stroke="rgba(252,129,129,.5)" stroke-width="1.5"/>
+      <text x="540" y="472" text-anchor="middle" fill="#fc8181" font-size="11" font-weight="700" font-family="Inter">Expiry</text>
+      <text x="540" y="486" text-anchor="middle" fill="#fc8181" font-size="11" font-weight="700" font-family="Inter">Check?</text>
+
+      <!-- EXPIRED: right of diamond → Flag & mini-end -->
+      <line x1="620" y1="478" x2="672" y2="478" stroke="#fc8181" stroke-width="1.5" marker-end="url(#iv-ah-r)"/>
+      <text x="642" y="471" class="label-red">Expired</text>
+      <rect x="674" y="462" width="40" height="32" rx="16" fill="#2a1a1a" stroke="rgba(252,129,129,.5)" stroke-width="1.5"/>
+      <text x="694" y="477" text-anchor="middle" fill="#fc8181" font-size="9" font-weight="700" font-family="Inter">Flag</text>
+      <text x="694" y="489" text-anchor="middle" fill="#fc8181" font-size="9" font-family="Inter">Remove</text>
+      <!-- Mini end terminal -->
+      <circle cx="694" cy="516" r="9" fill="none" stroke="#fc8181" stroke-width="2"/>
+      <circle cx="694" cy="516" r="5" fill="#fc8181"/>
+      <line x1="694" y1="494" x2="694" y2="507" stroke="#fc8181" stroke-width="1.5" marker-end="url(#iv-ah-r)"/>
+      <text x="694" y="534" text-anchor="middle" fill="#fc8181" font-size="9" font-family="Inter">END</text>
+
+      <!-- VALID: bottom of expiry diamond -->
+      <line x1="540" y1="504" x2="540" y2="530" stroke="#68d391" stroke-width="1.5" marker-end="url(#iv-ah-g)"/>
+      <text x="556" y="522" class="label-green">Valid</text>
+
+      <!-- 7. Diamond: Low Stock? System cx=540, cy=558 -->
+      <polygon points="540,532 622,558 540,584 458,558" fill="#221a38" stroke="rgba(183,148,244,.5)" stroke-width="1.5"/>
+      <text x="540" y="552" text-anchor="middle" fill="#b794f4" font-size="11" font-weight="700" font-family="Inter">Stock</text>
+      <text x="540" y="566" text-anchor="middle" fill="#b794f4" font-size="11" font-weight="700" font-family="Inter">Level?</text>
+
+      <!-- LOW: left of diamond → User lane notification -->
+      <line x1="458" y1="558" x2="310" y2="558" stroke="#b794f4" stroke-width="1.5" marker-end="url(#iv-ah-p)"/>
+      <text x="384" y="551" text-anchor="middle" fill="#b794f4" font-size="10" font-family="Inter" font-weight="700">Low</text>
+      <!-- Low Stock Alert box (User lane) -->
+      <rect x="25" y="540" width="285" height="44" rx="22" class="uml-box-purple"/>
+      <text x="162" y="558" text-anchor="middle" fill="#b794f4" font-weight="700" font-family="Inter" font-size="12">Low Stock Alert</text>
+      <text x="162" y="574" text-anchor="middle" class="uml-attr">Push Notification Sent</text>
+
+      <!-- OK: bottom of stock diamond -->
+      <line x1="540" y1="584" x2="540" y2="610" stroke="#68d391" stroke-width="1.5" marker-end="url(#iv-ah-g)"/>
+      <text x="556" y="602" class="label-green">OK</text>
+
+      <!-- Merge from low stock and OK paths before Update -->
+      <line x1="162" y1="584" x2="162" y2="626" stroke="#b794f4" stroke-width="1.5"/>
+      <line x1="162" y1="626" x2="534" y2="626" stroke="#4a5568" stroke-width="1.5"/>
+      <line x1="540" y1="610" x2="540" y2="626" stroke="#68d391" stroke-width="1.5"/>
+      <!-- Join bar -->
+      <rect x="157" y="623" width="389" height="6" rx="3" fill="#4a5568"/>
+
+      <!-- 8. Update Inventory Records (System) -->
+      <line x1="540" y1="629" x2="540" y2="652" stroke="#68d391" stroke-width="1.5" marker-end="url(#iv-ah-g)"/>
+      <rect x="392" y="654" width="295" height="44" rx="22" class="uml-box-green"/>
+      <text x="540" y="672" text-anchor="middle" class="uml-text" font-weight="700">Update Inventory</text>
+      <text x="540" y="688" text-anchor="middle" class="uml-attr">Records &amp; Stock Counts</text>
+
+      <!-- Cross to User lane for Refresh -->
+      <line x1="392" y1="676" x2="330" y2="676" stroke="#68d391" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#iv-ah-g)"/>
+
+      <!-- 9. Refresh Dashboard (User lane) -->
+      <rect x="25" y="654" width="305" height="44" rx="22" class="uml-box-blue"/>
+      <text x="177" y="672" text-anchor="middle" class="uml-text" font-weight="700">Refresh Inventory</text>
+      <text x="177" y="688" text-anchor="middle" class="uml-attr">Dashboard &amp; List View</text>
+
+      <!-- Arrow to END -->
+      <line x1="177" y1="698" x2="177" y2="724" stroke="#63b3ed" stroke-width="1.5" marker-end="url(#iv-ah-b)"/>
+
+      <!-- END NODE -->
+      <circle cx="177" cy="738" r="12" fill="none" stroke="#63b3ed" stroke-width="2"/>
+      <circle cx="177" cy="738" r="7" fill="#63b3ed"/>
+      <text x="177" y="762" text-anchor="middle" class="label-blue">END</text>
+
+      <!-- LEGEND -->
+      <rect x="20" y="782" width="500" height="46" rx="6" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+      <text x="34" y="800" fill="#718096" font-size="10" font-weight="700" font-family="Inter">LEGEND</text>
+      <line x1="34" y1="816" x2="62" y2="816" stroke="#63b3ed" stroke-width="1.5" marker-end="url(#iv-ah-b)"/>
+      <text x="68" y="820" fill="#a0aec0" font-size="10" font-family="Inter">User Action</text>
+      <line x1="155" y1="816" x2="183" y2="816" stroke="#68d391" stroke-width="1.5" marker-end="url(#iv-ah-g)"/>
+      <text x="189" y="820" fill="#a0aec0" font-size="10" font-family="Inter">System Action</text>
+      <line x1="280" y1="816" x2="308" y2="816" stroke="#63b3ed" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#iv-ah-b)"/>
+      <text x="314" y="820" fill="#a0aec0" font-size="10" font-family="Inter">Cross-lane message</text>
+      <polygon points="420,809 450,816 420,823 390,816" fill="#2a2518" stroke="rgba(246,224,94,.5)" stroke-width="1"/>
+      <text x="458" y="820" fill="#a0aec0" font-size="10" font-family="Inter">Decision</text>
+    </svg>
+    </div>
+  </div>
+
+  <!-- Inventory Class Diagram -->
+  <div class="card purple">
+    <div class="card-title">
+      <span class="dot" style="background:var(--purple)"></span>
+      Class Diagram — Inventory Domain Model
+    </div>
+    <div style="overflow-x:auto">
+    <svg width="960" height="560" viewBox="0 0 960 560" style="min-width:860px">
+      <defs>
+        <marker id="iv-cl-ah" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#4a5568"/>
+        </marker>
+        <marker id="iv-cl-ah-b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#63b3ed"/>
+        </marker>
+        <marker id="iv-cl-ah-g" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#68d391"/>
+        </marker>
+        <marker id="iv-cl-ah-r" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#fc8181"/>
+        </marker>
+        <marker id="iv-cl-ah-p" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#b794f4"/>
+        </marker>
+        <marker id="iv-cl-ah-y" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#f6e05e"/>
+        </marker>
+      </defs>
+
+      <!-- ── CLASS: MedicineRepository ── TOP-LEFT -->
+      <rect x="20" y="20" width="210" height="230" rx="6" class="uml-box-green"/>
+      <rect x="20" y="20" width="210" height="36" rx="6" class="uml-header-green"/>
+      <text x="125" y="43" text-anchor="middle" class="uml-title-green">MedicineRepository</text>
+      <line x1="20" y1="56" x2="230" y2="56" stroke="rgba(104,211,145,.4)" stroke-width="1"/>
+      <text x="30" y="74" class="uml-attr">- repoId: String</text>
+      <text x="30" y="90" class="uml-attr">- name: String</text>
+      <text x="30" y="106" class="uml-attr">- genericName: String</text>
+      <text x="30" y="122" class="uml-attr">- barcode: String</text>
+      <text x="30" y="138" class="uml-attr">- manufacturer: String</text>
+      <text x="30" y="154" class="uml-attr">- category: String</text>
+      <text x="30" y="170" class="uml-attr">- unit: String</text>
+      <line x1="20" y1="180" x2="230" y2="180" stroke="rgba(104,211,145,.4)" stroke-width="1"/>
+      <text x="30" y="196" class="uml-method">+ searchByBarcode()</text>
+      <text x="30" y="212" class="uml-method">+ addMedicine()</text>
+      <text x="30" y="228" class="uml-method">+ getAll()</text>
+      <text x="30" y="244" class="uml-method">+ findById()</text>
+
+      <!-- ── CLASS: MedicationInventory ── TOP-CENTER -->
+      <rect x="290" y="20" width="220" height="250" rx="6" class="uml-box-blue"/>
+      <rect x="290" y="20" width="220" height="36" rx="6" class="uml-header"/>
+      <text x="400" y="43" text-anchor="middle" class="uml-title">MedicationInventory</text>
+      <line x1="290" y1="56" x2="510" y2="56" stroke="rgba(99,179,237,.4)" stroke-width="1"/>
+      <text x="300" y="74" class="uml-attr">- inventoryId: String</text>
+      <text x="300" y="90" class="uml-attr">- repoId: String</text>
+      <text x="300" y="106" class="uml-attr">- profileId: String</text>
+      <text x="300" y="122" class="uml-attr">- stockCount: Int</text>
+      <text x="300" y="138" class="uml-attr">- reorderLevel: Int</text>
+      <text x="300" y="154" class="uml-attr">- expiryDate: Date</text>
+      <text x="300" y="170" class="uml-attr">- lastUpdated: DateTime</text>
+      <text x="300" y="186" class="uml-attr">- status: Enum</text>
+      <line x1="290" y1="196" x2="510" y2="196" stroke="rgba(99,179,237,.4)" stroke-width="1"/>
+      <text x="300" y="212" class="uml-method">+ updateStock(qty)</text>
+      <text x="300" y="228" class="uml-method">+ isLow(): Boolean</text>
+      <text x="300" y="244" class="uml-method">+ isExpired(): Boolean</text>
+      <text x="300" y="260" class="uml-method">+ getStatus(): Enum</text>
+
+      <!-- ── CLASS: InventoryAlert ── TOP-RIGHT -->
+      <rect x="580" y="20" width="210" height="220" rx="6" class="uml-box-red"/>
+      <rect x="580" y="20" width="210" height="36" rx="6" fill="#0d1520" stroke="rgba(252,129,129,.5)" stroke-width="1.5"/>
+      <text x="685" y="43" text-anchor="middle" fill="#fc8181" font-size="13" font-weight="700" font-family="Inter">InventoryAlert</text>
+      <line x1="580" y1="56" x2="790" y2="56" stroke="rgba(252,129,129,.4)" stroke-width="1"/>
+      <text x="590" y="74" class="uml-attr">- alertId: String</text>
+      <text x="590" y="90" class="uml-attr">- inventoryId: String</text>
+      <text x="590" y="106" class="uml-attr">- type: Enum</text>
+      <text x="600" y="120" fill="#718096" font-family="'JetBrains Mono',monospace" font-size="9px"> (LOW_STOCK|EXPIRING</text>
+      <text x="600" y="133" fill="#718096" font-family="'JetBrains Mono',monospace" font-size="9px">  |EXPIRED)</text>
+      <text x="590" y="150" class="uml-attr">- message: String</text>
+      <text x="590" y="166" class="uml-attr">- isAcknowledged: Bool</text>
+      <text x="590" y="182" class="uml-attr">- createdAt: DateTime</text>
+      <line x1="580" y1="192" x2="790" y2="192" stroke="rgba(252,129,129,.4)" stroke-width="1"/>
+      <text x="590" y="208" fill="#fc8181" font-family="'JetBrains Mono',monospace" font-size="10.5px">+ acknowledge()</text>
+      <text x="590" y="224" fill="#fc8181" font-family="'JetBrains Mono',monospace" font-size="10.5px">+ escalate()</text>
+
+      <!-- ── CLASS: StockTransaction ── BOTTOM-RIGHT -->
+      <rect x="580" y="310" width="210" height="220" rx="6" class="uml-box-orange"/>
+      <rect x="580" y="310" width="210" height="36" rx="6" class="uml-header-orange"/>
+      <text x="685" y="333" text-anchor="middle" class="uml-title-orange">StockTransaction</text>
+      <line x1="580" y1="346" x2="790" y2="346" stroke="rgba(246,173,85,.4)" stroke-width="1"/>
+      <text x="590" y="364" class="uml-attr">- txId: String</text>
+      <text x="590" y="380" class="uml-attr">- inventoryId: String</text>
+      <text x="590" y="396" class="uml-attr">- type: Enum</text>
+      <text x="600" y="410" fill="#718096" font-family="'JetBrains Mono',monospace" font-size="9px"> (ADD|REMOVE|ADJUST)</text>
+      <text x="590" y="427" class="uml-attr">- quantity: Int</text>
+      <text x="590" y="443" class="uml-attr">- note: String</text>
+      <text x="590" y="459" class="uml-attr">- performedBy: UserId</text>
+      <text x="590" y="475" class="uml-attr">- timestamp: DateTime</text>
+      <line x1="580" y1="485" x2="790" y2="485" stroke="rgba(246,173,85,.4)" stroke-width="1"/>
+      <text x="590" y="501" fill="#f6ad55" font-family="'JetBrains Mono',monospace" font-size="10.5px">+ commit()</text>
+      <text x="590" y="517" fill="#f6ad55" font-family="'JetBrains Mono',monospace" font-size="10.5px">+ rollback()</text>
+
+      <!-- ── CLASS: HouseholdProfile (ref) ── BOTTOM-LEFT -->
+      <rect x="20" y="340" width="210" height="120" rx="6" fill="#161b22" stroke="rgba(104,211,145,.2)" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <rect x="20" y="340" width="210" height="36" rx="6" fill="#0d2018" stroke="rgba(104,211,145,.2)" stroke-width="1.5"/>
+      <text x="125" y="353" text-anchor="middle" fill="#68d391" font-size="11" font-weight="700" font-family="Inter">HouseholdProfile</text>
+      <text x="125" y="367" text-anchor="middle" fill="#4a6858" font-size="9" font-family="Inter">«referenced»</text>
+      <line x1="20" y1="376" x2="230" y2="376" stroke="rgba(104,211,145,.2)" stroke-width="1"/>
+      <text x="30" y="394" fill="#4a6858" font-family="'JetBrains Mono',monospace" font-size="10px">- profileId: String</text>
+      <text x="30" y="410" fill="#4a6858" font-family="'JetBrains Mono',monospace" font-size="10px">- name: String</text>
+      <text x="30" y="426" fill="#4a6858" font-family="'JetBrains Mono',monospace" font-size="10px">- members: User[]</text>
+      <text x="30" y="446" fill="#4a6858" font-size="10" font-family="Inter">(see Class Diagram above)</text>
+
+      <!-- ── RELATIONSHIPS ── -->
+
+      <!-- MedicineRepository 1 →→ 0..* MedicationInventory -->
+      <line x1="230" y1="135" x2="290" y2="135" stroke="#4a5568" stroke-width="1.5" marker-end="url(#iv-cl-ah)"/>
+      <text x="238" y="129" fill="#a0aec0" font-size="10" font-family="Inter">1</text>
+      <text x="264" y="129" fill="#a0aec0" font-size="10" font-family="Inter">0..*</text>
+      <text x="238" y="120" fill="#a0aec0" font-size="9" font-family="Inter" font-style="italic">stocked as</text>
+
+      <!-- MedicationInventory 1 →→ 0..* InventoryAlert -->
+      <line x1="510" y1="120" x2="580" y2="120" stroke="#fc8181" stroke-width="1.5" marker-end="url(#iv-cl-ah-r)"/>
+      <text x="517" y="114" fill="#a0aec0" font-size="10" font-family="Inter">1</text>
+      <text x="550" y="114" fill="#a0aec0" font-size="10" font-family="Inter">0..*</text>
+      <text x="520" y="106" fill="#fc8181" font-size="9" font-family="Inter" font-style="italic">triggers</text>
+
+      <!-- MedicationInventory 1 →→ 0..* StockTransaction -->
+      <line x1="510" y1="200" x2="560" y2="200" stroke="#f6ad55" stroke-width="1.5"/>
+      <line x1="560" y1="200" x2="560" y2="420" stroke="#f6ad55" stroke-width="1.5"/>
+      <line x1="560" y1="420" x2="580" y2="420" stroke="#f6ad55" stroke-width="1.5" marker-end="url(#iv-cl-ah-y)"/>
+      <text x="518" y="194" fill="#a0aec0" font-size="10" font-family="Inter">1</text>
+      <text x="540" y="310" fill="#a0aec0" font-size="10" font-family="Inter">0..*</text>
+      <text x="514" y="186" fill="#f6ad55" font-size="9" font-family="Inter" font-style="italic">records</text>
+
+      <!-- HouseholdProfile →→ MedicationInventory -->
+      <line x1="230" y1="380" x2="290" y2="220" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#iv-cl-ah)"/>
+      <text x="242" y="304" fill="#a0aec0" font-size="9" font-family="Inter" font-style="italic">owns</text>
+
+      <!-- InventoryAlert →→ StockTransaction (vertical) -->
+      <line x1="685" y1="240" x2="685" y2="310" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#iv-cl-ah)"/>
+      <text x="690" y="280" fill="#a0aec0" font-size="9" font-family="Inter" font-style="italic">linked</text>
+
+      <!-- LEGEND -->
+      <rect x="800" y="20" width="148" height="260" rx="8" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+      <text x="816" y="40" fill="#718096" font-size="11" font-weight="700" font-family="Inter">LEGEND</text>
+      <line x1="816" y1="58" x2="850" y2="58" stroke="#4a5568" stroke-width="1.5" marker-end="url(#iv-cl-ah)"/>
+      <text x="857" y="62" fill="#a0aec0" font-size="10" font-family="Inter">Association</text>
+      <line x1="816" y1="80" x2="850" y2="80" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#iv-cl-ah)"/>
+      <text x="857" y="84" fill="#a0aec0" font-size="10" font-family="Inter">Dependency</text>
+      <text x="816" y="106" fill="#68d391" font-size="10" font-family="JetBrains Mono">+ method()</text>
+      <text x="816" y="120" fill="#a0aec0" font-size="9" font-family="Inter">public method</text>
+      <text x="816" y="140" fill="#4fd1c5" font-size="10" font-family="JetBrains Mono">- attr</text>
+      <text x="816" y="154" fill="#a0aec0" font-size="9" font-family="Inter">private attribute</text>
+      <rect x="816" y="168" width="120" height="28" rx="4" fill="#161b22" stroke="rgba(104,211,145,.2)" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <text x="876" y="187" text-anchor="middle" fill="#4a6858" font-size="9" font-family="Inter">«referenced»</text>
+      <text x="816" y="210" fill="#a0aec0" font-size="9" font-family="Inter">External class ref</text>
+      <text x="816" y="235" fill="#a0aec0" font-size="9" font-family="Inter">1 = one</text>
+      <text x="816" y="250" fill="#a0aec0" font-size="9" font-family="Inter">0..* = zero-to-many</text>
+      <text x="816" y="265" fill="#a0aec0" font-size="9" font-family="Inter">1..* = one-to-many</text>
+    </svg>
+    </div>
+  </div>
+
+</section>
+
+<div style="text-align:center;padding:28px 0 16px;color:var(--muted);font-size:12px;border-top:1px solid var(--border);margin-top:16px">
+  💊 MediHome Project · UML Diagrams · Activity · Use Case · Class · Sequence · Inventory
+</div>
+
+</div>
+</body>
+</html>
