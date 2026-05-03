@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Assail's Exam Revision – Electrical Circuits</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root{
+  --bg:#0d1117; --surface:#161b22; --card:#1c2128;
+  --border:#30363d; --accent:#58a6ff; --green:#3fb950;
+  --yellow:#e3b341; --red:#f85149; --purple:#bc8cff;
+  --orange:#ffa657; --cyan:#39d353; --text:#e6edf3;
+  --muted:#8b949e; --white:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Inter',sans-serif;font-size:14px;
+  line-height:1.6;
+}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(13,17,23,.95);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:10px 20px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+}
+nav .logo{font-weight:900;font-size:15px;color:var(--accent);margin-right:12px;white-space:nowrap}
+nav a{
+  color:var(--muted);text-decoration:none;font-size:12px;font-weight:600;
+  padding:4px 10px;border-radius:20px;border:1px solid transparent;
+  transition:.2s;white-space:nowrap;
+}
+nav a:hover{color:var(--text);border-color:var(--border);background:var(--surface)}
+
+/* ── HERO ── */
+.hero{
+  text-align:center;padding:48px 20px 32px;
+  background:linear-gradient(180deg,#0d1117 0%,#0d1117 100%);
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(88,166,255,.12),transparent);
+  pointer-events:none;
+}
+.hero h1{font-size:clamp(28px,6vw,52px);font-weight:900;
+  background:linear-gradient(135deg,var(--accent),var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:8px;}
+.hero p{color:var(--muted);font-size:15px;max-width:500px;margin:0 auto;}
+.hero .badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(248,81,73,.15);border:1px solid rgba(248,81,73,.4);
+  color:#f85149;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;
+  margin-bottom:16px;letter-spacing:.5px;
+}
+
+/* ── LAYOUT ── */
+.page{max-width:1400px;margin:0 auto;padding:24px 16px 60px;}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(480px,1fr));gap:16px;}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+section{margin-bottom:36px;}
+.section-title{
+  font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:10px;
+}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ── CARD ── */
+.card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:20px;position:relative;overflow:hidden;
+}
+.card-title{
+  font-size:13px;font-weight:700;margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.card.blue{border-color:rgba(88,166,255,.3)}
+.card.blue .dot{background:var(--accent)}
+.card.green{border-color:rgba(63,185,80,.3)}
+.card.green .dot{background:var(--green)}
+.card.yellow{border-color:rgba(227,179,65,.3)}
+.card.yellow .dot{background:var(--yellow)}
+.card.purple{border-color:rgba(188,140,255,.3)}
+.card.purple .dot{background:var(--purple)}
+.card.red{border-color:rgba(248,81,73,.3)}
+.card.red .dot{background:var(--red)}
+.card.orange{border-color:rgba(255,166,87,.3)}
+.card.orange .dot{background:var(--orange)}
+
+/* ── FORMULA ── */
+.formula{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:8px;padding:10px 14px;margin:6px 0;
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+.formula .f{color:var(--yellow);font-weight:700;}
+.formula .note{color:var(--muted);font-size:11px;}
+.formula-big{
+  font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;
+  color:var(--accent);text-align:center;padding:16px;
+  background:var(--surface);border-radius:10px;margin:8px 0;
+  border:1px solid rgba(88,166,255,.2);
+}
+
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px;}
+.tbl th{background:var(--surface);color:var(--muted);font-weight:700;
+  padding:7px 10px;text-align:left;border-bottom:1px solid var(--border);}
+.tbl td{padding:7px 10px;border-bottom:1px solid rgba(48,54,61,.5);}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:rgba(255,255,255,.02);}
+
+/* ── SVG DIAGRAM WRAPPER ── */
+.diagram{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:12px;margin-top:8px;
+  display:flex;justify-content:center;
+}
+svg{overflow:visible;}
+.wire{stroke:#58a6ff;stroke-width:2.5;fill:none;stroke-linecap:round;}
+.comp{stroke:#e3b341;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.volt{stroke:#3fb950;stroke-width:2.5;fill:none;stroke-linecap:round;}
+.label{fill:#e6edf3;font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:700;}
+.sublabel{fill:#8b949e;font-size:10px;font-family:'JetBrains Mono',monospace;}
+.arrow{fill:#58a6ff;}
+.node{fill:#58a6ff;}
+.plus{fill:#3fb950;font-size:12px;font-family:'JetBrains Mono',monospace;font-weight:900;}
+.minus{fill:#f85149;font-size:14px;font-family:'JetBrains Mono',monospace;font-weight:900;}
+
+/* ── CHIPS ── */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.chip{
+  font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:700;
+  padding:3px 10px;border-radius:20px;
+  background:rgba(88,166,255,.12);color:var(--accent);
+  border:1px solid rgba(88,166,255,.25);
+}
+.chip.g{background:rgba(63,185,80,.12);color:var(--green);border-color:rgba(63,185,80,.25);}
+.chip.y{background:rgba(227,179,65,.12);color:var(--yellow);border-color:rgba(227,179,65,.25);}
+.chip.p{background:rgba(188,140,255,.12);color:var(--purple);border-color:rgba(188,140,255,.25);}
+.chip.r{background:rgba(248,81,73,.12);color:var(--red);border-color:rgba(248,81,73,.25);}
+.chip.o{background:rgba(255,166,87,.12);color:var(--orange);border-color:rgba(255,166,87,.25);}
+
+/* ── RULES ── */
+.rule{
+  border-left:3px solid var(--accent);padding:10px 14px;
+  background:rgba(88,166,255,.06);border-radius:0 8px 8px 0;margin:8px 0;font-size:12.5px;
+}
+.rule.g{border-color:var(--green);background:rgba(63,185,80,.06);}
+.rule.y{border-color:var(--yellow);background:rgba(227,179,65,.06);}
+.rule.r{border-color:var(--red);background:rgba(248,81,73,.06);}
+.rule.p{border-color:var(--purple);background:rgba(188,140,255,.06);}
+
+/* ── COLOR CODE TABLE ── */
+.band-row{display:flex;align-items:center;gap:0;}
+.band{width:28px;height:40px;flex-shrink:0;}
+.color-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:700;
+}
+.csq{width:14px;height:14px;border-radius:3px;flex-shrink:0;}
+
+/* ── TRIANGLE (Ohm's) ── */
+.ohm-tri{position:relative;width:140px;height:120px;margin:0 auto;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){.grid2{grid-template-columns:1fr;}.grid3{grid-template-columns:1fr;}}
+@media print{
+  body{background:#fff;color:#000;}nav{display:none;}
+  .card{background:#f9f9f9;border-color:#ddd;}
+  .formula,.rule,.diagram{background:#f5f5f5;border-color:#ddd;}
+  .formula .f{color:#b8860b;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="logo">⚡ Assail's Circuits</span>
+  <a href="#basics">Basics</a>
+  <a href="#ohm">Ohm's Law</a>
+  <a href="#series">Series</a>
+  <a href="#parallel">Parallel</a>
+  <a href="#kirchhoff">Kirchhoff</a>
+  <a href="#power">Power</a>
+  <a href="#caps">Capacitors</a>
+  <a href="#inductors">Inductors</a>
+  <a href="#ac">AC Circuits</a>
+  <a href="#dividers">Dividers</a>
+  <a href="#thevenin">Thévenin</a>
+  <a href="#components">Symbols</a>
+  <a href="#resistorcode">Color Code</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="badge">📅 EXAM TOMORROW — GOOD LUCK ASSAIL!</div>
+  <h1>Electrical Circuits<br>Complete Cheat Sheet</h1>
+  <p>Every formula, diagram & rule you need. All in one page.</p>
+</div>
+
+<div class="page">
+
+<!-- ═══════ SECTION: BASICS ═══════ -->
+<section id="basics">
+  <div class="section-title">Core Quantities</div>
+  <div class="grid4">
+    <div class="card blue">
+      <div class="card-title"><span class="dot"></span>Voltage (V)</div>
+      <div class="formula"><span class="f">V = W / Q</span><span class="note">Joules / Coulomb</span></div>
+      <div style="color:var(--muted);font-size:12px;margin-top:8px">Energy per unit charge. Unit: <strong style="color:var(--accent)">Volt (V)</strong></div>
+    </div>
+    <div class="card green">
+      <div class="card-title"><span class="dot"></span>Current (I)</div>
+      <div class="formula"><span class="f">I = Q / t</span><span class="note">Coulombs / second</span></div>
+      <div style="color:var(--muted);font-size:12px;margin-top:8px">Charge flow rate. Unit: <strong style="color:var(--green)">Ampere (A)</strong></div>
+    </div>
+    <div class="card yellow">
+      <div class="card-title"><span class="dot"></span>Resistance (R)</div>
+      <div class="formula"><span class="f">R = V / I</span><span class="note">Ohm's Law</span></div>
+      <div style="color:var(--muted);font-size:12px;margin-top:8px">Opposition to current. Unit: <strong style="color:var(--yellow)">Ohm (Ω)</strong></div>
+    </div>
+    <div class="card purple">
+      <div class="card-title"><span class="dot"></span>Charge (Q)</div>
+      <div class="formula"><span class="f">Q = I × t</span><span class="note">Amperes × seconds</span></div>
+      <div style="color:var(--muted);font-size:12px;margin-top:8px">Amount of electricity. Unit: <strong style="color:var(--purple)">Coulomb (C)</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SECTION: OHM'S LAW ═══════ -->
+<section id="ohm">
+  <div class="section-title">Ohm's Law</div>
+  <div class="grid2">
+    <div class="card blue">
+      <div class="card-title"><span class="dot"></span>Ohm's Law Triangle</div>
+      <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+        <!-- Triangle SVG -->
+        <svg width="160" height="130" viewBox="0 0 160 130">
+          <!-- Triangle -->
+          <polygon points="80,8 10,120 150,120" fill="rgba(88,166,255,.1)" stroke="var(--accent)" stroke-width="2"/>
+          <!-- Dividing line -->
+          <line x1="10" y1="75" x2="150" y2="75" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <!-- V at top -->
+          <text x="80" y="65" text-anchor="middle" fill="#3fb950" font-size="26" font-weight="900" font-family="JetBrains Mono">V</text>
+          <!-- I and R at bottom -->
+          <text x="48" y="112" text-anchor="middle" fill="#e3b341" font-size="22" font-weight="900" font-family="JetBrains Mono">I</text>
+          <line x1="78" y1="80" x2="78" y2="120" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="112" y="112" text-anchor="middle" fill="#f85149" font-size="22" font-weight="900" font-family="JetBrains Mono">R</text>
+          <!-- Labels -->
+          <text x="80" y="20" text-anchor="middle" fill="#8b949e" font-size="9" font-family="Inter">Cover what you need</text>
+        </svg>
+        <div style="flex:1;min-width:160px">
+          <div class="formula"><span class="f">V = I × R</span><span class="note">find Voltage</span></div>
+          <div class="formula"><span class="f">I = V / R</span><span class="note">find Current</span></div>
+          <div class="formula"><span class="f">R = V / I</span><span class="note">find Resistance</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card yellow">
+      <div class="card-title"><span class="dot"></span>Simple Circuit Diagram</div>
+      <div class="diagram">
+        <svg width="280" height="160" viewBox="0 0 280 160">
+          <!-- Top wire -->
+          <line x1="40" y1="30" x2="240" y2="30" class="wire"/>
+          <!-- Bottom wire -->
+          <line x1="40" y1="130" x2="240" y2="130" class="wire"/>
+          <!-- Left wire (battery side) -->
+          <line x1="40" y1="30" x2="40" y2="55" class="wire"/>
+          <line x1="40" y1="105" x2="40" y2="130" class="wire"/>
+          <!-- Right wire (resistor side) -->
+          <line x1="240" y1="30" x2="240" y2="55" class="wire"/>
+          <line x1="240" y1="105" x2="240" y2="130" class="wire"/>
+          <!-- Battery (left) -->
+          <line x1="28" y1="55" x2="52" y2="55" class="volt" stroke-width="3.5"/>
+          <line x1="33" y1="65" x2="47" y2="65" class="volt" stroke-width="1.5"/>
+          <line x1="28" y1="75" x2="52" y2="75" class="volt" stroke-width="3.5"/>
+          <line x1="33" y1="85" x2="47" y2="85" class="volt" stroke-width="1.5"/>
+          <line x1="28" y1="95" x2="52" y2="95" class="volt" stroke-width="3.5"/>
+          <line x1="33" y1="105" x2="47" y2="105" class="volt" stroke-width="1.5"/>
+          <text x="40" y="147" text-anchor="middle" class="sublabel">V</text>
+          <!-- + / - -->
+          <text x="56" y="59" class="plus">+</text>
+          <text x="56" y="108" class="minus">−</text>
+          <!-- Resistor (right, zigzag) -->
+          <polyline points="240,55 240,62 228,67 252,77 228,87 252,97 228,97 240,105" class="comp"/>
+          <text x="258" y="82" class="sublabel">R</text>
+          <!-- Current arrow on top wire -->
+          <polygon points="140,24 132,30 148,30" class="arrow"/>
+          <text x="140" y="20" text-anchor="middle" class="sublabel">I →</text>
+          <!-- Voltage label -->
+          <text x="18" y="82" text-anchor="middle" class="sublabel" transform="rotate(-90,18,82)">V</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SECTION: SERIES ═══════ -->
+<section id="series">
+  <div class="section-title">Series Circuits</div>
+  <div class="grid2">
+    <div class="card green">
+      <div class="card-title"><span class="dot"></span>Series Rules & Formulas</div>
+      <div class="rule g">🔗 Same current through every component: <strong>I₁ = I₂ = I₃ = I</strong></div>
+      <div class="rule g">⚡ Voltages add up: <strong>V_T = V₁ + V₂ + V₃</strong></div>
+      <div class="rule g">🔧 Resistances add up: <strong>R_T = R₁ + R₂ + R₃</strong></div>
+      <div class="formula"><span class="f">R_T = R₁ + R₂ + ... + Rₙ</span></div>
+      <div class="formula"><span class="f">V_T = V₁ + V₂ + ... + Vₙ</span></div>
+      <div class="formula"><span class="f">I = V_T / R_T</span></div>
+      <div style="margin-top:8px;font-size:12px;color:var(--muted)">
+        <strong style="color:var(--green)">Remember:</strong> Open any series element → whole circuit breaks
+      </div>
+    </div>
+
+    <div class="card green">
+      <div class="card-title"><span class="dot"></span>Series Circuit Diagram</div>
+      <div class="diagram">
+        <svg width="320" height="160" viewBox="0 0 320 160">
+          <!-- Outer rectangle -->
+          <line x1="30" y1="30" x2="290" y2="30" class="wire"/>
+          <line x1="30" y1="130" x2="290" y2="130" class="wire"/>
+          <line x1="30" y1="30" x2="30" y2="55" class="wire"/>
+          <line x1="30" y1="105" x2="30" y2="130" class="wire"/>
+          <line x1="290" y1="30" x2="290" y2="130" class="wire"/>
+          <!-- Battery -->
+          <line x1="18" y1="55" x2="42" y2="55" class="volt" stroke-width="3"/>
+          <line x1="22" y1="65" x2="38" y2="65" class="volt" stroke-width="1.5"/>
+          <line x1="18" y1="75" x2="42" y2="75" class="volt" stroke-width="3"/>
+          <line x1="22" y1="85" x2="38" y2="85" class="volt" stroke-width="1.5"/>
+          <line x1="18" y1="95" x2="42" y2="95" class="volt" stroke-width="3"/>
+          <line x1="22" y1="105" x2="42" y2="105" class="volt" stroke-width="1.5"/>
+          <text x="30" y="148" text-anchor="middle" class="sublabel">V_T</text>
+          <!-- R1 zigzag top-left region -->
+          <line x1="80" y1="30" x2="80" y2="30" class="wire"/>
+          <polyline points="90,30 97,18 104,42 111,18 118,42 125,18 132,30" class="comp"/>
+          <text x="111" y="12" text-anchor="middle" class="sublabel">R₁</text>
+          <!-- R2 zigzag top-right region -->
+          <polyline points="190,30 197,18 204,42 211,18 218,42 225,18 232,30" class="comp"/>
+          <text x="211" y="12" text-anchor="middle" class="sublabel">R₂</text>
+          <!-- R3 on right vertical -->
+          <polyline points="290,60 278,67 302,77 278,87 302,97 278,97 290,105" class="comp"/>
+          <text x="310" y="82" class="sublabel">R₃</text>
+          <!-- Current arrows -->
+          <polygon points="60,24 52,30 68,30" class="arrow"/>
+          <polygon points="170,24 162,30 178,30" class="arrow"/>
+          <text x="60" y="20" text-anchor="middle" class="sublabel">I</text>
+          <text x="170" y="20" text-anchor="middle" class="sublabel">I</text>
+          <!-- Voltage drops -->
+          <text x="111" y="52" text-anchor="middle" style="fill:#3fb950;font-size:10px;font-family:'JetBrains Mono'">V₁</text>
+          <text x="211" y="52" text-anchor="middle" style="fill:#3fb950;font-size:10px;font-family:'JetBrains Mono'">V₂</text>
+          <text x="310" y="56" style="fill:#3fb950;font-size:10px;font-family:'JetBrains Mono'">V₃</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SECTION: PARALLEL ═══════ -->
+<section id="parallel">
+  <div class="section-title">Parallel Circuits</div>
+  <div class="grid2">
+    <div class="card blue">
+      <div class="card-title"><span class="dot"></span>Parallel Rules & Formulas</div>
+      <div class="rule">⚡ Same voltage across every branch: <strong>V₁ = V₂ = V₃ = V</strong></div>
+      <div class="rule">🔀 Currents add up: <strong>I_T = I₁ + I₂ + I₃</strong></div>
+      <div class="rule">🔧 Reciprocal resistance: <strong>1/R_T = 1/R₁ + 1/R₂</strong></div>
+      <div class="formula"><span class="f">1/R_T = 1/R₁ + 1/R₂ + ... + 1/Rₙ</span></div>
+      <div class="formula"><span class="f">R_T = (R₁ × R₂)/(R₁ + R₂)</span><span class="note">2 resistors only</span></div>
+      <div class="formula"><span class="f">I_T = I₁ + I₂ + ... + Iₙ</span></div>
+      <div style="margin-top:8px;font-size:12px;color:var(--muted)">
+        <strong style="color:var(--accent)">Remember:</strong> R_T is always less than smallest resistor
+      </div>
+    </div>
+
+    <div class="card blue">
+      <div class="card-title"><span class="dot"></span>Parallel Circuit Diagram</div>
+      <div class="diagram">
+        <svg width="300" height="170" viewBox="0 0 300 170">
+          <!-- Main rails -->
+          <line x1="30" y1="20" x2="270" y2="20" class="wire"/>
+          <line x1="30" y1="150" x2="270" y2="150" class="wire"/>
+          <!-- Battery left -->
+          <line x1="30" y1="20" x2="30" y2="55" class="wire"/>
+          <line x1="30" y1="115" x2="30" y2="150" class="wire"/>
+          <line x1="18" y1="55" x2="42" y2="55" class="volt" stroke-width="3"/>
+          <line x1="22" y1="65" x2="38" y2="65" class="volt"/>
+          <line x1="18" y1="75" x2="42" y2="75" class="volt" stroke-width="3"/>
+          <line x1="22" y1="85" x2="38" y2="85" class="volt"/>
+          <line x1="18" y1="95" x2="42" y2="95" class="volt" stroke-width="3"/>
+          <line x1="22" y1="105" x2="38" y2="105" class="volt"/>
+          <text x="30" y="165" text-anchor="middle" class="sublabel">V</text>
+          <!-- Branch 1 -->
+          <line x1="110" y1="20" x2="110" y2="45" class="wire"/>
+          <line x1="110" y1="125" x2="110" y2="150" class="wire"/>
+          <polyline points="110,45 98,52 122,62 98,72 122,82 98,82 110,92 110,125" class="comp"/>
+          <text x="130" y="82" class="sublabel">R₁</text>
+          <!-- Branch 2 -->
+          <line x1="185" y1="20" x2="185" y2="45" class="wire"/>
+          <line x1="185" y1="125" x2="185" y2="150" class="wire"/>
+          <polyline points="185,45 173,52 197,62 173,72 197,82 173,82 185,92 185,125" class="comp"/>
+          <text x="205" y="82" class="sublabel">R₂</text>
+          <!-- Branch 3 -->
+          <line x1="260" y1="20" x2="260" y2="45" class="wire"/>
+          <line x1="260" y1="125" x2="260" y2="150" class="wire"/>
+          <polyline points="260,45 248,52 272,62 248,72 272,82 248,82 260,92 260,125" class="comp"/>
+          <text x="275" y="82" class="sublabel">R₃</text>
+          <!-- Current arrows -->
+          <polygon points="104,24 110,16 116,24" style="fill:var(--green)"/>
+          <polygon points="179,24 185,16 191,24" style="fill:var(--yellow)"/>
+          <polygon points="254,24 260,16 266,24" style="fill:var(--orange)"/>
+          <text x="110" y="10" text-anchor="middle" class="sublabel" style="fill:#3fb950">I₁</text>
+          <text x="185" y="10" text-anchor="middle" class="sublabel" style="fill:#e3b341">I₂</text>
+          <text x="260" y="10" text-anchor="middle" class="sublabel" style="fill:#ffa657">I₃</text>
+          <!-- Total current -->
+          <polygon points="65,26 57,20 73,20" class="arrow"/>
+          <text x="65" y="13" text-anchor="middle" class="sublabel">I_T →</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SECTION: KIRCHHOFF ═══════ -->
+<section id="kirchhoff">
+  <div class="section-title">Kirchhoff's Laws</div>
+  <div class="grid2">
+    <!-- KCL -->
+    <div class="card green">
+      <div class="card-title"><span class="dot"></span>KCL – Current Law (at a node)</div>
+      <div class="formula-big">ΣI_in = ΣI_out</div>
+      <div class="rule g">Sum of all currents entering a node = Sum leaving</div>
+      <div class="diagram" style="margin-top:12px">
+        <svg width="220" height="160" viewBox="0 0 220 160">
+          <!-- Node dot -->
+          <circle cx="110" cy="80" r="7" class="node"/>
+          <text x="110" y="70" text-anchor="middle" class="sublabel">NODE</text>
+          <!-- I1 entering from left -->
+          <line x1="20" y1="80" x2="103" y2="80" class="wire"/>
+          <polygon points="98,76 106,80 98,84" class="arrow"/>
+          <text x="55" y="72" text-anchor="middle" class="label" style="fill:#3fb950">I₁</text>
+          <!-- I2 entering from top -->
+          <line x1="110" y1="10" x2="110" y2="73" class="wire"/>
+          <polygon points="106,68 110,76 114,68" class="arrow"/>
+          <text x="122" y="45" class="label" style="fill:#3fb950">I₂</text>
+          <!-- I3 leaving to right -->
+          <line x1="117" y1="80" x2="200" y2="80" class="wire"/>
+          <polygon points="186,76 194,80 186,84" class="arrow"/>
+          <text x="155" y="72" text-anchor="middle" class="label" style="fill:#f85149">I₃</text>
+          <!-- I4 leaving to bottom-right -->
+          <line x1="115" y1="85" x2="175" y2="145" class="wire"/>
+          <polygon points="167,138 173,146 163,146" class="arrow"/>
+          <text x="155" y="132" class="label" style="fill:#f85149">I₄</text>
+          <!-- Equation -->
+          <text x="110" y="158" text-anchor="middle" style="fill:#8b949e;font-size:10px;font-family:'JetBrains Mono'">I₁ + I₂ = I₃ + I₄</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- KVL -->
+    <div class="card purple">
+      <div class="card-title"><span class="dot"></span>KVL – Voltage Law (around a loop)</div>
+      <div class="formula-big" style="color:var(--purple)">ΣV = 0</div>
+      <div class="rule p">Sum of all voltage rises & drops around any closed loop = 0</div>
+      <div class="diagram" style="margin-top:12px">
+        <svg width="260" height="160" viewBox="0 0 260 160">
+          <!-- Loop rectangle -->
+          <line x1="30" y1="20" x2="230" y2="20" class="wire"/>
+          <line x1="30" y1="140" x2="230" y2="140" class="wire"/>
+          <line x1="30" y1="20" x2="30" y2="60" class="wire"/>
+          <line x1="30" y1="100" x2="30" y2="140" class="wire"/>
+          <line x1="230" y1="20" x2="230" y2="60" class="wire"/>
+          <line x1="230" y1="100" x2="230" y2="140" class="wire"/>
+          <!-- Battery left: V_s -->
+          <line x1="18" y1="60" x2="42" y2="60" class="volt" stroke-width="3"/>
+          <line x1="23" y1="70" x2="37" y2="70" class="volt"/>
+          <line x1="18" y1="80" x2="42" y2="80" class="volt" stroke-width="3"/>
+          <line x1="23" y1="90" x2="37" y2="90" class="volt"/>
+          <line x1="18" y1="100" x2="42" y2="100" class="volt" stroke-width="3"/>
+          <text x="8" y="82" text-anchor="middle" class="label" style="fill:#3fb950;font-size:13px" transform="rotate(-90,8,82)">V_s</text>
+          <text x="48" y="64" class="plus">+</text><text x="48" y="102" class="minus">−</text>
+          <!-- R1 top -->
+          <polyline points="90,20 97,8 104,32 111,8 118,32 125,8 132,20" class="comp"/>
+          <text x="111" y="5" text-anchor="middle" class="sublabel">R₁  −V₁+</text>
+          <!-- R2 right -->
+          <polyline points="230,60 218,67 242,77 218,87 242,97 218,97 230,107" class="comp"/>
+          <text x="248" y="82" class="sublabel" style="fill:#e3b341">R₂</text>
+          <!-- R3 bottom -->
+          <polyline points="90,140 97,128 104,152 111,128 118,152 125,128 132,140" class="comp"/>
+          <text x="111" y="160" text-anchor="middle" class="sublabel">R₃  +V₃−</text>
+          <!-- Loop arrow -->
+          <path d="M 130 80 A 40 40 0 1 0 129 80" stroke="rgba(188,140,255,.5)" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+          <text x="130" y="84" text-anchor="middle" style="fill:#bc8cff;font-size:10px;font-family:'JetBrains Mono'">↺</text>
+          <!-- Equation bottom -->
+          <text x="130" y="158" text-anchor="middle" style="display:none"/>
+        </svg>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px;font-family:'JetBrains Mono'">
+        +V_s − V₁ − V₂ − V₃ = 0 &nbsp;→&nbsp; V_s = V₁ + V₂ + V₃
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SECTION: POWER ═══════ -->
+<section id="power">
+  <div class="section-title">Power & Energy</div>
+  <div class="grid2">
+    <div class="card orange">
+      <div class="card-title"><span class="dot"></span>Power Formulas (9 key ones)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <div class="formula"><span class="f">P = V × I</span></div>
+        <div class="formula"><span class="f">P = I² × R</span></div>
+        <div class="formula"><span class="f">P = V² / R</span></div>
+        <div class="formula"><span class="f">P = W / t</span></div>
+        <div class="formula"><span class="f">W = P × t</span></div>
+        <div class="formula"><span class="f">W = V × I × t</span></div>
+        <div class="formula"><span class="f">W = I² × R × t</span></div>
+        <div class="formula"><span class="f">η = P_out/P_in</span><span class="note">efficiency</span></div>
+      </div>
+      <div class="chips" style="margin-top:10px">
+        <span class="chip o">P in Watts (W)</span>
+        <span class="chip o">W in Joules (J)</span>
+        <span class="chip o">t in seconds</span>
+      </div>
+    </div>
+
+    <div class="card orange">
+      <div class="card-title"><span class="dot"></span>Power Triangle</div>
+      <div class="diagram">
+        <svg width="220" height="130" viewBox="0 0 220 130">
+          <!-- Triangle -->
+          <polygon points="110,6 20,118 200,118" fill="rgba(255,166,87,.1)" stroke="var(--orange)" stroke-width="2"/>
+          <line x1="20" y1="72" x2="200" y2="72" stroke="var(--orange)" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <!-- P top -->
+          <text x="110" y="62" text-anchor="middle" fill="#ff9800" font-size="28" font-weight="900" font-family="JetBrains Mono">P</text>
+          <!-- V bottom left, I bottom right -->
+          <text x="68" y="110" text-anchor="middle" fill="#3fb950" font-size="22" font-weight="900" font-family="JetBrains Mono">V</text>
+          <line x1="108" y1="78" x2="108" y2="120" stroke="var(--orange)" stroke-width="1.5"/>
+          <text x="152" y="110" text-anchor="middle" fill="#58a6ff" font-size="22" font-weight="900" font-family="JetBrains Mono">I</text>
+          <!-- Note -->
+          <text x="110" y="128" text-anchor="middle" fill="#8b949e" font-size="9" font-family="Inter">Cover the unknown to find the formula</text>
+        </svg>
+      </div>
+      <div class="rule y" style="margin-top:8px;font-size:12px">
+        <strong>Efficiency η = (P_out / P_in) × 100%</strong><br>
+        Losses = P_in − P_out
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SECTION: CAPACITORS ═══════ -->
+<section id="caps">
+  <div class="section-title">Capacitors</div>
+  <div class="grid2">
+    <div class="card purple">
+      <div class="card-title"><span class="dot"></span>Capacitor Formulas</div>
+      <div class="formula"><span class="f">Q = C × V</span><span class="note">charge stored</span></div>
+      <div class="formula"><span class="f">C = Q / V</span><span class="note">capacitance (Farads)</span></div>
+      <div class="formula"><span class="f">E = ½ C V²</span><span class="note">energy stored (J)</span></div>
+      <div class="formula"><span class="f">E = Q²/(2C)</span><span class="note">alt energy form</span></div>
+      <div class="formula"><span class="f">I = C × dV/dt</span><span class="note">current through cap</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+        <div>
+          <div style="color:var(--green);font-size:11px;font-weight:700;margin-bottom:6px">SERIES</div>
+          <div class="formula" style="font-size:11px"><span class="f">1/C_T = 1/C₁ + 1/C₂</span></div>
+          <div style="color:var(--muted);font-size:11px;margin-top:4px">C_T &lt; smallest C</div>
+        </div>
+        <div>
+          <div style="color:var(--accent);font-size:11px;font-weight:700;margin-bottom:6px">PARALLEL</div>
+          <div class="formula" style="font-size:11px"><span class="f">C_T = C₁ + C₂ + C₃</span></div>
+          <div style="color:var(--muted);font-size:11px;margin-top:4px">C_T &gt; largest C</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card purple">
+      <div class="card-title"><span class="dot"></span>Capacitor Diagrams</div>
+      <div class="diagram">
+        <svg width="280" height="160" viewBox="0 0 280 160">
+          <!-- Series Caps -->
+          <text x="60" y="12" text-anchor="middle" class="sublabel" style="fill:#bc8cff">SERIES</text>
+          <line x1="10" y1="70" x2="40" y2="70" class="wire"/>
+          <line x1="40" y1="50" x2="40" y2="90" class="comp"/>
+          <line x1="50" y1="50" x2="50" y2="90" class="comp"/>
+          <line x1="50" y1="70" x2="80" y2="70" class="wire"/>
+          <line x1="80" y1="50" x2="80" y2="90" class="comp"/>
+          <line x1="90" y1="50" x2="90" y2="90" class="comp"/>
+          <line x1="90" y1="70" x2="120" y2="70" class="wire"/>
+          <!-- Labels -->
+          <text x="45" y="45" text-anchor="middle" class="sublabel">C₁</text>
+          <text x="85" y="45" text-anchor="middle" class="sublabel">C₂</text>
+          <!-- Series bottom lines -->
+          <line x1="10" y1="120" x2="120" y2="120" class="wire" stroke-dasharray="3,3" opacity=".4"/>
+          <line x1="10" y1="70" x2="10" y2="120" class="wire" opacity=".4"/>
+          <line x1="120" y1="70" x2="120" y2="120" class="wire" opacity=".4"/>
+
+          <!-- Parallel Caps -->
+          <text x="210" y="12" text-anchor="middle" class="sublabel" style="fill:#58a6ff">PARALLEL</text>
+          <line x1="160" y1="70" x2="180" y2="70" class="wire"/>
+          <line x1="180" y1="25" x2="180" y2="115" class="wire"/>
+          <line x1="260" y1="25" x2="260" y2="115" class="wire"/>
+          <line x1="260" y1="70" x2="280" y2="70" class="wire"/>
+          <!-- Cap 1 branch -->
+          <line x1="180" y1="40" x2="210" y2="40" class="wire"/>
+          <line x1="210" y1="25" x2="210" y2="55" class="comp"/>
+          <line x1="218" y1="25" x2="218" y2="55" class="comp"/>
+          <line x1="218" y1="40" x2="260" y2="40" class="wire"/>
+          <text x="214" y="20" text-anchor="middle" class="sublabel">C₁</text>
+          <!-- Cap 2 branch -->
+          <line x1="180" y1="100" x2="210" y2="100" class="wire"/>
+          <line x1="210" y1="85" x2="210" y2="115" class="comp"/>
+          <line x1="218" y1="85" x2="218" y2="115" class="comp"/>
+          <line x1="218" y1="100" x2="260" y2="100" class="wire"/>
+          <text x="214" y="80" text-anchor="middle" class="sublabel">C₂</text>
+          <!-- V label -->
+          <text x="155" y="74" class="sublabel" style="fill:#bc8cff">V</text>
+        </svg>
+      </div>
+      <div class="rule p" style="font-size:12px;margin-top:8px">
+        Capacitor blocks DC in steady state — acts as open circuit<br>
+        In AC, reactance: <strong>Xc = 1/(2πfC)</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SECTION: INDUCTORS ═══════ -->
+<section id="inductors">
+  <div class="section-title">Inductors</div>
+  <div class="grid2">
+    <div class="card yellow">
+      <div class="card-title"><span class="dot"></span>Inductor Formulas</div>
+      <div class="formula"><span class="f">V = L × dI/dt</span><span class="note">voltage across inductor</span></div>
+      <div class="formula"><span class="f">E = ½ L I²</span><span class="note">energy stored (J)</span></div>
+      <div class="formula"><span class="f">τ = L / R</span><span class="note">time constant (RL)</span></div>
+      <div class="formula"><span class="f">X_L = 2πfL = ωL</span><span class="note">inductive reactance</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+        <div>
+          <div style="color:var(--green);font-size:11px;font-weight:700;margin-bottom:6px">SERIES</div>
+          <div class="formula" style="font-size:11px"><span class="f">L_T = L₁ + L₂ + L₃</span></div>
+        </div>
+        <div>
+          <div style="color:var(--accent);font-size:11px;font-weight:700;margin-bottom:6px">PARALLEL</div>
+          <div class="formula" style="font-size:11px"><span class="f">1/L_T = 1/L₁ + 1/L₂</span></div>
+        </div>
+      </div>
+      <div class="rule y" style="margin-top:10px;font-size:12px">
+        Inductor blocks AC, passes DC — acts as short circuit (wire) in DC steady state
+      </div>
+    </div>
+
+    <div class="card yellow">
+      <div class="card-title"><span class="dot"></span>Inductor Symbol & RC/RL Time Constants</div>
+      <div class="diagram">
+        <svg width="280" height="80" viewBox="0 0 280 80">
+          <!-- Inductor symbol (loops) -->
+          <text x="30" y="18" text-anchor="middle" class="sublabel" style="fill:#e3b341">INDUCTOR</text>
+          <line x1="10" y1="45" x2="30" y2="45" class="wire"/>
+          <path d="M30,45 Q35,30 45,45 Q50,30 60,45 Q65,30 75,45 Q80,30 90,45" class="comp"/>
+          <line x1="90" y1="45" x2="110" y2="45" class="wire"/>
+          <text x="60" y="70" text-anchor="middle" class="sublabel">L (Henrys)</text>
+          <!-- Capacitor symbol reminder -->
+          <text x="200" y="18" text-anchor="middle" class="sublabel" style="fill:#bc8cff">CAPACITOR</text>
+          <line x1="155" y1="45" x2="185" y2="45" class="wire"/>
+          <line x1="185" y1="28" x2="185" y2="62" class="comp"/>
+          <line x1="193" y1="28" x2="193" y2="62" class="comp"/>
+          <line x1="193" y1="45" x2="223" y2="45" class="wire"/>
+          <text x="189" y="72" text-anchor="middle" class="sublabel">C (Farads)</text>
+        </svg>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+        <div class="rule y" style="font-size:12px">
+          <strong>RC Time Constant</strong><br>
+          τ = R × C<br>
+          63.2% charged at t=τ<br>
+          99.3% charged at t=5τ
+        </div>
+        <div class="rule" style="font-size:12px">
+          <strong>RL Time Constant</strong><br>
+          τ = L / R<br>
+          63.2% of I_final at t=τ<br>
+          99.3% at t=5τ
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SECTION: AC CIRCUITS ═══════ -->
+<section id="ac">
+  <div class="section-title">AC Circuits</div>
+  <div class="grid2">
+    <div class="card red">
+      <div class="card-title"><span class="dot"></span>AC Key Formulas</div>
+      <table class="tbl">
+        <tr><th>Quantity</th><th>Formula</th><th>Unit</th></tr>
+        <tr><td>Angular frequency</td><td class="formula" style="border:none;padding:4px 0;background:none"><span class="f">ω = 2πf</span></td><td style="color:var(--muted)">rad/s</td></tr>
+        <tr><td>Period</td><td><span style="color:var(--yellow);font-family:'JetBrains Mono';font-size:12px">T = 1/f</span></td><td style="color:var(--muted)">seconds</td></tr>
+        <tr><td>Inductive reactance</td><td><span style="color:var(--yellow);font-family:'JetBrains Mono';font-size:12px">X_L = ωL = 2πfL</span></td><td style="color:var(--muted)">Ω</td></tr>
+        <tr><td>Capacitive reactance</td><td><span style="color:var(--yellow);font-family:'JetBrains Mono';font-size:12px">X_C = 1/ωC</span></td><td style="color:var(--muted)">Ω</td></tr>
+        <tr><td>Impedance (series)</td><td><span style="color:var(--yellow);font-family:'JetBrains Mono';font-size:12px">Z = √(R² + X²)</span></td><td style="color:var(--muted)">Ω</td></tr>
+        <tr><td>Phase angle</td><td><span style="color:var(--yellow);font-family:'JetBrains Mono';font-size:12px">φ = arctan(X/R)</span></td><td style="color:var(--muted)">degrees</td></tr>
+        <tr><td>RMS Voltage</td><td><span style="color:var(--yellow);font-family:'JetBrains Mono';font-size:12px">V_rms = V_peak/√2</span></td><td style="color:var(--muted)">V</td></tr>
+        <tr><td>RMS Current</td><td><span style="color:var(--yellow);font-family:'JetBrains Mono';font-size:12px">I_rms = I_peak/√2</span></td><td style="color:var(--muted)">A</td></tr>
+        <tr><td>Resonance</td><td><span style="color:var(--yellow);font-family:'JetBrains Mono';font-size:12px">f₀ = 1/(2π√LC)</span></td><td style="color:var(--muted)">Hz</td></tr>
+      </table>
+    </div>
+
+    <div class="card red">
+      <div class="card-title"><span class="dot"></span>Impedance Phasor & AC Power</div>
+      <div class="diagram">
+        <svg width="260" height="140" viewBox="0 0 260 140">
+          <!-- Axes -->
+          <line x1="40" y1="100" x2="200" y2="100" stroke="#30363d" stroke-width="1"/>
+          <line x1="40" y1="20" x2="40" y2="110" stroke="#30363d" stroke-width="1"/>
+          <!-- R horizontal -->
+          <line x1="40" y1="100" x2="160" y2="100" class="wire" stroke-width="2.5"/>
+          <polygon points="152,95 162,100 152,105" class="arrow"/>
+          <text x="100" y="118" text-anchor="middle" class="label" style="fill:#58a6ff">R</text>
+          <!-- X vertical -->
+          <line x1="160" y1="100" x2="160" y2="35" class="comp" stroke-width="2.5"/>
+          <polygon points="155,42 160,32 165,42" style="fill:var(--yellow)"/>
+          <text x="175" y="68" class="label" style="fill:#e3b341">X</text>
+          <text x="185" y="68" class="sublabel">(X_L−X_C)</text>
+          <!-- Hypotenuse Z -->
+          <line x1="40" y1="100" x2="160" y2="35" stroke="var(--red)" stroke-width="2.5"/>
+          <polygon points="153,38 162,34 158,44" style="fill:var(--red)"/>
+          <text x="85" y="60" class="label" style="fill:#f85149">Z</text>
+          <!-- Angle -->
+          <path d="M 70,100 A 30 30 0 0 0 67,73" stroke="var(--purple)" stroke-width="1.5" fill="none"/>
+          <text x="80" y="88" class="sublabel" style="fill:#bc8cff">φ</text>
+          <!-- Formula -->
+          <text x="210" y="45" class="sublabel">Z = √(R²+X²)</text>
+          <text x="210" y="58" class="sublabel">φ = tan⁻¹(X/R)</text>
+        </svg>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px">
+        <div class="rule r" style="font-size:11px;text-align:center">
+          <strong>Active (P)</strong><br>P = VIcosφ<br><span style="color:var(--muted)">Watts</span>
+        </div>
+        <div class="rule" style="font-size:11px;text-align:center">
+          <strong>Reactive (Q)</strong><br>Q = VIsinφ<br><span style="color:var(--muted)">VAR</span>
+        </div>
+        <div class="rule p" style="font-size:11px;text-align:center">
+          <strong>Apparent (S)</strong><br>S = VI<br><span style="color:var(--muted)">VA</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SECTION: DIVIDERS ═══════ -->
+<section id="dividers">
+  <div class="section-title">Voltage & Current Dividers</div>
+  <div class="grid2">
+    <div class="card green">
+      <div class="card-title"><span class="dot"></span>Voltage Divider Rule</div>
+      <div class="formula-big" style="font-size:18px">V_x = V_s × (R_x / R_T)</div>
+      <div class="diagram">
+        <svg width="220" height="180" viewBox="0 0 220 180">
+          <!-- Vertical circuit -->
+          <line x1="60" y1="10" x2="160" y2="10" class="wire"/>
+          <line x1="60" y1="10" x2="60" y2="40" class="wire"/>
+          <line x1="60" y1="80" x2="60" y2="100" class="wire"/>
+          <line x1="60" y1="140" x2="60" y2="170" class="wire"/>
+          <line x1="60" y1="170" x2="160" y2="170" class="wire"/>
+          <line x1="160" y1="10" x2="160" y2="170" class="wire"/>
+          <!-- V source right -->
+          <circle cx="160" cy="90" r="22" stroke="var(--green)" stroke-width="2" fill="none"/>
+          <text x="160" y="87" text-anchor="middle" class="plus">+</text>
+          <text x="160" y="98" text-anchor="middle" class="minus">−</text>
+          <text x="182" y="94" class="sublabel">V_s</text>
+          <!-- R1 top -->
+          <polyline points="60,40 48,47 72,57 48,67 72,77 48,77 60,85" class="comp"/>
+          <text x="80" y="63" class="sublabel">R₁</text>
+          <!-- R2 bottom -->
+          <polyline points="60,100 48,107 72,117 48,127 72,137 48,137 60,145" class="comp"/>
+          <text x="80" y="123" class="sublabel">R₂</text>
+          <!-- Vx measurement arrow -->
+          <line x1="10" y1="100" x2="10" y2="145" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="3,3"/>
+          <line x1="5" y1="100" x2="55" y2="100" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="5" y1="145" x2="55" y2="145" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3,3"/>
+          <text x="6" y="126" text-anchor="middle" class="label" style="fill:#58a6ff;font-size:12px" transform="rotate(-90,6,126)">V₂</text>
+        </svg>
+      </div>
+      <div class="rule g" style="font-size:12px">
+        V₂ = V_s × R₂/(R₁+R₂) &nbsp;&nbsp; V₁ = V_s × R₁/(R₁+R₂)
+      </div>
+    </div>
+
+    <div class="card blue">
+      <div class="card-title"><span class="dot"></span>Current Divider Rule</div>
+      <div class="formula-big" style="font-size:18px">I_x = I_T × (R_other / R_T)</div>
+      <div class="diagram">
+        <svg width="220" height="140" viewBox="0 0 220 140">
+          <!-- Horizontal parallel -->
+          <line x1="10" y1="70" x2="45" y2="70" class="wire"/>
+          <line x1="175" y1="70" x2="210" y2="70" class="wire"/>
+          <line x1="45" y1="30" x2="45" y2="110" class="wire"/>
+          <line x1="175" y1="30" x2="175" y2="110" class="wire"/>
+          <!-- Top branch R1 -->
+          <line x1="45" y1="35" x2="75" y2="35" class="wire"/>
+          <polyline points="75,35 82,23 89,47 96,23 103,47 110,23 117,35" class="comp"/>
+          <line x1="117" y1="35" x2="175" y2="35" class="wire"/>
+          <text x="96" y="18" text-anchor="middle" class="sublabel">R₁</text>
+          <!-- Bottom branch R2 -->
+          <line x1="45" y1="105" x2="75" y2="105" class="wire"/>
+          <polyline points="75,105 82,93 89,117 96,93 103,117 110,93 117,105" class="comp"/>
+          <line x1="117" y1="105" x2="175" y2="105" class="wire"/>
+          <text x="96" y="88" text-anchor="middle" class="sublabel">R₂</text>
+          <!-- Arrows -->
+          <polygon points="24,64 32,70 24,76" class="arrow"/>
+          <text x="18" y="62" class="sublabel">I_T</text>
+          <polygon points="132,30 140,35 132,40" style="fill:var(--green)"/>
+          <text x="145" y="30" class="sublabel" style="fill:#3fb950">I₁</text>
+          <polygon points="132,100 140,105 132,110" style="fill:var(--yellow)"/>
+          <text x="145" y="100" class="sublabel" style="fill:#e3b341">I₂</text>
+        </svg>
+      </div>
+      <div class="rule" style="font-size:12px">
+        I₁ = I_T × R₂/(R₁+R₂) &nbsp;&nbsp; I₂ = I_T × R₁/(R₁+R₂)<br>
+        <span style="color:var(--muted)">(Note: opposite resistor on top!)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SECTION: THEVENIN / NORTON ═══════ -->
+<section id="thevenin">
+  <div class="section-title">Thévenin's & Norton's Theorems</div>
+  <div class="grid2">
+    <div class="card blue">
+      <div class="card-title"><span class="dot"></span>Thévenin's Theorem</div>
+      <div class="rule">Any linear circuit between two terminals = one voltage source (V_th) in series with one resistance (R_th)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+        <div>
+          <div style="color:var(--muted);font-size:11px;margin-bottom:4px">STEP 1 – Find V_th</div>
+          <div class="formula" style="font-size:11px"><span class="f">V_th = V_oc</span></div>
+          <div style="color:var(--muted);font-size:11px;margin-top:4px">Open-circuit voltage at terminals</div>
+        </div>
+        <div>
+          <div style="color:var(--muted);font-size:11px;margin-bottom:4px">STEP 2 – Find R_th</div>
+          <div class="formula" style="font-size:11px"><span class="f">R_th = V_oc / I_sc</span></div>
+          <div style="color:var(--muted);font-size:11px;margin-top:4px">Kill sources: V→short, I→open</div>
+        </div>
+      </div>
+      <div class="diagram" style="margin-top:12px">
+        <svg width="240" height="110" viewBox="0 0 240 110">
+          <!-- Thevenin equivalent circuit -->
+          <text x="120" y="12" text-anchor="middle" class="sublabel" style="fill:#58a6ff">THÉVENIN EQUIVALENT</text>
+          <line x1="10" y1="30" x2="10" y2="90" class="wire"/>
+          <line x1="10" y1="30" x2="50" y2="30" class="wire"/>
+          <!-- Vth source -->
+          <circle cx="30" cy="60" r="16" stroke="var(--green)" stroke-width="2" fill="none"/>
+          <text x="30" y="57" text-anchor="middle" class="plus">+</text>
+          <text x="30" y="67" text-anchor="middle" class="minus">−</text>
+          <text x="30" y="90" text-anchor="middle" class="sublabel">V_th</text>
+          <line x1="10" y1="90" x2="50" y2="90" class="wire"/>
+          <!-- Rth -->
+          <line x1="50" y1="30" x2="80" y2="30" class="wire"/>
+          <polyline points="80,30 87,18 94,42 101,18 108,42 115,18 122,30" class="comp"/>
+          <line x1="122" y1="30" x2="190" y2="30" class="wire"/>
+          <text x="101" y="14" text-anchor="middle" class="sublabel">R_th</text>
+          <line x1="50" y1="90" x2="190" y2="90" class="wire"/>
+          <!-- Terminals -->
+          <circle cx="190" cy="30" r="4" class="node"/>
+          <circle cx="190" cy="90" r="4" class="node"/>
+          <text x="202" y="34" class="sublabel" style="fill:#3fb950">A</text>
+          <text x="202" y="94" class="sublabel" style="fill:#3fb950">B</text>
+          <!-- Load box -->
+          <rect x="200" y="40" width="35" height="40" rx="5" fill="rgba(88,166,255,.1)" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="3,3"/>
+          <text x="217" y="65" text-anchor="middle" class="sublabel" style="fill:#58a6ff">R_L</text>
+          <line x1="190" y1="30" x2="200" y2="40" class="wire" opacity=".5"/>
+          <line x1="190" y1="90" x2="200" y2="80" class="wire" opacity=".5"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="card green">
+      <div class="card-title"><span class="dot"></span>Norton's Theorem & Conversion</div>
+      <div class="rule g">Any linear circuit = one current source (I_N) in parallel with one resistance (R_N = R_th)</div>
+      <div class="formula" style="margin-top:8px"><span class="f">I_N = I_sc</span><span class="note">Short-circuit current</span></div>
+      <div class="formula"><span class="f">R_N = R_th</span><span class="note">Same resistance!</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+        <div class="rule g" style="font-size:11px;text-align:center">
+          Thévenin → Norton<br><strong>I_N = V_th / R_th</strong>
+        </div>
+        <div class="rule" style="font-size:11px;text-align:center">
+          Norton → Thévenin<br><strong>V_th = I_N × R_N</strong>
+        </div>
+      </div>
+      <div class="diagram" style="margin-top:12px">
+        <svg width="200" height="110" viewBox="0 0 200 110">
+          <text x="100" y="12" text-anchor="middle" class="sublabel" style="fill:#3fb950">NORTON EQUIVALENT</text>
+          <line x1="10" y1="30" x2="10" y2="90" class="wire"/>
+          <line x1="10" y1="30" x2="160" y2="30" class="wire"/>
+          <line x1="10" y1="90" x2="160" y2="90" class="wire"/>
+          <!-- IN current source -->
+          <circle cx="50" cy="60" r="18" stroke="var(--green)" stroke-width="2" fill="rgba(63,185,80,.05)"/>
+          <polygon points="50,48 46,58 54,58" style="fill:var(--green)"/>
+          <line x1="50" y1="42" x2="50" y2="30" class="wire"/>
+          <line x1="50" y1="78" x2="50" y2="90" class="wire"/>
+          <text x="50" y="105" text-anchor="middle" class="sublabel">I_N</text>
+          <!-- RN parallel -->
+          <line x1="110" y1="30" x2="110" y2="45" class="wire"/>
+          <polyline points="110,45 98,52 122,62 98,72 122,82 98,82 110,90" class="comp"/>
+          <text x="130" y="66" class="sublabel">R_N</text>
+          <!-- Terminals -->
+          <circle cx="160" cy="30" r="4" class="node"/>
+          <circle cx="160" cy="90" r="4" class="node"/>
+          <text x="170" y="34" class="sublabel" style="fill:#3fb950">A</text>
+          <text x="170" y="94" class="sublabel" style="fill:#3fb950">B</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Max Power Transfer -->
+  <div class="grid3" style="margin-top:16px">
+    <div class="card orange">
+      <div class="card-title"><span class="dot"></span>Maximum Power Transfer</div>
+      <div class="formula-big" style="font-size:20px;color:var(--orange)">R_L = R_th</div>
+      <div class="formula"><span class="f">P_max = V_th² / (4 R_th)</span></div>
+      <div style="color:var(--muted);font-size:12px;margin-top:8px">Maximum power delivered to load when load resistance equals Thévenin resistance</div>
+    </div>
+    <div class="card red">
+      <div class="card-title"><span class="dot"></span>Superposition Principle</div>
+      <div class="rule r" style="font-size:12px">In a linear circuit with multiple sources, the response (V or I) at any point = sum of responses due to each source acting alone</div>
+      <div style="margin-top:8px;font-size:12px;color:var(--muted)">
+        • Kill other voltage sources → <strong style="color:var(--text)">short circuit</strong><br>
+        • Kill other current sources → <strong style="color:var(--text)">open circuit</strong><br>
+        • Sum all individual results
+      </div>
+    </div>
+    <div class="card purple">
+      <div class="card-title"><span class="dot"></span>Source Transformation</div>
+      <div class="formula"><span class="f">V_s = I_s × R</span></div>
+      <div class="formula"><span class="f">I_s = V_s / R</span></div>
+      <div class="rule p" style="font-size:12px;margin-top:8px">
+        Voltage source + series R ↔ Current source + parallel R<br>
+        (Same external behaviour)
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SECTION: COMPONENT SYMBOLS ═══════ -->
+<section id="components">
+  <div class="section-title">Circuit Symbols</div>
+  <div class="card" style="padding:16px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;">
+
+      <!-- Resistor -->
+      <div style="text-align:center">
+        <svg width="120" height="50" viewBox="0 0 120 50">
+          <line x1="5" y1="25" x2="20" y2="25" class="wire"/>
+          <polyline points="20,25 27,12 34,38 41,12 48,38 55,12 62,25 70,25 77,12 84,38 91,25" class="comp"/>
+          <line x1="91" y1="25" x2="115" y2="25" class="wire"/>
+        </svg>
+        <div style="color:var(--muted);font-size:11px;font-weight:700">Resistor (R)</div>
+        <div style="color:var(--yellow);font-size:11px;font-family:'JetBrains Mono'">Ω</div>
+      </div>
+
+      <!-- Capacitor -->
+      <div style="text-align:center">
+        <svg width="120" height="50" viewBox="0 0 120 50">
+          <line x1="5" y1="25" x2="50" y2="25" class="wire"/>
+          <line x1="50" y1="8" x2="50" y2="42" class="comp"/>
+          <line x1="70" y1="8" x2="70" y2="42" class="comp"/>
+          <line x1="70" y1="25" x2="115" y2="25" class="wire"/>
+        </svg>
+        <div style="color:var(--muted);font-size:11px;font-weight:700">Capacitor (C)</div>
+        <div style="color:var(--purple);font-size:11px;font-family:'JetBrains Mono'">Farads (F)</div>
+      </div>
+
+      <!-- Inductor -->
+      <div style="text-align:center">
+        <svg width="120" height="50" viewBox="0 0 120 50">
+          <line x1="5" y1="25" x2="20" y2="25" class="wire"/>
+          <path d="M20,25 Q25,10 30,25 Q35,10 40,25 Q45,10 50,25 Q55,10 60,25 Q65,10 70,25 Q75,10 80,25 Q85,10 90,25 Q95,10 100,25" class="comp"/>
+          <line x1="100" y1="25" x2="115" y2="25" class="wire"/>
+        </svg>
+        <div style="color:var(--muted);font-size:11px;font-weight:700">Inductor (L)</div>
+        <div style="color:var(--yellow);font-size:11px;font-family:'JetBrains Mono'">Henrys (H)</div>
+      </div>
+
+      <!-- DC Voltage Source -->
+      <div style="text-align:center">
+        <svg width="120" height="60" viewBox="0 0 120 60">
+          <line x1="5" y1="30" x2="45" y2="30" class="wire"/>
+          <line x1="45" y1="15" x2="45" y2="45" class="volt" stroke-width="3.5"/>
+          <line x1="55" y1="22" x2="55" y2="38" class="volt" stroke-width="1.5"/>
+          <line x1="55" y1="30" x2="115" y2="30" class="wire"/>
+          <text x="42" y="12" class="plus">+</text>
+          <text x="52" y="48" class="minus">−</text>
+        </svg>
+        <div style="color:var(--muted);font-size:11px;font-weight:700">Battery / DC Source</div>
+        <div style="color:var(--green);font-size:11px;font-family:'JetBrains Mono'">Volts (V)</div>
+      </div>
+
+      <!-- AC Voltage Source -->
+      <div style="text-align:center">
+        <svg width="120" height="60" viewBox="0 0 120 60">
+          <line x1="5" y1="30" x2="38" y2="30" class="wire"/>
+          <circle cx="60" cy="30" r="22" stroke="var(--green)" stroke-width="2" fill="none"/>
+          <path d="M48,30 Q54,18 60,30 Q66,42 72,30" stroke="var(--green)" stroke-width="2" fill="none"/>
+          <line x1="82" y1="30" x2="115" y2="30" class="wire"/>
+        </svg>
+        <div style="color:var(--muted);font-size:11px;font-weight:700">AC Voltage Source</div>
+        <div style="color:var(--green);font-size:11px;font-family:'JetBrains Mono'">~V</div>
+      </div>
+
+      <!-- Current Source -->
+      <div style="text-align:center">
+        <svg width="120" height="60" viewBox="0 0 120 60">
+          <line x1="5" y1="30" x2="38" y2="30" class="wire"/>
+          <circle cx="60" cy="30" r="22" stroke="var(--accent)" stroke-width="2" fill="none"/>
+          <line x1="60" y1="18" x2="60" y2="42" class="wire"/>
+          <polygon points="56,26 60,18 64,26" class="arrow"/>
+          <line x1="82" y1="30" x2="115" y2="30" class="wire"/>
+        </svg>
+        <div style="color:var(--muted);font-size:11px;font-weight:700">Current Source</div>
+        <div style="color:var(--accent);font-size:11px;font-family:'JetBrains Mono'">Amps (A)</div>
+      </div>
+
+      <!-- Ground -->
+      <div style="text-align:center">
+        <svg width="120" height="60" viewBox="0 0 120 60">
+          <line x1="60" y1="5" x2="60" y2="25" class="wire"/>
+          <line x1="35" y1="25" x2="85" y2="25" class="wire" stroke-width="2.5"/>
+          <line x1="42" y1="33" x2="78" y2="33" class="wire" stroke-width="2"/>
+          <line x1="50" y1="41" x2="70" y2="41" class="wire" stroke-width="1.5"/>
+          <line x1="56" y1="49" x2="64" y2="49" class="wire" stroke-width="1"/>
+        </svg>
+        <div style="color:var(--muted);font-size:11px;font-weight:700">Ground (GND)</div>
+        <div style="color:var(--muted);font-size:11px;font-family:'JetBrains Mono'">0V reference</div>
+      </div>
+
+      <!-- Switch -->
+      <div style="text-align:center">
+        <svg width="120" height="50" viewBox="0 0 120 50">
+          <line x1="5" y1="25" x2="40" y2="25" class="wire"/>
+          <circle cx="40" cy="25" r="4" class="node"/>
+          <circle cx="80" cy="25" r="4" class="node"/>
+          <line x1="40" y1="25" x2="75" y2="12" class="wire"/>
+          <line x1="80" y1="25" x2="115" y2="25" class="wire"/>
+        </svg>
+        <div style="color:var(--muted);font-size:11px;font-weight:700">Switch (SPST)</div>
+        <div style="color:var(--muted);font-size:11px;font-family:'JetBrains Mono'">Open/Closed</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SECTION: RESISTOR COLOR CODE ═══════ -->
+<section id="resistorcode">
+  <div class="section-title">Resistor Color Code</div>
+  <div class="grid2">
+    <div class="card yellow">
+      <div class="card-title"><span class="dot"></span>4-Band Resistor</div>
+      <div class="diagram">
+        <svg width="280" height="80" viewBox="0 0 280 80">
+          <!-- Resistor body -->
+          <rect x="40" y="25" width="200" height="30" rx="5" fill="#d4a843" stroke="#a0742a" stroke-width="2"/>
+          <!-- Leads -->
+          <line x1="5" y1="40" x2="40" y2="40" class="wire"/>
+          <line x1="240" y1="40" x2="275" y2="40" class="wire"/>
+          <!-- Band 1 -->
+          <rect x="58" y="25" width="20" height="30" fill="#8B4513" rx="2"/>
+          <!-- Band 2 -->
+          <rect x="88" y="25" width="20" height="30" fill="#000000" rx="2"/>
+          <!-- Band 3 (multiplier) -->
+          <rect x="118" y="25" width="20" height="30" fill="#ff0000" rx="2"/>
+          <!-- Band 4 (tolerance) -->
+          <rect x="190" y="25" width="20" height="30" fill="#d4af37" rx="2"/>
+          <!-- Labels -->
+          <text x="68" y="72" text-anchor="middle" style="fill:#8B4513;font-size:9px;font-family:'JetBrains Mono';font-weight:700">1st</text>
+          <text x="98" y="72" text-anchor="middle" style="fill:#8b949e;font-size:9px;font-family:'JetBrains Mono';font-weight:700">2nd</text>
+          <text x="128" y="72" text-anchor="middle" style="fill:#f85149;font-size:9px;font-family:'JetBrains Mono';font-weight:700">×</text>
+          <text x="200" y="72" text-anchor="middle" style="fill:#e3b341;font-size:9px;font-family:'JetBrains Mono';font-weight:700">tol</text>
+          <!-- Example -->
+          <text x="140" y="16" text-anchor="middle" class="sublabel">Example: Brown-Black-Red-Gold = 1,0 × 100 = 1kΩ ±5%</text>
+        </svg>
+      </div>
+      <table class="tbl" style="margin-top:8px">
+        <tr><th>Color</th><th>Value</th><th>Multiplier</th><th>Tolerance</th></tr>
+        <tr><td><span class="color-chip"><span class="csq" style="background:#000"></span>Black</span></td><td>0</td><td>×1</td><td>—</td></tr>
+        <tr><td><span class="color-chip"><span class="csq" style="background:#8B4513"></span>Brown</span></td><td>1</td><td>×10</td><td>±1%</td></tr>
+        <tr><td><span class="color-chip"><span class="csq" style="background:#f44336"></span>Red</span></td><td>2</td><td>×100</td><td>±2%</td></tr>
+        <tr><td><span class="color-chip"><span class="csq" style="background:#ff6600"></span>Orange</span></td><td>3</td><td>×1K</td><td>—</td></tr>
+        <tr><td><span class="color-chip"><span class="csq" style="background:#ffeb3b"></span>Yellow</span></td><td>4</td><td>×10K</td><td>—</td></tr>
+        <tr><td><span class="color-chip"><span class="csq" style="background:#4caf50"></span>Green</span></td><td>5</td><td>×100K</td><td>±0.5%</td></tr>
+        <tr><td><span class="color-chip"><span class="csq" style="background:#2196f3"></span>Blue</span></td><td>6</td><td>×1M</td><td>±0.25%</td></tr>
+        <tr><td><span class="color-chip"><span class="csq" style="background:#9c27b0"></span>Violet</span></td><td>7</td><td>×10M</td><td>±0.1%</td></tr>
+        <tr><td><span class="color-chip"><span class="csq" style="background:#9e9e9e"></span>Gray</span></td><td>8</td><td>—</td><td>±0.05%</td></tr>
+        <tr><td><span class="color-chip"><span class="csq" style="background:#fff;border:1px solid #555"></span>White</span></td><td>9</td><td>—</td><td>—</td></tr>
+        <tr><td><span class="color-chip"><span class="csq" style="background:#d4af37"></span>Gold</span></td><td>—</td><td>×0.1</td><td>±5%</td></tr>
+        <tr><td><span class="color-chip"><span class="csq" style="background:#c0c0c0"></span>Silver</span></td><td>—</td><td>×0.01</td><td>±10%</td></tr>
+      </table>
+    </div>
+
+    <div class="card blue">
+      <div class="card-title"><span class="dot"></span>Quick Reference Summary</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <div style="color:var(--green);font-size:11px;font-weight:700;margin-bottom:6px;letter-spacing:.5px">SERIES</div>
+          <div class="formula" style="font-size:11px"><span class="f">R_T = R₁+R₂+R₃</span></div>
+          <div class="formula" style="font-size:11px"><span class="f">I same everywhere</span></div>
+          <div class="formula" style="font-size:11px"><span class="f">V adds up</span></div>
+          <div class="formula" style="font-size:11px"><span class="f">C_T: 1/C₁+1/C₂</span></div>
+          <div class="formula" style="font-size:11px"><span class="f">L_T = L₁+L₂+L₃</span></div>
+        </div>
+        <div>
+          <div style="color:var(--accent);font-size:11px;font-weight:700;margin-bottom:6px;letter-spacing:.5px">PARALLEL</div>
+          <div class="formula" style="font-size:11px"><span class="f">1/R_T = 1/R₁+1/R₂</span></div>
+          <div class="formula" style="font-size:11px"><span class="f">V same everywhere</span></div>
+          <div class="formula" style="font-size:11px"><span class="f">I adds up</span></div>
+          <div class="formula" style="font-size:11px"><span class="f">C_T = C₁+C₂+C₃</span></div>
+          <div class="formula" style="font-size:11px"><span class="f">L_T: 1/L₁+1/L₂</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px">
+        <div style="color:var(--muted);font-size:11px;font-weight:700;margin-bottom:6px;letter-spacing:.5px">ALL POWER FORMS</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+          <div class="formula" style="font-size:10px;padding:6px 8px"><span class="f">P=VI</span></div>
+          <div class="formula" style="font-size:10px;padding:6px 8px"><span class="f">P=I²R</span></div>
+          <div class="formula" style="font-size:10px;padding:6px 8px"><span class="f">P=V²/R</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px">
+        <div style="color:var(--muted);font-size:11px;font-weight:700;margin-bottom:6px;letter-spacing:.5px">AC REACTANCES</div>
+        <div class="formula" style="font-size:11px"><span class="f">X_L = 2πfL = ωL</span><span class="note">inductor</span></div>
+        <div class="formula" style="font-size:11px"><span class="f">X_C = 1/(2πfC)</span><span class="note">capacitor</span></div>
+        <div class="formula" style="font-size:11px"><span class="f">Z = √(R² + (X_L−X_C)²)</span></div>
+      </div>
+
+      <div style="margin-top:14px">
+        <div style="color:var(--muted);font-size:11px;font-weight:700;margin-bottom:6px;letter-spacing:.5px">MEMORY AIDS</div>
+        <div class="rule" style="font-size:11px">
+          <strong>ELI the ICE man:</strong><br>
+          ELI → Inductor (L): Voltage (E) leads Current (I)<br>
+          ICE → Capacitor (C): Current (I) leads Voltage (E)
+        </div>
+        <div class="rule g" style="font-size:11px;margin-top:6px">
+          <strong>Bad Boys Race Our Young Girls:</strong><br>
+          Black Brown Red Orange Yellow Green Blue Violet Gray White
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div style="text-align:center;padding:32px 0 16px;color:var(--muted);font-size:12px;border-top:1px solid var(--border);margin-top:20px">
+  ⚡ Assail's Exam Revision &nbsp;·&nbsp; Electrical Circuits &nbsp;·&nbsp; You've got this! 💪
+</div>
+
+</div><!-- /page -->
+</body>
+</html>
