@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Session Security – Help AG</title>
+<style>
+  /* ── Reset & Tokens ────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red:    #D42B2F;
+    --red-dk: #A31F22;
+    --navy:   #1B2B5B;
+    --cream:  #FAF5EE;
+    --white:  #FFFFFF;
+    --blob:   rgba(212,43,47,0.92);
+  }
+
+  body {
+    background: #111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    user-select: none;
+  }
+
+  /* ── Stage ─────────────────────────────────────────────── */
+  .stage {
+    position: relative;
+    width: min(420px, 95vw);
+  }
+
+  /* ── Carousel Track ────────────────────────────────────── */
+  .track-wrap {
+    overflow: hidden;
+    border-radius: 28px;
+    box-shadow: 0 24px 80px rgba(0,0,0,.55);
+  }
+
+  .track {
+    display: flex;
+    transition: transform .55s cubic-bezier(.77,0,.18,1);
+    will-change: transform;
+  }
+
+  /* ── Slide ─────────────────────────────────────────────── */
+  .slide {
+    min-width: 100%;
+    aspect-ratio: 9/16;
+    background: var(--cream);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 44px 36px;
+    gap: 0;
+  }
+
+  /* ── Blob corners ──────────────────────────────────────── */
+  .blob {
+    position: absolute;
+    background: var(--blob);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .blob-tl { width: 200px; height: 200px; top: -90px; left: -80px; }
+  .blob-tr { width: 180px; height: 180px; top: -70px; right: -70px; }
+  .blob-bl { width: 210px; height: 210px; bottom: -90px; left: -90px; }
+  .blob-br { width: 190px; height: 190px; bottom: -80px; right: -80px; }
+
+  /* ── Logo bar ──────────────────────────────────────────── */
+  .logo-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 2;
+  }
+  .logo-circle {
+    width: 56px; height: 56px;
+    background: var(--red);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-size: 26px;
+    font-weight: 900;
+    font-family: Georgia, serif;
+    letter-spacing: -1px;
+    box-shadow: 0 4px 16px rgba(212,43,47,.45);
+  }
+  .logo-text { color: var(--navy); font-size: 22px; font-weight: 800; letter-spacing: .5px; }
+  .logo-sub  { color: var(--navy); font-size: 11px; opacity: .65; letter-spacing: .3px; }
+
+  /* ── Headline text ─────────────────────────────────────── */
+  .h1 {
+    font-size: clamp(30px, 9vw, 40px);
+    font-weight: 800;
+    color: var(--red);
+    text-align: center;
+    line-height: 1.15;
+    z-index: 2;
+    letter-spacing: -.3px;
+  }
+  .h2 {
+    font-size: clamp(18px, 5.5vw, 22px);
+    font-weight: 700;
+    color: var(--red);
+    text-align: center;
+    line-height: 1.4;
+    z-index: 2;
+  }
+  .body-text {
+    font-size: clamp(15px, 4.5vw, 18px);
+    color: var(--red);
+    text-align: center;
+    font-weight: 600;
+    line-height: 1.65;
+    z-index: 2;
+  }
+  .tagline {
+    font-size: 13px;
+    color: var(--navy);
+    opacity: .7;
+    text-align: center;
+    z-index: 2;
+    letter-spacing: .2px;
+  }
+  .spacer { flex: 1; }
+
+  /* ── Icon list ─────────────────────────────────────────── */
+  .icon-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    z-index: 2;
+  }
+  .icon-list li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(212,43,47,.08);
+    border-radius: 14px;
+    padding: 12px 16px;
+    border-left: 4px solid var(--red);
+  }
+  .icon-list .ico {
+    font-size: 24px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .icon-list span {
+    font-size: clamp(14px, 4vw, 16px);
+    font-weight: 700;
+    color: var(--red);
+    line-height: 1.3;
+  }
+
+  /* ── Bullet list ───────────────────────────────────────── */
+  .bullet-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    z-index: 2;
+  }
+  .bullet-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: clamp(14px, 4vw, 16px);
+    font-weight: 600;
+    color: var(--red);
+    line-height: 1.4;
+  }
+  .bullet-list li::before {
+    content: '•';
+    font-size: 22px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: -1px;
+  }
+
+  /* ── Divider ───────────────────────────────────────────── */
+  .divider {
+    width: 48px; height: 4px;
+    background: var(--red);
+    border-radius: 2px;
+    z-index: 2;
+    margin: 4px 0;
+  }
+
+  /* ── SVG Illustrations ─────────────────────────────────── */
+  .illo { z-index: 2; flex-shrink: 0; }
+
+  /* ── Slide-specific spacing ────────────────────────────── */
+  #s1 { gap: 18px; }
+  #s2 { gap: 10px; }
+  #s3 { gap: 14px; }
+  #s4 { gap: 14px; }
+  #s5 { gap: 14px; }
+  #s6 { gap: 14px; }
+
+  /* ── Step badge ────────────────────────────────────────── */
+  .step-badge {
+    background: var(--red);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    z-index: 2;
+  }
+
+  /* ── Warning strip ─────────────────────────────────────── */
+  .warn-strip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--red);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 10px 18px;
+    border-radius: 12px;
+    z-index: 2;
+    width: 100%;
+    justify-content: center;
+    letter-spacing: .3px;
+  }
+
+  /* ── Navigation ────────────────────────────────────────── */
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .nav-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,.25);
+    background: rgba(255,255,255,.1);
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s, border-color .2s, transform .15s;
+    backdrop-filter: blur(6px);
+  }
+  .nav-btn:hover { background: rgba(212,43,47,.6); border-color: var(--red); transform: scale(1.08); }
+  .nav-btn:active { transform: scale(.95); }
+
+  .dots {
+    display: flex;
+    gap: 8px;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.25);
+    transition: background .3s, transform .3s;
+    cursor: pointer;
+  }
+  .dot.active {
+    background: var(--red);
+    transform: scale(1.4);
+  }
+
+  /* ── Slide-in animation on active ─────────────────────── */
+  .slide.entering .anim { animation: fadeUp .5s ease both; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .slide.entering .anim:nth-child(1) { animation-delay: .05s; }
+  .slide.entering .anim:nth-child(2) { animation-delay: .12s; }
+  .slide.entering .anim:nth-child(3) { animation-delay: .19s; }
+  .slide.entering .anim:nth-child(4) { animation-delay: .26s; }
+  .slide.entering .anim:nth-child(5) { animation-delay: .33s; }
+  .slide.entering .anim:nth-child(6) { animation-delay: .40s; }
+
+  /* ── Pulse on warning icon ─────────────────────────────── */
+  @keyframes pulse {
+    0%,100% { transform: scale(1); }
+    50%      { transform: scale(1.15); }
+  }
+  .pulse { animation: pulse 2s ease-in-out infinite; display: inline-block; }
+
+  /* ── Counter on slide 6 ────────────────────────────────── */
+  .stat-row {
+    display: flex;
+    gap: 10px;
+    z-index: 2;
+    width: 100%;
+  }
+  .stat-box {
+    flex: 1;
+    background: var(--red);
+    border-radius: 14px;
+    padding: 12px 8px;
+    text-align: center;
+    color: #fff;
+  }
+  .stat-box .num  { font-size: 26px; font-weight: 900; line-height: 1; }
+  .stat-box .lbl  { font-size: 10px; font-weight: 600; opacity: .85; letter-spacing: .4px; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="track-wrap">
+    <div class="track" id="track">
+
+      <!-- ══ SLIDE 1 – Cover ══════════════════════════════ -->
+      <div class="slide" id="s1">
+        <div class="blob blob-tl"></div>
+        <div class="blob blob-tr"></div>
+        <div class="blob blob-br"></div>
+
+        <div class="logo-bar anim">
+          <div class="logo-circle">(i)</div>
+          <div class="logo-text">HELP AG</div>
+          <div class="logo-sub">an e&amp; enterprise company</div>
+        </div>
+
+        <div class="spacer"></div>
+
+        <!-- Animated lock SVG -->
+        <svg class="illo anim" width="110" height="110" viewBox="0 0 110 110" fill="none">
+          <circle cx="55" cy="55" r="50" fill="rgba(212,43,47,.12)" stroke="var(--red)" stroke-width="2.5"/>
+          <rect x="34" y="50" width="42" height="30" rx="7" fill="var(--red)"/>
+          <path d="M42 50V38a13 13 0 0 1 26 0v12" stroke="var(--red)" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <circle cx="55" cy="65" r="5" fill="white"/>
+          <rect x="53" y="66" width="4" height="7" rx="2" fill="white"/>
+          <!-- question mark overlay -->
+          <circle cx="75" cy="32" r="14" fill="var(--cream)" stroke="var(--red)" stroke-width="2"/>
+          <text x="75" y="37" text-anchor="middle" font-size="17" font-weight="900" fill="var(--red)">?</text>
+        </svg>
+
+        <div class="spacer"></div>
+
+        <div class="h1 anim">You're already<br>logged in…</div>
+        <div style="height:10px"></div>
+        <div class="h2 anim" style="color:var(--navy);">…but is it<br><em style="color:var(--red);">really you?</em></div>
+
+        <div class="spacer"></div>
+        <div class="warn-strip anim">
+          <span class="pulse">⚠️</span>&nbsp; Session hijacking is silent
+        </div>
+        <div class="spacer"></div>
+      </div>
+
+      <!-- ══ SLIDE 2 – The Silent Problem ════════════════ -->
+      <div class="slide" id="s2">
+        <div class="blob blob-tl"></div>
+        <div class="blob blob-br"></div>
+
+        <div class="step-badge anim">The problem</div>
+        <div style="height:8px"></div>
+
+        <div class="h2 anim">You checked your account.</div>
+        <div class="divider anim"></div>
+
+        <svg class="illo anim" width="120" height="90" viewBox="0 0 120 90" fill="none">
+          <!-- monitor -->
+          <rect x="15" y="10" width="90" height="58" rx="8" fill="var(--navy)" stroke="var(--red)" stroke-width="2"/>
+          <rect x="22" y="17" width="76" height="42" rx="4" fill="rgba(212,43,47,.08)"/>
+          <!-- checkmark lines (normal-looking data) -->
+          <line x1="28" y1="27" x2="58" y2="27" stroke="var(--red)" stroke-width="3" stroke-linecap="round" opacity=".4"/>
+          <line x1="28" y1="34" x2="70" y2="34" stroke="var(--red)" stroke-width="3" stroke-linecap="round" opacity=".3"/>
+          <line x1="28" y1="41" x2="50" y2="41" stroke="var(--red)" stroke-width="3" stroke-linecap="round" opacity=".2"/>
+          <!-- big check -->
+          <path d="M64 30 L72 40 L88 22" stroke="#2ecc71" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- stand -->
+          <rect x="50" y="68" width="20" height="6" rx="3" fill="var(--navy)"/>
+          <rect x="40" y="73" width="40" height="5" rx="2.5" fill="var(--red)" opacity=".5"/>
+          <!-- question bubbles -->
+          <circle cx="100" cy="15" r="10" fill="var(--red)"/>
+          <text x="100" y="20" text-anchor="middle" font-size="12" font-weight="900" fill="white">?</text>
+          <circle cx="18" cy="20" r="8" fill="var(--red)" opacity=".7"/>
+          <text x="18" y="25" text-anchor="middle" font-size="10" font-weight="900" fill="white">?</text>
+        </svg>
+
+        <div class="body-text anim">
+          Everything looks <span style="color:var(--navy);font-style:italic;">normal.</span>
+        </div>
+        <div style="height:4px"></div>
+        <div class="body-text anim">No alerts. No warnings.</div>
+        <div style="height:10px"></div>
+        <div class="divider anim" style="background:var(--navy);opacity:.3;"></div>
+        <div style="height:10px"></div>
+        <div class="h2 anim" style="font-size:clamp(16px,5vw,20px);">
+          Just… activity you<br><span style="text-decoration:underline;text-underline-offset:4px;">don't remember.</span>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 3 – How It Happens ════════════════════ -->
+      <div class="slide" id="s3">
+        <div class="blob blob-tr"></div>
+        <div class="blob blob-bl"></div>
+
+        <div class="step-badge anim">How it happens</div>
+        <div style="height:6px"></div>
+        <div class="h2 anim">Not all threats<br>force their way in.</div>
+        <div style="height:4px"></div>
+        <div class="body-text anim" style="font-size:14px;color:var(--navy);opacity:.7;">Some simply walk through an open door.</div>
+        <div style="height:14px"></div>
+
+        <ul class="icon-list anim">
+          <li>
+            <span class="ico">🔓</span>
+            <span>You forget to log out</span>
+          </li>
+          <li>
+            <span class="ico">🖥️</span>
+            <span>Sessions stay active too long</span>
+          </li>
+          <li>
+            <span class="ico">👁️</span>
+            <span>Access goes unnoticed</span>
+          </li>
+          <li>
+            <span class="ico">📡</span>
+            <span>Unsecured public networks</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ══ SLIDE 4 – What It Looks Like ════════════════ -->
+      <div class="slide" id="s4">
+        <div class="blob blob-tl"></div>
+        <div class="blob blob-br"></div>
+
+        <div class="step-badge anim" style="background:var(--navy);">What happens next</div>
+        <div style="height:8px"></div>
+        <div class="h2 anim">It doesn't look<br>wrong… until it is.</div>
+        <div style="height:12px"></div>
+
+        <!-- Hacker SVG -->
+        <svg class="illo anim" width="120" height="100" viewBox="0 0 120 100" fill="none">
+          <!-- hooded figure -->
+          <ellipse cx="60" cy="40" rx="22" ry="22" fill="#1B2B5B"/>
+          <ellipse cx="60" cy="39" rx="13" ry="14" fill="#F5C89A"/>
+          <path d="M38 40 Q38 20 60 18 Q82 20 82 40 Q82 32 60 30 Q38 32 38 40Z" fill="#1B2B5B"/>
+          <!-- laptop -->
+          <rect x="30" y="62" width="60" height="30" rx="4" fill="#1B2B5B"/>
+          <rect x="34" y="65" width="52" height="22" rx="2" fill="var(--red)" opacity=".8"/>
+          <!-- skull on screen -->
+          <ellipse cx="60" cy="74" rx="8" ry="7" fill="white" opacity=".9"/>
+          <circle cx="57" cy="72" r="1.5" fill="var(--red)"/>
+          <circle cx="63" cy="72" r="1.5" fill="var(--red)"/>
+          <path d="M56 77 Q60 80 64 77" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <!-- warning triangles -->
+          <polygon points="10,30 18,44 2,44" fill="var(--red)" opacity=".9"/>
+          <text x="10" y="42" text-anchor="middle" font-size="9" font-weight="900" fill="white">!</text>
+          <polygon points="110,20 118,34 102,34" fill="var(--red)" opacity=".9"/>
+          <text x="110" y="32" text-anchor="middle" font-size="9" font-weight="900" fill="white">!</text>
+          <polygon points="100,55 108,69 92,69" fill="var(--red)" opacity=".7"/>
+          <text x="100" y="67" text-anchor="middle" font-size="9" font-weight="900" fill="white">!</text>
+        </svg>
+
+        <ul class="bullet-list anim">
+          <li>Changes you didn't make</li>
+          <li>Actions taken in your name</li>
+          <li>Information accessed without you knowing</li>
+        </ul>
+      </div>
+
+      <!-- ══ SLIDE 5 – How to Stay Safe ══════════════════ -->
+      <div class="slide" id="s5">
+        <div class="blob blob-tr"></div>
+        <div class="blob blob-bl"></div>
+
+        <div class="step-badge anim" style="background:var(--navy);">Stay protected</div>
+        <div style="height:6px"></div>
+        <div class="h1 anim" style="font-size:clamp(26px,8vw,34px);">How to<br>Stay Safe</div>
+        <div style="height:14px"></div>
+
+        <ul class="icon-list anim">
+          <li>
+            <span class="ico">🔒</span>
+            <span>Log out from shared &amp; public devices</span>
+          </li>
+          <li>
+            <span class="ico">🔔</span>
+            <span>Enable login alerts on all accounts</span>
+          </li>
+          <li>
+            <span class="ico">📋</span>
+            <span>Review active sessions regularly</span>
+          </li>
+          <li>
+            <span class="ico">🛡️</span>
+            <span>Use multi-factor authentication (MFA)</span>
+          </li>
+        </ul>
+
+        <div style="height:10px"></div>
+        <div class="warn-strip anim" style="background:var(--navy);">
+          🔐&nbsp; Your identity is your first firewall
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 6 – CTA / Closing ══════════════════════ -->
+      <div class="slide" id="s6">
+        <div class="blob blob-tl"></div>
+        <div class="blob blob-br"></div>
+
+        <div class="stat-row anim">
+          <div class="stat-box">
+            <div class="num">80%</div>
+            <div class="lbl">of breaches involve stolen credentials</div>
+          </div>
+          <div class="stat-box">
+            <div class="num">207</div>
+            <div class="lbl">days avg. to detect a breach</div>
+          </div>
+        </div>
+
+        <div style="height:14px"></div>
+        <div class="divider anim"></div>
+        <div style="height:12px"></div>
+
+        <div class="h1 anim" style="font-size:clamp(24px,7.5vw,32px);">
+          Stay secure.<br>Stay aware.
+        </div>
+        <div style="height:10px"></div>
+        <div class="h2 anim" style="color:var(--navy);font-size:clamp(14px,4.5vw,17px);">
+          Cybersecurity starts<br>with the right awareness.
+        </div>
+
+        <div class="spacer"></div>
+
+        <div class="logo-bar anim">
+          <div class="logo-circle">(i)</div>
+          <div class="logo-text">HELP AG</div>
+          <div class="logo-sub">an e&amp; enterprise company</div>
+        </div>
+        <div style="height:8px"></div>
+        <div class="tagline anim">Protecting digital identities across the region.</div>
+
+        <div style="height:6px"></div>
+        <div class="body-text anim" style="font-size:12px;color:var(--navy);opacity:.55;">
+          #CyberSecurity &nbsp;·&nbsp; #DigitalSafety &nbsp;·&nbsp; #StaySecure
+        </div>
+      </div>
+
+    </div><!-- /track -->
+  </div><!-- /track-wrap -->
+
+  <!-- ── Navigation ──────────────────────────────────────── -->
+  <nav class="nav">
+    <button class="nav-btn" id="prev" aria-label="Previous">&#8592;</button>
+    <div class="dots" id="dots"></div>
+    <button class="nav-btn" id="next" aria-label="Next">&#8594;</button>
+  </nav>
+</div><!-- /stage -->
+
+<script>
+  const track  = document.getElementById('track');
+  const slides = Array.from(track.children);
+  const dotsEl = document.getElementById('dots');
+  const total  = slides.length;
+  let cur = 0;
+  let startX = 0;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  });
+
+  function goTo(n) {
+    slides[cur].classList.remove('entering');
+    cur = (n + total) % total;
+    track.style.transform = `translateX(-${cur * 100}%)`;
+    dotsEl.querySelectorAll('.dot').forEach((d, i) =>
+      d.classList.toggle('active', i === cur));
+    void slides[cur].offsetWidth; // reflow
+    slides[cur].classList.add('entering');
+  }
+
+  document.getElementById('prev').addEventListener('click', () => goTo(cur - 1));
+  document.getElementById('next').addEventListener('click', () => goTo(cur + 1));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(cur + 1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   goTo(cur - 1);
+  });
+
+  // Touch swipe
+  track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  track.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 40) goTo(cur + (dx < 0 ? 1 : -1));
+  });
+
+  // Init first slide
+  slides[0].classList.add('entering');
+</script>
+</body>
+</html>
